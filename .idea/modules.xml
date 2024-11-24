@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AccountService/AccountService.iml" filepath="$PROJECT_DIR$/AccountService/AccountService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JPetStore6-microservice.iml" filepath="$PROJECT_DIR$/JPetStore6-microservice.iml" />
+    </modules>
+  </component>
+</project>
