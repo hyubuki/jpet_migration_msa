@@ -1,0 +1,6 @@
+*.iml
+/.idea
+/AccountService/target
+/CartService/target
+/CatalogService/target
+/OrderService/target

@@ -1,7 +1,0 @@
-org\mybatis\jpetstore\domain\Product.class
-org\mybatis\jpetstore\service\AccountService.class
-org\mybatis\jpetstore\controller\AccountController.class
-org\mybatis\jpetstore\session\SessionConfig.class
-org\mybatis\jpetstore\controller\WelcomeController.class
-org\mybatis\jpetstore\domain\Account.class
-org\mybatis\jpetstore\mapper\AccountMapper.class
