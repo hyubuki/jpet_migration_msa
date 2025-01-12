@@ -29,6 +29,8 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 1. Account 객체
 2. MyList
 3. isAuthenticated
+4. CATEGORY_LIST // 카테고리 종류 목록
+5. LANGUAGE_LIST // 지원 언어 목록
 ```
 이런 변경사항을 고려해 AccountActionBean의 새로운 형태인 Controller에서 제공하게 될 인터페이스를 추리면 아래와 같이 나타낼 수 있습니다.
 
@@ -56,15 +58,14 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 
 ## 변경 후,,
 ```
-1. getCategories(): STATIC 상수 반환
-2. newAccountForm(): 회원가입 페이지 반환
-3. newAccount(): 실제 회원가입 로직
-4. editAccountForm(): 회원정보수정 페이지 반환
-5. editAccount(): 실제 회원정보수정 로직
-6. signonForm(): 로그인 페이지 반환
-7. signon(): 실제 로그인 로직
-8. signoff(): 로그아웃 로직
-9. clear(): 세션 비우기
+1. newAccountForm(): 회원가입 페이지 반환
+2. newAccount(): 실제 회원가입 로직
+3. editAccountForm(): 회원정보수정 페이지 반환
+4. editAccount(): 실제 회원정보수정 로직
+5. signonForm(): 로그인 페이지 반환
+6. signon(): 실제 로그인 로직
+7. signoff(): 로그아웃 로직
+8. clear(): 세션 비우기
 ```
 
 # 필요한 외부 API
@@ -74,4 +75,9 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 해당 API는 다음과 같은 형태를 띄어야 합니다.
 
 getProductList/{category_id}: Json 형태로 Product 객체를 여러 개 받습니다.
+```
+
+# 제공할 API
+```
+
 ```
