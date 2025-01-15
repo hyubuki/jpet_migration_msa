@@ -74,7 +74,10 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 따라서 Catalog service에서 특정 ID에 맞는 상품을 가져오는 API를 사용해야 합니다.
 해당 API는 다음과 같은 형태를 띄어야 합니다.
 
-getProductList/{category_id}: Json 형태로 Product 객체를 여러 개 받습니다.
+getProductList(categoryId): Json 형태로 카테고리 ID에 해당하는 Product 객체를 여러 개 받습니다.
+searchProducts(keyword): Keyword로 상품을 검색한 결과 페이지로 이동되어야 합니다.
+viewCategory(categoryId): 카테고리 ID에 해당하는 상품 목록을 볼 수 있는 페이지로 이동되어야 합니다.
+viewMain(): 홈 화면으로 이동되어야 합니다.
 ```
 
 # 제공할 API

@@ -74,7 +74,8 @@ public class AccountController {
     }
 
     @PostMapping("/signon")
-    public String signon(@RequestBody Account account, HttpSession session) {
+    public String signon(Account account, HttpSession session) {
+        System.out.println(account.getUsername());
         account = accountService.getAccount(account.getUsername(), account.getPassword());
 
         if (account == null) {
