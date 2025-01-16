@@ -17,6 +17,7 @@ package org.mybatis.jpetstore.service;
 
 import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.mapper.AccountMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class AccountService {
 
   private final AccountMapper accountMapper;
 
+  @Autowired
   public AccountService(AccountMapper accountMapper) {
     this.accountMapper = accountMapper;
   }
