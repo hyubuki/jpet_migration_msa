@@ -66,13 +66,18 @@
 	<tr>
 		<td>Language Preference:</td>
 		<td><select name="languagePreference">
-			<option value="english"></option>
+			<option value="english">english</option>
+			<option value="japanese">japanese</option>
 		</select></td>
 	</tr>
 	<tr>
 		<td>Favourite Category:</td>
 		<td><select name="favouriteCategoryId">
-			<option value="FISH"></option>
+			<option value="FISH">FISH</option>
+			<option value="DOGS">DOGS</option>
+			<option value="REPTILES">REPTILES</option>
+			<option value="CATS">CATS</option>
+			<option value="BIRDS">BIRDS</option>
 		</select></td>
 	</tr>
 	<tr>

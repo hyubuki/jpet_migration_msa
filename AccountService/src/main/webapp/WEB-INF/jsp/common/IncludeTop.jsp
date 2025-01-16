@@ -107,4 +107,4 @@
 
 </div>
 
-<div id="Content"><stripes:messages />
+<div id="Content"> ${msg}

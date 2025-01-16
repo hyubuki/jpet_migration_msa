@@ -17,7 +17,7 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="Catalog"><form action="/account/signon" method="post" enctype="application/json">
+<div id="Catalog"><form action="/account/signon" method="post">
 
 	<p>Please enter your username and password.</p>
 	<p>Username:<input type="text" name="username" value="j2ee"> <br />

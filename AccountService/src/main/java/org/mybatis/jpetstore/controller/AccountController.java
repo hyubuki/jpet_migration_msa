@@ -19,12 +19,10 @@ import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/")
 public class AccountController {
     protected static final String ERROR = "/WEB-INF/jsp/common/Error.jsp";
-    private static final String NEW_ACCOUNT = "/WEB-INF/jsp/account/NewAccountForm.jsp";
-    private static final String EDIT_ACCOUNT = "/WEB-INF/jsp/account/EditAccountForm.jsp";
-    private static final String SIGNON = "/WEB-INF/jsp/account/SignonForm.jsp";
+    private static final String REDIRECT_BASE_URL="http://localhost:8080";
 
     private static final List<String> LANGUAGE_LIST;
     private static final List<String> CATEGORY_LIST;
@@ -43,14 +41,14 @@ public class AccountController {
     }
 
     @PostMapping("/newAccount")
-    public String newAccount(@RequestBody Account account, HttpSession session) {
+    public String newAccount(Account account, HttpSession session) {
         accountService.insertAccount(account);
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
 
         // 카탈로그 서비스 사용
         // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
         session.setAttribute("isAuthenticated", true);
-        return "redirect:/";
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
 
     @GetMapping("/editAccountForm")
@@ -59,13 +57,13 @@ public class AccountController {
     }
 
     @PostMapping("/editAccount")
-    public String editAccount(@RequestBody Account account, HttpSession session) {
+    public String editAccount(Account account, HttpSession session) {
         accountService.updateAccount(account);
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
 
         // 카탈로그 서비스 사용
         // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
-        return "redirect:/";
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
 
     @GetMapping("/signonForm")
@@ -86,13 +84,13 @@ public class AccountController {
             account.setPassword(null);
 //            session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);
-            return "redirect:/";
+            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
         }
     }
 
     @GetMapping("/signoff")
     public String signoff(HttpSession session) {
         session.invalidate();
-        return "redirect:/";
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
 }
