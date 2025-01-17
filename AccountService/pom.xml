@@ -113,6 +113,7 @@
                             <Dependencies>jdk.unsupported</Dependencies>
                         </manifestEntries>
                     </archive>
+                    <webXml>src/main/webapp/web.xml</webXml>
                 </configuration>
             </plugin>
             <plugin>
