@@ -73,7 +73,7 @@ public class AccountController {
 
     @PostMapping("/signon")
     public String signon(Account account, HttpSession session) {
-        account = accountService.getAccount(account.getUsername(), account.getPassword());
+        session.setAttribute("account", accountService.getAccount(account.getUsername(), account.getPassword()));
 
         if (account == null) {
             String value = "Invalid username or password.  Signon failed.";
