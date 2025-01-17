@@ -20,43 +20,43 @@
 <table>
 	<tr>
 		<td>First name:</td>
-		<td><stripes:text name="account.firstName" /></td>
+		<td><input type="text" name="firstName"></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><stripes:text name="account.lastName" /></td>
+		<td><input type="text" name="lastName"></td>
 	</tr>
 	<tr>
 		<td>Email:</td>
-		<td><stripes:text size="40" name="account.email" /></td>
+		<td><input type="text" name="email"></td>
 	</tr>
 	<tr>
 		<td>Phone:</td>
-		<td><stripes:text name="account.phone" /></td>
+		<td><input type="text" name="phone"></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><stripes:text size="40" name="account.address1" /></td>
+		<td><input type="text" name="address1"></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><stripes:text size="40" name="account.address2" /></td>
+		<td><input type="text" name="address2"></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><stripes:text name="account.city" /></td>
+		<td><input type="text" name="city"></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><stripes:text size="4" name="account.state" /></td>
+		<td><input type="text" name="state"></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><stripes:text size="10" name="account.zip" /></td>
+		<td><input type="text" name="zip"></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><stripes:text size="15" name="account.country" /></td>
+		<td><input type="text" name="country"></td>
 	</tr>
 </table>
 
@@ -65,23 +65,28 @@
 <table>
 	<tr>
 		<td>Language Preference:</td>
-		<td><stripes:select name="account.languagePreference">
-			<stripes:options-collection collection="${actionBean.languages}" />
-		</stripes:select></td>
+		<td><select name="languagePreference">
+			<option value="english">english</option>
+			<option value="japanese">japanese</option>
+		</select></td>
 	</tr>
 	<tr>
 		<td>Favourite Category:</td>
-		<td><stripes:select name="account.favouriteCategoryId">
-			<stripes:options-collection collection="${actionBean.categories}" />
-		</stripes:select></td>
+		<td><select name="favouriteCategoryId">
+			<option value="FISH">FISH</option>
+			<option value="DOGS">DOGS</option>
+			<option value="REPTILES">REPTILES</option>
+			<option value="CATS">CATS</option>
+			<option value="BIRDS">BIRDS</option>
+		</select></td>
 	</tr>
 	<tr>
 		<td>Enable MyList</td>
-		<td><stripes:checkbox name="account.listOption" /></td>
+		<td><input type="checkbox" name="listOption"></td>
 	</tr>
 	<tr>
 		<td>Enable MyBanner</td>
-		<td><stripes:checkbox name="account.bannerOption" /></td>
+		<td><input type="checkbox" name="bannerOption"></td>
 	</tr>
 
 </table>

@@ -17,31 +17,29 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="Catalog"><stripes:form
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-	focus="">
+<div id="Catalog"><form action="/account/newAccount" method="post">
 
 	<h3>User Information</h3>
 
 	<table>
 		<tr>
 			<td>User ID:</td>
-			<td><stripes:text name="username" /></td>
+			<td><input type="text" name="username"></td>
 		</tr>
 		<tr>
 			<td>New password:</td>
-			<td><stripes:text name="password" /></td>
+			<td><input type="password" name="password"></td>
 		</tr>
 		<tr>
 			<td>Repeat password:</td>
-			<td><stripes:text name="repeatedPassword" /></td>
+			<td><input type="password" name="repeatPassword"></td>
 		</tr>
 	</table>
 
 	<%@ include file="IncludeAccountFields.jsp"%>
 
-	<stripes:submit name="newAccount" value="Save Account Information" />
+	<input type="submit" value="Save Account Information">
 
-</stripes:form></div>
+	</form></div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>

@@ -44,3 +44,9 @@ create table profile (
     banneropt int,
     constraint pk_profile primary key (userid)
 );
+
+create table bannerdata (
+    favcategory varchar(80) not null,
+    bannername varchar(255)  null,
+    constraint pk_bannerdata primary key (favcategory)
+);

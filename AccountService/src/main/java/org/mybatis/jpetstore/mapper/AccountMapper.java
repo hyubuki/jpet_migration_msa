@@ -15,6 +15,7 @@
  */
 package org.mybatis.jpetstore.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.Account;
 
 /**
@@ -22,6 +23,7 @@ import org.mybatis.jpetstore.domain.Account;
  *
  * @author Eduardo Macarron
  */
+@Mapper
 public interface AccountMapper {
 
   Account getAccountByUsername(String username);
