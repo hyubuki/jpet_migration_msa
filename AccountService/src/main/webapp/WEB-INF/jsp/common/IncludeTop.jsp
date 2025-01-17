@@ -45,7 +45,7 @@
 <div id="Header">
 
 <div id="Logo">
-<div id="LogoContent"><a href="/">
+<div id="LogoContent"><a href="/catalog">
 	<img src="/account/images/logo-topbar.gif" />
 </a></div>
 </div>
@@ -80,7 +80,7 @@
 	      </a>
 	</c:if>
 </c:if> <img align="middle" src="/account/images/separator.gif" /> <a
-	href="../help.html">?</a></div>
+	href="/account/html/help.html">?</a></div>
 </div>
 
 <div id="Search">
