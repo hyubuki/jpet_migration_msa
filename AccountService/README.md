@@ -90,6 +90,7 @@ listOrders(): 주문 내역 페이지로 이동되어야 합니다.
 ```
 
 # 제공할 API
+최상단에서 언급한 것과 같이 /account가 base url입니다.
 ```
-
+/newAccountForm
 ```
