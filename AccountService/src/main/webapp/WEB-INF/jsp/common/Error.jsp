@@ -17,6 +17,6 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<stripes:messages />
+<p>${msg}</p>
 
 <%@ include file="../common/IncludeBottom.jsp"%>

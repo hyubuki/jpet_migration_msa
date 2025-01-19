@@ -1,4 +1,4 @@
-<%--
+<%@ page import="org.mybatis.jpetstore.domain.Account" %><%--
 
        Copyright 2010-2016 the original author or authors.
 
@@ -16,8 +16,6 @@
 
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="stripes"
-	uri="http://stripes.sourceforge.net/stripes.tld"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
@@ -27,7 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<link rel="StyleSheet" href="../css/jpetstore.css" type="text/css"
+<link rel="StyleSheet" href="/account/css/jpetstore.css" type="text/css"
 	media="screen" />
 
 <meta name="generator"
@@ -47,85 +45,66 @@
 <div id="Header">
 
 <div id="Logo">
-<div id="LogoContent"><stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean">
-	<img src="../images/logo-topbar.gif" />
-</stripes:link></div>
+<div id="LogoContent"><a href="/catalog">
+	<img src="/account/images/logo-topbar.gif" />
+</a></div>
 </div>
+	<%
+		Account account = (Account) session.getAttribute("account");
+		Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
+		String msg = (String) request.getAttribute("msg");
+	%>
 
 <div id="Menu">
-<div id="MenuContent"><stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CartActionBean"
-	event="viewCart">
-	<img align="middle" name="img_cart" src="../images/cart.gif" />
-</stripes:link> <img align="middle" src="../images/separator.gif" /> <c:if
-	test="${sessionScope.accountBean == null}">
-	<stripes:link
-		beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-		event="signonForm">
+<div id="MenuContent"><a href="/cart/viewCart">
+	<img align="middle" name="img_cart" src="/account/images/cart.gif" />
+</a> <img align="middle" src="/account/images/separator.gif" /> <c:if
+	test="${account == null}">
+	<a href="/account/signonForm">
           Sign In
-	    </stripes:link>
-</c:if> <c:if test="${sessionScope.accountBean != null}">
-	<c:if test="${!sessionScope.accountBean.authenticated}">
-		<stripes:link
-			beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-			event="signonForm">
+	    </a>
+</c:if> <c:if test="${account != null}">
+	<c:if test="${!isAuthenticated}">
+		<a href="/account/signonForm">
             Sign In
-	      </stripes:link>
+	      </a>
 	</c:if>
-</c:if> <c:if test="${sessionScope.accountBean != null}">
-	<c:if test="${sessionScope.accountBean.authenticated}">
-		<stripes:link
-			beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-			event="signoff">
+</c:if> <c:if test="${account != null}">
+	<c:if test="${isAuthenticated}">
+		<a href="/account/signoff">
             Sign Out
-	      </stripes:link>
-		<img align="middle" src="../images/separator.gif" />
-		<stripes:link
-			beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-			event="editAccountForm">
+	      </a>
+		<img align="middle" src="/account/images/separator.gif" />
+		<a href="/account/editAccountForm">
             My Account
-	      </stripes:link>
+	      </a>
 	</c:if>
-</c:if> <img align="middle" src="../images/separator.gif" /> <a
-	href="../help.html">?</a></div>
+</c:if> <img align="middle" src="/account/images/separator.gif" /> <a
+	href="/account/html/help.html">?</a></div>
 </div>
 
 <div id="Search">
-<div id="SearchContent"><stripes:form
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean">
-	<stripes:text name="keyword" size="14" />
-	<stripes:submit name="searchProducts" value="Search" />
-</stripes:form></div>
+<div id="SearchContent">
+<%--	<stripes:form--%>
+<%--	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean">--%>
+<%--	<stripes:text name="keyword" size="14" />--%>
+<%--	<stripes:submit name="searchProducts" value="Search" />--%>
+<%--</stripes:form>--%>
+</div>
 </div>
 
-<div id="QuickLinks"><stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="FISH" />
-	<img src="../images/sm_fish.gif" />
-</stripes:link> <img src="../images/separator.gif" /> <stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="DOGS" />
-	<img src="../images/sm_dogs.gif" />
-</stripes:link> <img src="../images/separator.gif" /> <stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="REPTILES" />
-	<img src="../images/sm_reptiles.gif" />
-</stripes:link> <img src="../images/separator.gif" /> <stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="CATS" />
-	<img src="../images/sm_cats.gif" />
-</stripes:link> <img src="../images/separator.gif" /> <stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="BIRDS" />
-	<img src="../images/sm_birds.gif" />
-</stripes:link></div>
+<div id="QuickLinks"><a href="/catalog/viewCategory/FISH">
+	<img src="/account/images/sm_fish.gif" />
+</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/DOGS">
+	<img src="/account/images/sm_dogs.gif" />
+</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/REPTILES">
+	<img src="/account/images/sm_reptiles.gif" />
+</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/CATS">
+	<img src="/account/images/sm_cats.gif" />
+</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/BIRDS">
+	<img src="/account/images/sm_birds.gif" />
+</a></div>
 
 </div>
 
-<div id="Content"><stripes:messages />
+<div id="Content"> <c:if test="${msg!=null}">${msg}</c:if>

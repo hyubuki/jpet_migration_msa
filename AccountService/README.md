@@ -1,3 +1,5 @@
+# 기본 경로
+- tomcat에서 배포할 때, Application Context를 "/account"로 설정
 # 세션에 담을 데이터
 ## 기존 ActionBean
 ```
@@ -29,6 +31,8 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 1. Account 객체
 2. MyList
 3. isAuthenticated
+4. CATEGORY_LIST // 카테고리 종류 목록
+5. LANGUAGE_LIST // 지원 언어 목록
 ```
 이런 변경사항을 고려해 AccountActionBean의 새로운 형태인 Controller에서 제공하게 될 인터페이스를 추리면 아래와 같이 나타낼 수 있습니다.
 
@@ -56,15 +60,14 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 
 ## 변경 후,,
 ```
-1. getCategories(): STATIC 상수 반환
-2. newAccountForm(): 회원가입 페이지 반환
-3. newAccount(): 실제 회원가입 로직
-4. editAccountForm(): 회원정보수정 페이지 반환
-5. editAccount(): 실제 회원정보수정 로직
-6. signonForm(): 로그인 페이지 반환
-7. signon(): 실제 로그인 로직
-8. signoff(): 로그아웃 로직
-9. clear(): 세션 비우기
+1. newAccountForm(): 회원가입 페이지 반환
+2. newAccount(): 실제 회원가입 로직
+3. editAccountForm(): 회원정보수정 페이지 반환
+4. editAccount(): 실제 회원정보수정 로직
+5. signonForm(): 로그인 페이지 반환
+6. signon(): 실제 로그인 로직
+7. signoff(): 로그아웃 로직
+8. clear(): 세션 비우기
 ```
 
 # 필요한 외부 API
@@ -73,5 +76,29 @@ JPetStore6 웹 앱에서 사용자 정보가 Session에 담겨있기 때문에, 
 따라서 Catalog service에서 특정 ID에 맞는 상품을 가져오는 API를 사용해야 합니다.
 해당 API는 다음과 같은 형태를 띄어야 합니다.
 
-getProductList/{category_id}: Json 형태로 Product 객체를 여러 개 받습니다.
+<Catalog service>
+getProductList(categoryId): Json 형태로 카테고리 ID에 해당하는 Product 객체를 여러 개 받습니다.
+searchProducts(keyword): Keyword로 상품을 검색한 결과 페이지로 이동되어야 합니다.
+viewCategory(categoryId): 카테고리 ID에 해당하는 상품 목록을 볼 수 있는 페이지로 이동되어야 합니다.
+viewMain(): 홈 화면으로 이동되어야 합니다.
+
+<Cart service>
+viewCart(): 장바구니 페이지로 이동되어야 합니다.
+
+<Order service>
+listOrders(): 주문 내역 페이지로 이동되어야 합니다.
+```
+
+# 제공할 API
+- 최상단에서 언급한 것과 같이 /account가 base url입니다.
+- 세션 쿠키의 이름은 SESSION입니다.
+- 예를 들어, /signon 이 수행이 되면 response의 헤더에 cookie를 확인할 수 있습니다.
+```
+/newAccountForm: 회원 가입 페이지로 이동됩니다.
+/newAccount: 회원 가입 성공 후, 로그인이 완료된 상태로 메인페이지로 이동됩니다. 현재 검증 로직이 구현되어 있지 않아 빈칸으로 회원가입이 가능합니다.
+/editAccountForm: 회원 정보 수정 페이지로 이동됩니다. 기본적으로 이 URL은 로그인 된 상태에서만 접근하다고 가정하기 때문에 로그인 검증 단계를 거치지 않습니다. 따라서 로그인 되어 있지 않아도 해당 페이지로 접근할 수 있습니다.
+/editAccount: 회원 정보 수정이 완료된 후, 메인페이지로 이동됩니다.
+/signonForm: 로그인 페이지로 이동됩니다.
+/signon: 아이디 패스워드가 일치하는지 확인합니다. 로그인 실패시 /signonForm 으로 포워딩되며, 메시지가 출력됩니다. 로그인 성공시 메인페이지로 이동됩니다.
+/signoff: 세션이 만료됩니다. 메인페이지로 이동됩니다.
 ```
