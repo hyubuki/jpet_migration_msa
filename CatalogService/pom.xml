@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.mybatis</groupId>
-    <artifactId>jpetstore-Catalog</artifactId>
+    <artifactId>jpetstore-catalog</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
@@ -113,6 +113,7 @@
                             <Dependencies>jdk.unsupported</Dependencies>
                         </manifestEntries>
                     </archive>
+                    <webXml>src/main/webapp/web.xml</webXml>
                 </configuration>
             </plugin>
             <plugin>

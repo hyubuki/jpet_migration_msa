@@ -52,7 +52,7 @@
 	<%
 		Account account = (Account) session.getAttribute("account");
 		Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
-		String msg = (String) session.getAttribute("msg");
+		String msg = (String) request.getAttribute("msg");
 	%>
 
 <div id="Menu">
@@ -107,4 +107,4 @@
 
 </div>
 
-<div id="Content"> ${msg}
+<div id="Content"> <c:if test="${msg!=null}">${msg}</c:if>

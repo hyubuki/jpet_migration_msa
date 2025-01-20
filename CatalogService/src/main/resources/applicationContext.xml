@@ -33,6 +33,10 @@
         <jdbc:script location="classpath:database/jpetstore-hsqldb-dataload.sql"/>
     </jdbc:embedded-database>
 
+    <context:component-scan base-package="org.mybatis.jpetstore.session" />
+
+    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+
     <!-- transaction manager, use DataSourceTransactionManager" for JDBC local tx -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
@@ -44,12 +48,26 @@
     <!-- enable transaction demarcation with annotations -->
     <tx:annotation-driven />
 
+
+
     <!-- define the SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="typeAliasesPackage" value="org.mybatis.jpetstore.domain" />
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
     </bean>
 
     <!-- scan for mappers and let them be autowired -->
     <mybatis:scan base-package="org.mybatis.jpetstore.mapper" />
+
+
+<!--    &lt;!&ndash; RedisConnectionFactory, SessionRepositoryFilter 등을 직접 등록 &ndash;&gt;-->
+<!--    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">-->
+<!--        <constructor-arg value="localhost"/>-->
+<!--        <constructor-arg value="6379"/>-->
+<!--    </bean>-->
+
+
+
+
 </beans>

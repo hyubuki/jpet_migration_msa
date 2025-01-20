@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,19 +22,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class AccountController {
-    protected static final String ERROR = "/WEB-INF/jsp/common/Error.jsp";
     private static final String REDIRECT_BASE_URL="http://localhost:8080";
-
-    private static final List<String> LANGUAGE_LIST;
-    private static final List<String> CATEGORY_LIST;
 
     @Autowired
     private AccountService accountService;
 
-    static {
-        LANGUAGE_LIST = Collections.unmodifiableList(Arrays.asList("english", "japanese"));
-        CATEGORY_LIST = Collections.unmodifiableList(Arrays.asList("FISH", "DOGS", "REPTILES", "CATS", "BIRDS"));
-    }
 
     @GetMapping("/newAccountForm")
     public String newAccountForm() {
@@ -72,16 +65,17 @@ public class AccountController {
     }
 
     @PostMapping("/signon")
-    public String signon(Account account, HttpSession session) {
-        account = accountService.getAccount(account.getUsername(), account.getPassword());
+    public String signon(Account account, HttpServletRequest req, HttpSession session) {
+        Account existAccount = accountService.getAccount(account.getUsername(), account.getPassword());
 
-        if (account == null) {
+        if (existAccount == null) {
             String value = "Invalid username or password.  Signon failed.";
-            session.setAttribute("msg", value);
+            req.setAttribute("msg", value);
             session.invalidate();
             return "account/SignonForm";
         } else {
             account.setPassword(null);
+            session.setAttribute("account", existAccount);
 //            session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);
             return "redirect:" + REDIRECT_BASE_URL + "/catalog";
