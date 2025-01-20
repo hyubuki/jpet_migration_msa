@@ -23,17 +23,14 @@ public class CatalogController {
     }
 
     // TODO : 홈 화면으로 이동되어야 합니다.
-    @GetMapping("/main")
-    public String viewMain(HttpSession session){
-        // TODO : orderservice _ getAccount()
-        // TODO : 로그인 여부 => redis session에서 각 서비스가 가져다 쓰는건지?
-        // orderSer
+    @GetMapping("/")
+    public String viewMain(){
         return "catalog/Main";
     }
 
     // TODO : viewCategory(categoryId): 카테고리 ID에 해당하는 상품 목록을 볼 수 있는 페이지로 이동되어야 합니다.
     @GetMapping("/category")
-    public String viewCategory(@RequestParam String categoryId, Model model){
+    public String viewCategory(String categoryId, Model model){
         // category
         Category category = catalogService.getCategory(categoryId);
         // product name
