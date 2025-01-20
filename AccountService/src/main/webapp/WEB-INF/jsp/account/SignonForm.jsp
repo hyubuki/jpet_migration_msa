@@ -24,7 +24,7 @@
 	Password:<input type="password" name="password" value="j2ee"></p>
 	<input type="submit" name="signon" value="Login">
 
-	</form> Need a user name and password? <a href="/account/newAccountForm">Register Now!</a></div>
+	</form> Need a username and password? <a href="/account/newAccountForm">Register Now!</a></div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
 
