@@ -140,62 +140,62 @@
 //    this.itemList = itemList;
 //  }
 //
-//  @DefaultHandler
-//  public ForwardResolution viewMain() {
-//    return new ForwardResolution(MAIN);
-//  }
+////  @DefaultHandler
+////  public ForwardResolution viewMain() {
+////    return new ForwardResolution(MAIN);
+////  }
 //
 //  /**
 //   * View category.
 //   *
 //   * @return the forward resolution
 //   */
-//  public ForwardResolution viewCategory() {
-//    if (categoryId != null) {
-//      productList = catalogService.getProductListByCategory(categoryId);
-//      category = catalogService.getCategory(categoryId);
-//    }
-//    return new ForwardResolution(VIEW_CATEGORY);
-//  }
+////  public ForwardResolution viewCategory() {
+////    if (categoryId != null) {
+////      productList = catalogService.getProductListByCategory(categoryId);
+////      아아아 = catalogService.getCategory(categoryId);
+////    }
+////    return new ForwardResolution(VIEW_CATEGORY);
+////  }
 //
 //  /**
 //   * View product.
 //   *
 //   * @return the forward resolution
 //   */
-//  public ForwardResolution viewProduct() {
-//    if (productId != null) {
-//      itemList = catalogService.getItemListByProduct(productId);
-//      product = catalogService.getProduct(productId);
-//    }
-//    return new ForwardResolution(VIEW_PRODUCT);
-//  }
+////  public ForwardResolution viewProduct() {
+////    if (productId != null) {
+////      itemList = catalogService.getItemListByProduct(productId);
+////      product = catalogService.getProduct(productId);
+////    }
+////    return new ForwardResolution(VIEW_PRODUCT);
+////  }
 //
 //  /**
 //   * View item.
 //   *
 //   * @return the forward resolution
 //   */
-//  public ForwardResolution viewItem() {
-//    item = catalogService.getItem(itemId);
-//    product = item.getProduct();
-//    return new ForwardResolution(VIEW_ITEM);
-//  }
+////  public ForwardResolution viewItem() {
+////    item = catalogService.getItem(itemId);
+////    product = item.getProduct();
+////    return new ForwardResolution(VIEW_ITEM);
+////  }
 //
 //  /**
 //   * Search products.
 //   *
 //   * @return the forward resolution
 //   */
-//  public ForwardResolution searchProducts() {
-//    if (keyword == null || keyword.length() < 1) {
-//      setMessage("Please enter a keyword to search for, then press the search button.");
-//      return new ForwardResolution(ERROR);
-//    } else {
-//      productList = catalogService.searchProductList(keyword.toLowerCase());
-//      return new ForwardResolution(SEARCH_PRODUCTS);
-//    }
-//  }
+////  public ForwardResolution searchProducts() {
+////    if (keyword == null || keyword.length() < 1) {
+////      setMessage("Please enter a keyword to search for, then press the search button.");
+////      return new ForwardResolution(ERROR);
+////    } else {
+////      productList = catalogService.searchProductList(keyword.toLowerCase());
+////      return new ForwardResolution(SEARCH_PRODUCTS);
+////    }
+////  }
 //
 //  /**
 //   * Clear.

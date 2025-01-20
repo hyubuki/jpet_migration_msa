@@ -8,87 +8,83 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/")
 public class AccountController {
-    protected static final String ERROR = "/WEB-INF/jsp/common/Error.jsp";
-    private static final String NEW_ACCOUNT = "/WEB-INF/jsp/account/NewAccountForm.jsp";
-    private static final String EDIT_ACCOUNT = "/WEB-INF/jsp/account/EditAccountForm.jsp";
-    private static final String SIGNON = "/WEB-INF/jsp/account/SignonForm.jsp";
-
-    private static final List<String> LANGUAGE_LIST;
-    private static final List<String> CATEGORY_LIST;
+    private static final String REDIRECT_BASE_URL="http://localhost:8080";
 
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    static {
-        LANGUAGE_LIST = Collections.unmodifiableList(Arrays.asList("english", "japanese"));
-        CATEGORY_LIST = Collections.unmodifiableList(Arrays.asList("FISH", "DOGS", "REPTILES", "CATS", "BIRDS"));
-    }
-
-    public Account getAccount() {
-        return (Account) redisTemplate.opsForValue().get("account");
-    }
-
-    public String getUsername() {
-        Account account = (Account) redisTemplate.opsForValue().get("account");
-        if (account == null)
-            return null;
-        return account.getUsername();
-    }
-
-    public void setUsername(String username) {
-        Account account = (Account) redisTemplate.opsForValue().get("account");
-        account.setUsername(username);
-        redisTemplate.opsForValue().set("account", account);
-    }
-
-    public String getPassword() {
-        Account account = (Account) redisTemplate.opsForValue().get("account");
-        if (account == null)
-            return null;
-        return account.getPassword();
-    }
-
-    public void setPassword(String password) {
-        Account account = (Account) redisTemplate.opsForValue().get("account");
-        account.setPassword(password);
-        redisTemplate.opsForValue().set("account", account);
-    }
-
-    public List<Product> getMyList() {
-        List<Product> myList = (List<Product>) redisTemplate.opsForValue().get("myList");
-        if (myList == null)
-            return null;
-        return myList;
-    }
-
-    public void setMyList(List<Product> myList) {
-        redisTemplate.opsForValue().set("myList", myList);
-    }
-
-    public List<String> getLanguages() {
-        return LANGUAGE_LIST;
-    }
-
-    public List<String> getCategories() {
-        return CATEGORY_LIST;
-    }
 
     @GetMapping("/newAccountForm")
     public String newAccountForm() {
-        System.out.println("newAccountForm");
         return "account/NewAccountForm";
+    }
+
+    @PostMapping("/newAccount")
+    public String newAccount(Account account, HttpSession session) {
+        accountService.insertAccount(account);
+        session.setAttribute("account", accountService.getAccount(account.getUsername()));
+
+        // 카탈로그 서비스 사용
+        // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+        session.setAttribute("isAuthenticated", true);
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+    }
+
+    @GetMapping("/editAccountForm")
+    public String editAccountForm() {
+        return "account/EditAccountForm";
+    }
+
+    @PostMapping("/editAccount")
+    public String editAccount(Account account, HttpSession session) {
+        accountService.updateAccount(account);
+        session.setAttribute("account", accountService.getAccount(account.getUsername()));
+
+        // 카탈로그 서비스 사용
+        // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+    }
+
+    @GetMapping("/signonForm")
+    public String signonForm() {
+        return "account/SignonForm";
+    }
+
+    @PostMapping("/signon")
+    public String signon(Account account, HttpServletRequest req, HttpSession session) {
+        Account existAccount = accountService.getAccount(account.getUsername(), account.getPassword());
+
+        if (existAccount == null) {
+            String value = "Invalid username or password.  Signon failed.";
+            req.setAttribute("msg", value);
+            session.invalidate();
+            return "account/SignonForm";
+        } else {
+            account.setPassword(null);
+            session.setAttribute("account", existAccount);
+//            session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+            session.setAttribute("isAuthenticated", true);
+            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        }
+    }
+
+    @GetMapping("/signoff")
+    public String signoff(HttpSession session) {
+        session.invalidate();
+        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
 }

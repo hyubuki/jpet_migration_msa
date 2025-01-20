@@ -17,6 +17,8 @@ package org.mybatis.jpetstore.mapper;
 
 import java.util.List;
 
+
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.Product;
 
 /**
@@ -24,6 +26,8 @@ import org.mybatis.jpetstore.domain.Product;
  *
  * @author Eduardo Macarron
  */
+
+@Mapper
 public interface ProductMapper {
 
   List<Product> getProductListByCategory(String categoryId);

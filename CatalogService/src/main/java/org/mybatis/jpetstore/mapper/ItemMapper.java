@@ -18,13 +18,15 @@ package org.mybatis.jpetstore.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.mybatis.jpetstore.domain.Item;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.jpetstore.domain.Item;
 /**
  * The Interface ItemMapper.
  *
  * @author Eduardo Macarron
  */
+@Mapper
 public interface ItemMapper {
 
   void updateInventoryQuantity(Map<String, Object> param);

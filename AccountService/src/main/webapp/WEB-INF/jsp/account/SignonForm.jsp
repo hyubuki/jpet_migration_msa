@@ -17,18 +17,14 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="Catalog"><stripes:form
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-	focus="">
+<div id="Catalog"><form action="/account/signon" method="post">
 
 	<p>Please enter your username and password.</p>
-	<p>Username:<stripes:text name="username" value="j2ee" /> <br />
-	Password:<stripes:password name="password" value="j2ee" /></p>
-	<stripes:submit name="signon" value="Login" />
+	<p>Username:<input type="text" name="username" value="j2ee"> <br />
+	Password:<input type="password" name="password" value="j2ee"></p>
+	<input type="submit" name="signon" value="Login">
 
-</stripes:form> Need a user name and password? <stripes:link
-	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.AccountActionBean"
-	event="newAccountForm">Register Now!</stripes:link></div>
+	</form> Need a username and password? <a href="/account/newAccountForm">Register Now!</a></div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
 
