@@ -17,6 +17,7 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
+<%--TODO session, account service--%>
 <div id="Welcome">
 <div id="WelcomeContent"><c:if
 	test="${sessionScope.accountBean != null }">
@@ -32,33 +33,21 @@
 	<img src="../images/fish_icon.gif" />
  <br />
 Saltwater, Freshwater <br />
-<stripes:link
-	beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="DOGS" />
-	<img src="../images/dogs_icon.gif" />
-</stripes:link> <br />
+	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=DOGS">
+		<img src="../images/dogs_icon.gif" />
+	</a> <br />
 Various Breeds <br />
-<stripes:link
-	beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="CATS" />
-	<img src="../images/cats_icon.gif" />
-</stripes:link> <br />
+	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=CATS">
+		<img src="../images/cats_icon.gif" />
+	</a> <br />
 Various Breeds, Exotic Varieties <br />
-<stripes:link
-	beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="REPTILES" />
-	<img src="../images/reptiles_icon.gif" />
-</stripes:link> <br />
+	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=REPTILES">
+		<img src="../images/reptiles_icon.gif" />
+	</a> <br />
 Lizards, Turtles, Snakes <br />
-<stripes:link
-	beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-	event="viewCategory">
-	<stripes:param name="categoryId" value="BIRDS" />
-	<img src="../images/birds_icon.gif" />
-</stripes:link> <br />
+	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=BIRDS">
+		<img src="../images/birds_icon.gif" />
+	</a> <br />
 Exotic Varieties</div>
 </div>
 
@@ -86,4 +75,3 @@ Exotic Varieties</div>
 </div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
-
