@@ -73,7 +73,7 @@ public class CatalogController {
     @GetMapping("/searchProducts")
     public String searchProducts(@RequestParam String keywords,Model model){
         if(keywords == null ||  keywords.length() < 1){
-            String errorMessage = "\"Please enter a keyword to search for, then press the search button.\""
+            String errorMessage = "\"Please enter a keyword to search for, then press the search button.\"";
             model.addAttribute("message",errorMessage);
         }else{
             List<Product> productList = catalogService.searchProductList(keywords.toLowerCase());
