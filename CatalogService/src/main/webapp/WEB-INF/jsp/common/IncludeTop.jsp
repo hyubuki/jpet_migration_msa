@@ -93,16 +93,17 @@
 </div>
 </div>
 
-<div id="QuickLinks"><a href="/catalog/viewCategory/FISH">
-	<img src="/account/images/sm_fish.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/DOGS">
-	<img src="/account/images/sm_dogs.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/REPTILES">
-	<img src="/account/images/sm_reptiles.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/CATS">
-	<img src="/account/images/sm_cats.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/BIRDS">
-	<img src="/account/images/sm_birds.gif" />
+<div id="QuickLinks">
+	<a href="/catalog/category?categoryId=FISH">
+	<img src="/catalog/images/sm_fish.gif" />
+</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=DOGS">
+	<img src="/catalog/images/sm_dogs.gif" />
+</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=REPTILES">
+	<img src="/catalog/images/sm_reptiles.gif" />
+</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=CATS">
+	<img src="/catalog/images/sm_cats.gif" />
+</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=BIRDS">
+	<img src="/catalog/images/sm_birds.gif" />
 </a></div>
 
 </div>
