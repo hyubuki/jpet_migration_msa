@@ -30,7 +30,9 @@
 <div id="Main">
 <div id="Sidebar">
 <div id="SidebarContent">
-	<img src="../images/fish_icon.gif" /> <br />
+	<a href="${pageContext.request.contextPath}/category?categoryId=FISH">
+		<img src="/catalog/images/fish_icon.gif" />
+	</a> <br />
 Saltwater, Freshwater <br />
 	<a href="${pageContext.request.contextPath}/category?categoryId=DOGS">
 		<img src="/catalog/images/dogs_icon.gif" />
