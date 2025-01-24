@@ -32,19 +32,19 @@
 <div id="SidebarContent">
 	<img src="../images/fish_icon.gif" /> <br />
 Saltwater, Freshwater <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=DOGS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=DOGS">
 		<img src="/catalog/images/dogs_icon.gif" />
 	</a> <br />
 Various Breeds <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=CATS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=CATS">
 		<img src="/catalog/images/cats_icon.gif" />
 	</a> <br />
 Various Breeds, Exotic Varieties <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=REPTILES">
+	<a href="${pageContext.request.contextPath}/category?categoryId=REPTILES">
 		<img src="/catalog/images/reptiles_icon.gif" />
 	</a> <br />
 Lizards, Turtles, Snakes <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=BIRDS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=BIRDS">
 		<img src="/catalog/images/birds_icon.gif" />
 	</a> <br />
 Exotic Varieties</div>
