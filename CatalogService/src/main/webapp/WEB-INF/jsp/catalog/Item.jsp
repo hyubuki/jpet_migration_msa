@@ -53,12 +53,13 @@
 
 	<tr>
 <%-- TODO : CartService _ addItemToCart--%>
-		<td><stripes:link class="Button"
-			beanclass="org.mybatis.jpetstore.web.actions.CartActionBean"
-			event="addItemToCart">
-			<stripes:param name="workingItemId" value="${actionBean.item.itemId}" />
-       	Add to Cart
-       </stripes:link></td>
+
+<%--		<td><stripes:link class="Button"--%>
+<%--			beanclass="org.mybatis.jpetstore.web.actions.CartActionBean"--%>
+<%--			event="addItemToCart">--%>
+<%--			<stripes:param name="workingItemId" value="${actionBean.item.itemId}" />--%>
+<%--       	Add to Cart--%>
+<%--       </stripes:link></td>--%>
 	</tr>
 </table>
 
