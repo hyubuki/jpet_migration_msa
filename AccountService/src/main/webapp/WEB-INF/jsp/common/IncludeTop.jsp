@@ -1,4 +1,6 @@
-<%@ page import="org.mybatis.jpetstore.domain.Account" %><%--
+<%@ page import="org.mybatis.jpetstore.domain.Account" %>
+<%@ page import="org.mybatis.jpetstore.domain.Product" %>
+<%@ page import="java.util.List" %><%--
 
        Copyright 2010-2016 the original author or authors.
 
@@ -52,6 +54,7 @@
 	<%
 		Account account = (Account) session.getAttribute("account");
 		Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
+		List<Product> productList = (List<Product>) session.getAttribute("myList");
 		String msg = (String) request.getAttribute("msg");
 	%>
 
