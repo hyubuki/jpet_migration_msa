@@ -15,6 +15,7 @@
  */
 package org.mybatis.jpetstore.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.Order;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  *
  * @author Eduardo Macarron
  */
+@Mapper
 public interface OrderMapper {
 
   List<Order> getOrdersByUsername(String username);

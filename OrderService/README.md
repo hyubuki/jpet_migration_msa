@@ -28,3 +28,14 @@
 4. newOrder()
 5. viewOrder()
 ```
+
+# 필요한 외부 API
+```
+<Catalog service>
+getItem(itemId): ItemId에 맞는 Item을 JSON 데이터로 반환해야 합니다.
+getInventoryQuantity(itemId): ItemId에 맞는 Item의 수량을 반환해야 합니다.
+updateInventoryQuantity(itemId, incr): ItemId에 맞는 Item의 현재 수량을 (현재 수량 - incr)로 변경해야 합니다.
+
+<Cart service>
+Cart를 세션에 저장해야 합니다.
+```

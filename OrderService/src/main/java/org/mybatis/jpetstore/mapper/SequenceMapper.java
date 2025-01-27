@@ -15,6 +15,7 @@
  */
 package org.mybatis.jpetstore.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.Sequence;
 
 /**
@@ -22,6 +23,7 @@ import org.mybatis.jpetstore.domain.Sequence;
  *
  * @author Eduardo Macarron
  */
+@Mapper
 public interface SequenceMapper {
 
   Sequence getSequence(Sequence sequence);

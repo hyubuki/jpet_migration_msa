@@ -15,6 +15,7 @@
  */
 package org.mybatis.jpetstore.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.LineItem;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  *
  * @author Eduardo Macarron
  */
+@Mapper
 public interface LineItemMapper {
 
   List<LineItem> getLineItemsByOrderId(int orderId);
