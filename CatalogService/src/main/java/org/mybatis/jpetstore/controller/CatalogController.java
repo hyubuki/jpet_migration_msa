@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Controller
 @RequestMapping("/")
@@ -86,4 +89,14 @@ public class CatalogController {
         List<Product> productListByCategory = catalogService.getProductListByCategory(catalogId);
         return productListByCategory;
     }
+
+    @ResponseBody
+    @GetMapping("/isItemInStock")
+    public Map<String,Object> getIsItemInStock(@RequestParam String itemId){
+        Boolean isItemInStock = catalogService.isItemInStock(itemId);
+        Map<String,Object> response = new HashMap<String,Object>();
+        response.put("isItemInStock",isItemInStock);
+        return response;
+    }
+
 }
