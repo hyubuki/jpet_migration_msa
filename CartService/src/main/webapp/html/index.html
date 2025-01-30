@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
        Copyright 2010-2022 the original author or authors.
@@ -16,27 +15,24 @@
        limitations under the License.
 
 -->
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<mapper namespace="org.mybatis.jpetstore.mapper.LineItemMapper">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-  <cache />
+<head>
+  <title>JPetStore Demo</title>
+  <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
 
-  <select id="getLineItemsByOrderId" resultType="LineItem">
-    SELECT
-      ORDERID,
-      LINENUM AS lineNumber,
-      ITEMID,
-      QUANTITY,
-      UNITPRICE
-    FROM LINEITEM
-    WHERE ORDERID = #{orderId}
-  </select>
+<body>
+<div id="Content">
+  <h2>Welcome to JPetStore 6</h2>
 
-  <insert id="insertLineItem">
-    INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE)
-    VALUES (#{orderId}, #{lineNumber}, #{itemId}, #{quantity}, #{unitPrice})
-  </insert>
+  <p><a href="actions/Catalog.action">Enter the Store</a></p>
 
-</mapper>
+  <p><sub>Copyright www.mybatis.org </sub></p>
+
+</div>
+</body>
+</html>
