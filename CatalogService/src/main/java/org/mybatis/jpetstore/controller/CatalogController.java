@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Controller
 @RequestMapping("/")
@@ -22,13 +25,11 @@ public class CatalogController {
         this.catalogService = catalogService;
     }
 
-    // TODO : 홈 화면으로 이동되어야 합니다.
     @GetMapping("/")
     public String viewMain(){
         return "catalog/Main";
     }
 
-    // TODO : viewCategory(categoryId): 카테고리 ID에 해당하는 상품 목록을 볼 수 있는 페이지로 이동되어야 합니다.
     @GetMapping("/category")
     public String viewCategory(String categoryId, Model model){
         // category
@@ -66,7 +67,6 @@ public class CatalogController {
         return "catalog/Item";
     }
 
-    // TODO : searchProducts(keyword): Keyword로 상품을 검색한 결과 페이지로 이동되어야 합니다.
     @GetMapping("/searchProducts")
     public String searchProducts(@RequestParam String keywords, Model model){
         if(keywords == null ||  keywords.length() < 1){
@@ -79,11 +79,26 @@ public class CatalogController {
         return "catalog/SearchProducts";
     }
 
-    // TODO : getProductLIst(catalogId) _ Json 형태로 카테고리 ID에 해당하는 Product 객체를 여러 개 받습니다.
     @ResponseBody
     @PostMapping("/get/productList")
     public List<Product> getProductList(@RequestParam String catalogId){
         List<Product> productListByCategory = catalogService.getProductListByCategory(catalogId);
         return productListByCategory;
     }
+
+    @ResponseBody
+    @GetMapping("/isItemInStock")
+    public Map<String,Object> getIsItemInStock(@RequestParam String itemId){
+        Boolean isItemInStock = catalogService.isItemInStock(itemId);
+        Map<String,Object> response = new HashMap<String,Object>();
+        response.put("isItemInStock",isItemInStock);
+        return response;
+    }
+
+    @ResponseBody
+    @GetMapping("/getItem")
+    public Item getItem(@RequestParam String itemId) {
+        return catalogService.getItem(itemId);
+    }
+
 }
