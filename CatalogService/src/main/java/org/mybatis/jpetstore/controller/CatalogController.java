@@ -68,7 +68,7 @@ public class CatalogController {
 
     // TODO : searchProducts(keyword): Keyword로 상품을 검색한 결과 페이지로 이동되어야 합니다.
     @GetMapping("/searchProducts")
-    public String searchProducts(@RequestParam String keywords,Model model){
+    public String searchProducts(@RequestParam String keywords, Model model){
         if(keywords == null ||  keywords.length() < 1){
             String errorMessage = "Please enter a keyword to search for, then press the search button.";
             model.addAttribute("message",errorMessage);
