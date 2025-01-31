@@ -88,11 +88,9 @@ public class CatalogController {
 
     @ResponseBody
     @GetMapping("/isItemInStock")
-    public Map<String,Object> getIsItemInStock(@RequestParam String itemId){
+    public Boolean getIsItemInStock(@RequestParam String itemId){
         Boolean isItemInStock = catalogService.isItemInStock(itemId);
-        Map<String,Object> response = new HashMap<String,Object>();
-        response.put("isItemInStock",isItemInStock);
-        return response;
+        return isItemInStock;
     }
 
     @ResponseBody
@@ -100,5 +98,7 @@ public class CatalogController {
     public Item getItem(@RequestParam String itemId) {
         return catalogService.getItem(itemId);
     }
+
+
 
 }

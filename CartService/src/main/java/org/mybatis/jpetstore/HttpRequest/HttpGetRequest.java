@@ -48,7 +48,7 @@ public class HttpGetRequest {
     }
 
 
-    public static void isItemInStockFromCatalogService(String itemId) {
+    public static String isItemInStockFromCatalogService(String itemId) {
         // TODO : 배포시 해당 URL로 변경
         try {
             // url 설정
@@ -72,7 +72,8 @@ public class HttpGetRequest {
                 }
                 in.close();
 
-                System.out.println(response.toString());
+                return response.toString();
+
 
             }
 

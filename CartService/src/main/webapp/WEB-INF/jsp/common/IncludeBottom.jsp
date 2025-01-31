@@ -1,12 +1,12 @@
 <%--
 
-       Copyright 2010-2023 the original author or authors.
+       Copyright 2010-2016 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
        You may obtain a copy of the License at
 
-          https://www.apache.org/licenses/LICENSE-2.0
+          http://www.apache.org/licenses/LICENSE-2.0
 
        Unless required by applicable law or agreed to in writing, software
        distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,10 +22,10 @@
 <div id="PoweredBy">&nbsp;<a href="http://www.mybatis.org">www.mybatis.org</a>
 </div>
 
-<div id="Banner"><c:if test="${sessionScope.accountBean != null }">
-	<c:if test="${sessionScope.accountBean.authenticated}">
-		<c:if test="${sessionScope.accountBean.account.bannerOption}">
-          ${sessionScope.accountBean.account.bannerName}
+<div id="Banner"><c:if test="${account != null }">
+	<c:if test="${isAuthenticated}">
+		<c:if test="${account.isBannerOption()}">
+          ${account.getBannerName()}
         </c:if>
 	</c:if>
 </c:if></div>
