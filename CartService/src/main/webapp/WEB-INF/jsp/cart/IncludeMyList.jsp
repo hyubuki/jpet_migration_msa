@@ -21,7 +21,7 @@
 	<ul>
 <%--		Todo accountBean --%>
 		<c:forEach var="product" items="${myList}">
-			<li><a href="${pageContext.request.contextPath}/catalog/product?productId=${proudct.productId}">${product.name}</a> (${product.productId})</li>
+			<li><a href="/catalog/product?productId=${proudct.productId}">${product.name}</a> (${product.productId})</li>
 		</c:forEach>
 	</ul>
 </c:if>
