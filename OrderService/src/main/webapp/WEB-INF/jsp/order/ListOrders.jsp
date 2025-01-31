@@ -26,7 +26,7 @@
 		<th>Total Price</th>
 	</tr>
 
-	<c:forEach var="order" items="${sessionScope.orderList}">
+	<c:forEach var="order" items="${orderList}">
 		<tr>
 			<td><a href="/order/viewOrder?orderId=${order.orderId}">
 					${order.orderId}</a></td>

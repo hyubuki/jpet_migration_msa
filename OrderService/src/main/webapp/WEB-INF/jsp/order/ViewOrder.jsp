@@ -23,8 +23,8 @@
 
 <table>
 	<tr>
-		<th align="center" colspan="2">Order #${order.getOrderId()}
-		<fmt:formatDate value="${order.getOrderDate}"
+		<th align="center" colspan="2">Order #${sessionScope.order.orderId}
+		<fmt:formatDate value="${sessionScope.order.orderDate}"
 			pattern="yyyy/MM/dd hh:mm:ss" /></th>
 	</tr>
 	<tr>
@@ -32,93 +32,93 @@
 	</tr>
 	<tr>
 		<td>Card Type:</td>
-		<td><c:out value="${order.getCardType()}" /></td>
+		<td><c:out value="${sessionScope.order.cardType}" /></td>
 	</tr>
 	<tr>
 		<td>Card Number:</td>
-		<td><c:out value="${order.getCreditCard()}" /> * Fake
+		<td><c:out value="${sessionScope.order.creditCard}" /> * Fake
 		number!</td>
 	</tr>
 	<tr>
 		<td>Expiry Date (MM/YYYY):</td>
-		<td><c:out value="${order.getExpiryDate()}" /></td>
+		<td><c:out value="${sessionScope.order.expiryDate}" /></td>
 	</tr>
 	<tr>
 		<th colspan="2">Billing Address</th>
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="${order.getBillToFirstName()}" /></td>
+		<td><c:out value="${sessionScope.order.billToFirstName}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="${order.getBillToLastName()}" /></td>
+		<td><c:out value="${sessionScope.order.billToLastName}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="${order.getBillAddress1()}" /></td>
+		<td><c:out value="${sessionScope.order.billAddress1}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="${order.getBillAddress2()}" /></td>
+		<td><c:out value="${sessionScope.order.billAddress2}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="${order.getBillCity()}" /></td>
+		<td><c:out value="${sessionScope.order.billCity}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="${order.getBillState()}" /></td>
+		<td><c:out value="${sessionScope.order.billState}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="${order.getBillZip()}" /></td>
+		<td><c:out value="${sessionScope.order.billZip}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="${order.getBillCountry()}" /></td>
+		<td><c:out value="${sessionScope.order.billCountry}" /></td>
 	</tr>
 	<tr>
 		<th colspan="2">Shipping Address</th>
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="${order.getShipToFirstName()}" /></td>
+		<td><c:out value="${sessionScope.order.shipToFirstName}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="${order.getShipToLastName()}" /></td>
+		<td><c:out value="${sessionScope.order.shipToLastName}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="${order.getShipAddress1()}" /></td>
+		<td><c:out value="${sessionScope.order.shipAddress1}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="${order.getShipAddress2()}" /></td>
+		<td><c:out value="${sessionScope.order.shipAddress2}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="${order.getShipCity()}" /></td>
+		<td><c:out value="${sessionScope.order.shipCity}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="${order.getShipState()}" /></td>
+		<td><c:out value="${sessionScope.order.shipState}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="${order.getShipZip()}" /></td>
+		<td><c:out value="${sessionScope.order.shipZip}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="${order.getShipCountry()}" /></td>
+		<td><c:out value="${sessionScope.order.shipCountry}" /></td>
 	</tr>
 	<tr>
 		<td>Courier:</td>
-		<td><c:out value="${order.getCourier()}" /></td>
+		<td><c:out value="${sessionScope.order.courier}" /></td>
 	</tr>
 	<tr>
-		<td colspan="2">Status: <c:out value="${order.status}" /></td>
+		<td colspan="2">Status: <c:out value="${sessionScope.order.status}" /></td>
 	</tr>
 	<tr>
 		<td colspan="2">
@@ -130,12 +130,12 @@
 				<th>Price</th>
 				<th>Total Cost</th>
 			</tr>
-			<c:forEach var="lineItem" items="${order.getLineItems()}">
+			<c:forEach var="lineItem" items="${sessionScope.order.lineItems}">
 				<tr>
-					<td><a href="/catalog/item?itemId=${LineItem.getItem().getItemId()}">
-							${LineItem.getItem().getItemId()}</a></td>
-					<td><c:if test="${lineItem.getItem() != null}">
-						${lineItem.getItem().getAttribute1()}
+					<td><a href="/catalog/item?itemId=${lineItem.item.itemId}">
+							${lineItem.item.itemId}</a></td>
+					<td><c:if test="${lineItem.item != null}">
+						${lineItem.item.attribute1}
 						${lineItem.item.attribute2}
 						${lineItem.item.attribute3}
 						${lineItem.item.attribute4}
@@ -154,7 +154,7 @@
 			</c:forEach>
 			<tr>
 				<th colspan="5">Total: $<fmt:formatNumber
-					value="${actionBean.order.totalPrice}" pattern="#,##0.00" /></th>
+					value="${sessionScope.order.totalPrice}" pattern="#,##0.00" /></th>
 			</tr>
 		</table>
 		</td>

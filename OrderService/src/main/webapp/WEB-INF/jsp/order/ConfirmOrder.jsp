@@ -105,8 +105,10 @@ press continue...
 	</tr>
 
 </table>
+<form action="/order/newOrder?confirmed=true" method="post">
+	<input type="submit" class="Button" value="Confirm">
+</form>
 
-	<a class="button" href="/order/newOrder?confirmed=true">Confirm</a>
 </div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>

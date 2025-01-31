@@ -59,8 +59,7 @@
 
 
 	</table>
-	<input type="hidden" name="shippingAddressRequired" value="false">
-	<input type="submit" name="newOrder" value="Continue">
+	<input type="submit" name="newOrder?changeShipInfo=true" value="Continue">
 
 	</form></div>
 
