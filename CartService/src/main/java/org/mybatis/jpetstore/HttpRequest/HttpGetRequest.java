@@ -48,7 +48,7 @@ public class HttpGetRequest {
     }
 
 
-    public static String isItemInStockFromCatalogService(String itemId) {
+    public static Boolean isItemInStockFromCatalogService(String itemId) {
         // TODO : 배포시 해당 URL로 변경
         try {
             // url 설정
@@ -71,17 +71,12 @@ public class HttpGetRequest {
                     response.append(inputLine);
                 }
                 in.close();
-
-                return response.toString();
-
-
+                return response.toString().equals("true");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+        return null;
     }
 
 

@@ -5,11 +5,15 @@ import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jnlp.IntegrationService;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +103,19 @@ public class CatalogController {
         return catalogService.getItem(itemId);
     }
 
+    @ResponseBody
+    @GetMapping("/getQuantity")
+    public ResponseEntity<Integer> getInventoryQuantity(@RequestParam String itemId){
+        Integer quantity = catalogService.getItemQuantity(itemId);
+        return new ResponseEntity<Integer>(quantity,HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/updateQuantity")
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam String itemId, @RequestParam Integer increment){
+        Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment);
+        return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
+    }
 
 
 }

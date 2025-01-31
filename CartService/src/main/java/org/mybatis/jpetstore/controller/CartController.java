@@ -25,7 +25,7 @@ public class CartController {
         if (cart.containsItemId(workingItemId)) {
             cart.incrementQuantityByItemId(workingItemId);
         } else {
-            boolean isInStock = HttpGetRequest.isItemInStockFromCatalogService(workingItemId).equals("true");
+            boolean isInStock = Boolean.TRUE.equals(HttpGetRequest.isItemInStockFromCatalogService(workingItemId));
             Item item = HttpGetRequest.getItemFromCatalogService(workingItemId);
             assert item != null;
             cart.addItem(item,isInStock);
@@ -91,5 +91,7 @@ public class CartController {
         model.addAttribute("cart",cart);
         return "cart/Checkout";
     }
+
+
 
 }

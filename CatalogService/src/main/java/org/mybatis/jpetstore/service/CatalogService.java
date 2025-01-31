@@ -16,7 +16,9 @@
 package org.mybatis.jpetstore.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
@@ -89,4 +91,23 @@ public class CatalogService {
   public boolean isItemInStock(String itemId) {
     return itemMapper.getInventoryQuantity(itemId) > 0;
   }
+
+
+  public boolean updateItemQuantity(String itemId, Integer increment){
+    Map<String,Object> request = new HashMap<String,Object>();
+    try{
+      request.put("itemId",itemId);
+      request.put("increment",increment);
+      itemMapper.updateInventoryQuantity(request);
+    }catch (Exception e){
+      return false;
+    }
+    return true;
+  }
+
+  public Integer getItemQuantity(String itemId){
+    Integer quantity = itemMapper.getInventoryQuantity(itemId);
+    return quantity;
+  }
+
 }
