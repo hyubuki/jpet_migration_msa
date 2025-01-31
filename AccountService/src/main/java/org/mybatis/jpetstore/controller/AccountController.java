@@ -8,10 +8,7 @@ import org.mybatis.jpetstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +60,9 @@ public class AccountController {
     }
 
     @GetMapping("/signonForm")
-    public String signonForm() {
+    public String signonForm(@RequestParam String msg, HttpServletRequest req) {
+        if (msg != null)
+            req.setAttribute("msg", msg);
         return "account/SignonForm";
     }
 
