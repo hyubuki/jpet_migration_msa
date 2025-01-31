@@ -24,7 +24,7 @@
 	<table>
 		<tr>
 			<td>User ID:</td>
-			<td>${account.getUsername()}</td>
+			<td>${sessionScope.account.username}</td>
 		</tr>
 		<tr>
 			<td>New password:</td>
