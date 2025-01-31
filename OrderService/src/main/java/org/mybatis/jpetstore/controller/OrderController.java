@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,12 +31,12 @@ public class OrderController {
     }
 
     @GetMapping("/newOrderForm")
-    public String newOrderForm(HttpServletRequest req, HttpSession session) {
+    public String newOrderForm(HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");
         // Cart cart = (Cart) session.getAttribute("cart");
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
-            req.setAttribute("msg", msg);
+            redirect.addAttribute("msg", msg);
             return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
         }
 //        else if (cart != null) {
