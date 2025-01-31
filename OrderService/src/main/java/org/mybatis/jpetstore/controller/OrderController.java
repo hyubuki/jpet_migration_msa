@@ -35,8 +35,7 @@ public class OrderController {
     @GetMapping("/newOrderForm")
     public String newOrderForm(HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");
-        // Cart cart = (Cart) session.getAttribute("cart");
-        Cart cart = new Cart();
+         Cart cart = (Cart) session.getAttribute("cart");
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
@@ -56,18 +55,19 @@ public class OrderController {
     }
 
     @PostMapping("/newOrder")
-    public String newOrder(Order order, @RequestParam(required = false) boolean shippingAddressRequired, @RequestParam(required = false) boolean confirmed, HttpServletRequest req, HttpSession session) {
+    public String newOrder(Order order, @RequestParam(required = false) boolean shippingAddressRequired, @RequestParam(required = false) boolean confirmed, @RequestParam(required = false) boolean changeShipInfo, HttpServletRequest req, HttpSession session) {
         Order sessionOrder = (Order) session.getAttribute("order");
         if (shippingAddressRequired) {
             changeBillInfo(sessionOrder, order);
             session.setAttribute("order", sessionOrder);
             return "order/ShippingForm";
         } else if(!confirmed) {
-            changeShipInfo(sessionOrder, order);
+            if (changeShipInfo)
+                changeShipInfo(sessionOrder, order);
             session.setAttribute("order", sessionOrder);
             return "order/ConfirmOrder";
         } else if (order != null) {
-            orderService.insertOrder(order);
+            orderService.insertOrder(sessionOrder);
             
             session.removeAttribute("cart");
 

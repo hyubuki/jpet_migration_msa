@@ -15,8 +15,10 @@
  */
 package org.mybatis.jpetstore.service;
 
+import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.domain.Sequence;
+import org.mybatis.jpetstore.http.HttpFacade;
 import org.mybatis.jpetstore.mapper.LineItemMapper;
 import org.mybatis.jpetstore.mapper.OrderMapper;
 import org.mybatis.jpetstore.mapper.SequenceMapper;
@@ -39,13 +41,15 @@ public class OrderService {
   private final OrderMapper orderMapper;
   private final SequenceMapper sequenceMapper;
   private final LineItemMapper lineItemMapper;
+  private final HttpFacade httpFacade;
 
   @Autowired
   public OrderService(OrderMapper orderMapper, SequenceMapper sequenceMapper,
-                      LineItemMapper lineItemMapper) {
+                      LineItemMapper lineItemMapper, HttpFacade httpFacade) {
     this.orderMapper = orderMapper;
     this.sequenceMapper = sequenceMapper;
     this.lineItemMapper = lineItemMapper;
+    this.httpFacade = httpFacade;
   }
 
   /**
@@ -63,7 +67,9 @@ public class OrderService {
       Map<String, Object> param = new HashMap<>(2);
       param.put("itemId", itemId);
       param.put("increment", increment);
-//      itemMapper.updateInventoryQuantity(param);
+      boolean resp = httpFacade.updateInventoryQuantity(param);
+      if (!resp)
+        throw new RuntimeException("Failed to update inventory quantity");
     });
 
     orderMapper.insertOrder(order);
@@ -87,11 +93,11 @@ public class OrderService {
     Order order = orderMapper.getOrder(orderId);
     order.setLineItems(lineItemMapper.getLineItemsByOrderId(orderId));
 
-//    order.getLineItems().forEach(lineItem -> {
-//      Item item = itemMapper.getItem(lineItem.getItemId());
-//      item.setQuantity(itemMapper.getInventoryQuantity(lineItem.getItemId()));
-//      lineItem.setItem(item);
-//    });
+    order.getLineItems().forEach(lineItem -> {
+      Item item = httpFacade.getItem(lineItem.getItemId());
+      item.setQuantity(httpFacade.getInventoryQuantity(lineItem.getItemId()));
+      lineItem.setItem(item);
+    });
 
     return order;
   }
