@@ -1,7 +1,7 @@
 # Microservices version of JPetStore6
 
 ## Abstract of architecture
-![image](https://github.com/user-attachments/assets/3a4a1398-8dd3-46b1-a974-cc2a55b6e30a)
+![image](Architecture.jpg)
 
 
 ## To do...
