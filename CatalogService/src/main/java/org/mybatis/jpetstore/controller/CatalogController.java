@@ -5,12 +5,19 @@ import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jnlp.IntegrationService;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Controller
 @RequestMapping("/")
@@ -22,13 +29,11 @@ public class CatalogController {
         this.catalogService = catalogService;
     }
 
-    // TODO : 홈 화면으로 이동되어야 합니다.
     @GetMapping("/")
     public String viewMain(){
         return "catalog/Main";
     }
 
-    // TODO : viewCategory(categoryId): 카테고리 ID에 해당하는 상품 목록을 볼 수 있는 페이지로 이동되어야 합니다.
     @GetMapping("/category")
     public String viewCategory(String categoryId, Model model){
         // category
@@ -66,9 +71,8 @@ public class CatalogController {
         return "catalog/Item";
     }
 
-    // TODO : searchProducts(keyword): Keyword로 상품을 검색한 결과 페이지로 이동되어야 합니다.
     @GetMapping("/searchProducts")
-    public String searchProducts(@RequestParam String keywords,Model model){
+    public String searchProducts(@RequestParam String keywords, Model model){
         if(keywords == null ||  keywords.length() < 1){
             String errorMessage = "Please enter a keyword to search for, then press the search button.";
             model.addAttribute("message",errorMessage);
@@ -79,11 +83,39 @@ public class CatalogController {
         return "catalog/SearchProducts";
     }
 
-    // TODO : getProductLIst(catalogId) _ Json 형태로 카테고리 ID에 해당하는 Product 객체를 여러 개 받습니다.
     @ResponseBody
     @PostMapping("/get/productList")
     public List<Product> getProductList(@RequestParam String catalogId){
         List<Product> productListByCategory = catalogService.getProductListByCategory(catalogId);
         return productListByCategory;
     }
+
+    @ResponseBody
+    @GetMapping("/isItemInStock")
+    public Boolean getIsItemInStock(@RequestParam String itemId){
+        Boolean isItemInStock = catalogService.isItemInStock(itemId);
+        return isItemInStock;
+    }
+
+    @ResponseBody
+    @GetMapping("/getItem")
+    public Item getItem(@RequestParam String itemId) {
+        return catalogService.getItem(itemId);
+    }
+
+    @ResponseBody
+    @GetMapping("/getQuantity")
+    public ResponseEntity<Integer> getInventoryQuantity(@RequestParam String itemId){
+        Integer quantity = catalogService.getItemQuantity(itemId);
+        return new ResponseEntity<Integer>(quantity,HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/updateQuantity")
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam String itemId, @RequestParam Integer increment){
+        Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment);
+        return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
+    }
+
+
 }
