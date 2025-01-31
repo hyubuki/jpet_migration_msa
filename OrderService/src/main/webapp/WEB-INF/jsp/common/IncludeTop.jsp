@@ -52,9 +52,6 @@
 	<img src="/order/images/logo-topbar.gif" />
 </a></div>
 </div>
-	<%
-		Order order = (Order) session.getAttribute("order");
-	%>
 
 <div id="Menu">
 <div id="MenuContent"><a href="/cart/viewCart">

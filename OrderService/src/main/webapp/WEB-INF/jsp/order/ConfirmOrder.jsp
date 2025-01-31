@@ -29,7 +29,7 @@ press continue...
 		<th align="center" colspan="2"><font size="4"><b>Order</b></font>
 		<br />
 		<font size="3"><b> <fmt:formatDate
-			value="<%=order.getOrderDate()%>" pattern="yyyy/MM/dd hh:mm:ss" /></b></font>
+			value="${sessionScope.order.orderDate}" pattern="yyyy/MM/dd hh:mm:ss" /></b></font>
 		</th>
 	</tr>
 
@@ -38,70 +38,70 @@ press continue...
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="<%= order.getBillToFirstName() %>" /></td>
+		<td><c:out value="${sessionScope.order.billToFirstName}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="<%= order.getBillToLastName() %>" /></td>
+		<td><c:out value="${sessionScope.order.billToLastName}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="<%= order.getBillAddress1() %>" /></td>
+		<td><c:out value="${sessionScope.order.billAddress1}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="<%= order.getBillAddress2() %>" /></td>
+		<td><c:out value="${sessionScope.order.billAddress2}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="<%= order.getBillCity() %>" /></td>
+		<td><c:out value="${sessionScope.order.billAddress2}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="<%= order.getBillState() %>" /></td>
+		<td><c:out value="${sessionScope.order.billState}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="<%= order.getBillZip() %>" /></td>
+		<td><c:out value="${sessionScope.order.billZip}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="<%= order.getBillCountry() %>" /></td>
+		<td><c:out value="${sessionScope.order.billCountry}" /></td>
 	</tr>
 	<tr>
 		<th colspan="2">Shipping Address</th>
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="<%= order.getShipToFirstName() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipToFirstName}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="<%= order.getShipToLastName() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipToLastName}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="<%= order.getShipAddress1() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipAddress1}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="<%= order.getShipAddress2() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipAddress2}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="<%= order.getShipCity() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipCity}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="<%= order.getShipState() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipState}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="<%= order.getShipZip() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipZip}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="<%= order.getShipCountry() %>" /></td>
+		<td><c:out value="${sessionScope.order.shipCountry}" /></td>
 	</tr>
 
 </table>

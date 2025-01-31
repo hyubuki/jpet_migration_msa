@@ -86,7 +86,7 @@
 			<td><input type="checkbox" name="listOption" ${sessionScope.account.listOption ? 'checked' : ''}></td>
 		</tr>
 		<tr>
-			<td>Enable MyBanner</td>
+			<td>Enable MyBanner ${sessionScope.account.bannerOption}</td>
 			<td><input type="checkbox" name="bannerOption ${sessionScope.account.bannerOption ? 'checked' : ''}"></td>
 		</tr>
 	</c:if>

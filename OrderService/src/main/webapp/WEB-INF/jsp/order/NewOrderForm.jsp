@@ -26,19 +26,19 @@
 		<tr>
 			<td>Card Type:</td>
 			<td><select name="order.cardType">
-				<option value="Visa" <%= "Visa".equals(order.getCardType()) ? "selected" : "" %>>Visa</option>
-				<option value="MasterCard" <%= "MasterCard".equals(order.getCardType()) ? "selected" : "" %>>MasterCard</option>
-				<option value="American Express" <%= "American Express".equals(order.getCardType()) ? "selected" : "" %>>American Express</option>
+				<option value="Visa" ${sessionScope.order.cardType eq "Visa" ? "selected" : ""}>Visa</option>
+				<option value="MasterCard" ${sessionScope.order.cardType eq "MasterCard" ? "selected" : ""}>MasterCard</option>
+				<option value="American Express" ${sessionScope.order.cardType eq "American Express" ? "selected" : ""}>American Express</option>
 			</select></td>
 		</tr>
 		<tr>
 			<td>Card Number:</td>
-			<td><input type="text" name="creditCard" value="<%= order.getCreditCard() %>"> * Use a fake
+			<td><input type="text" name="creditCard" value="${sessionScope.order.creditCard}"> * Use a fake
 			number!</td>
 		</tr>
 		<tr>
 			<td>Expiry Date (MM/YYYY):</td>
-			<td><input type="text" name="expiryDate" value="<%= order.getExpiryDate() %>"></td>
+			<td><input type="text" name="expiryDate" value="${sessionScope.order.expiryDate}"></td>
 		</tr>
 		<tr>
 			<th colspan=2>Billing Address</th>
@@ -46,35 +46,35 @@
 
 		<tr>
 			<td>First name:</td>
-			<td><input type="text" name="billToFirstName" value="<%= order.getBillToFirstName() %>"></td>
+			<td><input type="text" name="billToFirstName" value="${sessionScope.order.billToFirstName}"></td>
 		</tr>
 		<tr>
 			<td>Last name:</td>
-			<td><input type="text" name="billToLastName" value="<%= order.getBillToLastName() %>"></td>
+			<td><input type="text" name="billToLastName" value="${sessionScope.order.billToLastName}"></td>
 		</tr>
 		<tr>
 			<td>Address 1:</td>
-			<td><input type="text" name="billAddress1" value="<%= order.getBillAddress1() %>"></td>
+			<td><input type="text" name="billAddress1" value="${sessionScope.order.billAddress1}"></td>
 		</tr>
 		<tr>
 			<td>Address 2:</td>
-			<td><input type="text" name="billAddress2" value="<%= order.getBillAddress2() %>"></td>
+			<td><input type="text" name="billAddress2" value="${sessionScope.order.billAddress2}"></td>
 		</tr>
 		<tr>
 			<td>City:</td>
-			<td><input type="text" name="billCity" value="<%= order.getBillCity() %>"></td>
+			<td><input type="text" name="billCity" value="${sessionScope.order.billCity}"></td>
 		</tr>
 		<tr>
 			<td>State:</td>
-			<td><input type="text" name="billState" value="<%= order.getBillState() %>"></td>
+			<td><input type="text" name="billState" value="${sessionScope.order.billState}"></td>
 		</tr>
 		<tr>
 			<td>Zip:</td>
-			<td><input type="text" name="billZip" value="<%= order.getBillZip() %>"></td>
+			<td><input type="text" name="billZip" value="${sessionScope.order.billZip}"></td>
 		</tr>
 		<tr>
 			<td>Country:</td>
-			<td><input type="text" name="billCountry" value="<%= order.getBillCountry() %>"></td>
+			<td><input type="text" name="billCountry" value="${sessionScope.order.billCountry}"></td>
 		</tr>
 
 		<tr>
