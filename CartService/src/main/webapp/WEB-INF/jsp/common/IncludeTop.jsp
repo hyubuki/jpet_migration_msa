@@ -87,27 +87,30 @@
 </div>
 
 <div id="Search">
-<div id="SearchContent">
-<%--	<stripes:form--%>
-<%--	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean">--%>
-<%--	<stripes:text name="keyword" size="14" />--%>
-<%--	<stripes:submit name="searchProducts" value="Search" />--%>
-<%--</stripes:form>--%>
-</div>
+	<div id="SearchContent">
+		<!-- 검색 폼 -->
+		<form action="/catalog/searchProducts" method="get">
+			<input type="text" name="keywords" size="14" placeholder="Enter keyword" />
+			<input type="submit" value="Search" />
+		</form>
+	</div>
 </div>
 
-<div id="QuickLinks"><a href="/catalog/viewCategory/FISH">
-	<img src="/account/images/sm_fish.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/DOGS">
-	<img src="/account/images/sm_dogs.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/REPTILES">
-	<img src="/account/images/sm_reptiles.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/CATS">
-	<img src="/account/images/sm_cats.gif" />
-</a> <img src="/account/images/separator.gif" /> <a href="/catalog/viewCategory/BIRDS">
-	<img src="/account/images/sm_birds.gif" />
-</a></div>
+	<div id="QuickLinks">
+		<a href="/catalog/category?categoryId=FISH">
+			<img src="/catalog/images/sm_fish.gif" />
+		</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=DOGS">
+		<img src="/catalog/images/sm_dogs.gif" />
+	</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=REPTILES">
+		<img src="/catalog/images/sm_reptiles.gif" />
+	</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=CATS">
+		<img src="/catalog/images/sm_cats.gif" />
+	</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=BIRDS">
+		<img src="/catalog/images/sm_birds.gif" />
+	</a></div>
 
 </div>
+
+
 
 <div id="Content"> <c:if test="${msg!=null}">${msg}</c:if>

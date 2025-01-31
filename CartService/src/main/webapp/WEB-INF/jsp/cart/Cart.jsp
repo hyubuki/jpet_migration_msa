@@ -26,7 +26,7 @@
 <div id="Cart">
 
 <h2>Shopping Cart</h2>
-	<form action="${pageContext.request.contextPath}/cart/update" method="post">
+	<form action="${pageContext.request.contextPath}/update" method="post">
 	<table>
 		<tr>
 			<th><b>Item ID</b></th>
@@ -72,9 +72,9 @@
 		</c:forEach>
 		<tr>
 			<td colspan="7">Sub Total: $<fmt:formatNumber
-				value="${cart.subTotal}" pattern="#,##0.00" /> <form action="cart" method="post" style="display:inline;">
+				value="${cart.subTotal}" pattern="#,##0.00" />
 				<input type="submit" name="updateCartQuantities" value="Update Cart" />
-			</form></td>
+			</td>
 		</tr>
 	</table>
 </form>

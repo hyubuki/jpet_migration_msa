@@ -83,15 +83,15 @@
 	href="/account/html/help.html">?</a></div>
 </div>
 
-<div id="Search">
-<div id="SearchContent">
-<%--	<stripes:form--%>
-<%--	beanclass="org.mybatis.jpetstore.org.mybatis.jpetstore.controller.actions.CatalogActionBean">--%>
-<%--	<stripes:text name="keyword" size="14" />--%>
-<%--	<stripes:submit name="searchProducts" value="Search" />--%>
-<%--</stripes:form>--%>
-</div>
-</div>
+	<div id="Search">
+		<div id="SearchContent">
+			<!-- 검색 폼 -->
+			<form action="/catalog/searchProducts" method="get">
+				<input type="text" name="keywords" size="14" placeholder="Enter keyword" />
+				<input type="submit" value="Search" />
+			</form>
+		</div>
+	</div>
 
 <div id="QuickLinks">
 	<a href="/catalog/category?categoryId=FISH">
