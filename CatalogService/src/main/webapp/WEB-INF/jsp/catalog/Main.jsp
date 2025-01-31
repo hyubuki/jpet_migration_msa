@@ -62,11 +62,11 @@ Exotic Varieties</div>
 	<area alt="Dogs" coords="60,250,130,320"
 		href="${pageContext.request.contextPath}/category?categoryId=DOGS" shape="RECT" />
 	<area alt="Reptiles" coords="140,270,210,340"
-		href="${pageContext.request.contextPath}/category?categoryId=Reptiles" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=REPTILES" shape="RECT" />
 	<area alt="Cats" coords="225,240,295,310"
-		href="${pageContext.request.contextPath}/category?categoryId=Cats" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=CATS" shape="RECT" />
 	<area alt="Birds" coords="280,180,350,250"
-		href="${pageContext.request.contextPath}/category?categoryId=Birds" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=BIRDS" shape="RECT" />
   </map>
   <img height="355" src="/catalog/images/splash.gif" align="middle"
 	usemap="#estoremap" width="350" /></div>

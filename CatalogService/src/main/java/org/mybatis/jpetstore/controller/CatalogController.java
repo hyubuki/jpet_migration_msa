@@ -11,12 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jnlp.IntegrationService;
-import javax.servlet.http.HttpSession;
-import javax.xml.ws.Response;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 
 @Controller
@@ -35,7 +31,7 @@ public class CatalogController {
     }
 
     @GetMapping("/category")
-    public String viewCategory(String categoryId, Model model){
+    public String viewCategory(@RequestParam String categoryId, Model model){
         // category
         Category category = catalogService.getCategory(categoryId);
         // product name
