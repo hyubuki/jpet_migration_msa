@@ -17,28 +17,30 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="BackLink">
-	<a href="${pageContext.request.contextPath}/">Return to Main Menu</a>
-</div>
+<h2>My Orders</h2>
 
-<div id="Catalog">
+<table>
+	<tr>
+		<th>Order ID</th>
+		<th>Date</th>
+		<th>Total Price</th>
+	</tr>
 
-	<h2>${category.name}</h2>
-
-	<table>
+	<c:forEach var="order" items="${actionBean.orderList}">
 		<tr>
-			<th>Product ID</th>
-			<th>Name</th>
+			<td><stripes:link
+				beanclass="org.mybatis.jpetstore.web.actions.OrderActionBean"
+				event="viewOrder">
+				<stripes:param name="orderId" value="${order.orderId}" />
+			    ${order.orderId}
+			  </stripes:link></td>
+			<td><fmt:formatDate value="${order.orderDate}"
+				pattern="yyyy/MM/dd hh:mm:ss" /></td>
+			<td>$<fmt:formatNumber value="${order.totalPrice}"
+				pattern="#,##0.00" /></td>
 		</tr>
-		<c:forEach var="product" items="${products}">
-			<tr>
-				<td>${product.productId}</td>
-				<td>${product.name}</td>
-			</tr>
-		</c:forEach>
-	</table>
-
-</div>
+	</c:forEach>
+</table>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
 

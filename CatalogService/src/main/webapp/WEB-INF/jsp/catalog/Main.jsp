@@ -30,21 +30,23 @@
 <div id="Main">
 <div id="Sidebar">
 <div id="SidebarContent">
-	<img src="../images/fish_icon.gif" /> <br />
+	<a href="${pageContext.request.contextPath}/category?categoryId=FISH">
+		<img src="/catalog/images/fish_icon.gif" />
+	</a> <br />
 Saltwater, Freshwater <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=DOGS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=DOGS">
 		<img src="/catalog/images/dogs_icon.gif" />
 	</a> <br />
 Various Breeds <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=CATS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=CATS">
 		<img src="/catalog/images/cats_icon.gif" />
 	</a> <br />
 Various Breeds, Exotic Varieties <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=REPTILES">
+	<a href="${pageContext.request.contextPath}/category?categoryId=REPTILES">
 		<img src="/catalog/images/reptiles_icon.gif" />
 	</a> <br />
 Lizards, Turtles, Snakes <br />
-	<a href="${pageContext.request.contextPath}/catalog/category?categoryId=BIRDS">
+	<a href="${pageContext.request.contextPath}/category?categoryId=BIRDS">
 		<img src="/catalog/images/birds_icon.gif" />
 	</a> <br />
 Exotic Varieties</div>
@@ -54,17 +56,17 @@ Exotic Varieties</div>
 <div id="MainImageContent">
   <map name="estoremap">
 	<area alt="Birds" coords="72,2,280,250"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=BIRDS" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=BIRDS" shape="RECT" />
 	<area alt="Fish" coords="2,180,72,250"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=FISH" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=FISH" shape="RECT" />
 	<area alt="Dogs" coords="60,250,130,320"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=DOGS" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=DOGS" shape="RECT" />
 	<area alt="Reptiles" coords="140,270,210,340"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=Reptiles" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=Reptiles" shape="RECT" />
 	<area alt="Cats" coords="225,240,295,310"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=Cats" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=Cats" shape="RECT" />
 	<area alt="Birds" coords="280,180,350,250"
-		href="${pageContext.request.contextPath}/catalog/category?categoryId=Birds" shape="RECT" />
+		href="${pageContext.request.contextPath}/category?categoryId=Birds" shape="RECT" />
   </map>
   <img height="355" src="/catalog/images/splash.gif" align="middle"
 	usemap="#estoremap" width="350" /></div>

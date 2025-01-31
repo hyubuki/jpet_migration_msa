@@ -3,6 +3,7 @@ package org.mybatis.jpetstore.controller;
 
 import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.domain.Product;
+import org.mybatis.jpetstore.http.HttpFacade;
 import org.mybatis.jpetstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +27,8 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private HttpFacade httpFacade;
 
 
     @GetMapping("/newAccountForm")
@@ -39,7 +42,7 @@ public class AccountController {
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
 
         // 카탈로그 서비스 사용
-        // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+        session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
         session.setAttribute("isAuthenticated", true);
         return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
@@ -55,7 +58,7 @@ public class AccountController {
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
 
         // 카탈로그 서비스 사용
-        // session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+        session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
         return "redirect:" + REDIRECT_BASE_URL + "/catalog";
     }
 
@@ -76,7 +79,7 @@ public class AccountController {
         } else {
             account.setPassword(null);
             session.setAttribute("account", existAccount);
-//            session.setAttribute("myList", catalogService.getProductListByCategory(account.getFavouriteCategoryId()));
+            session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);
             return "redirect:" + REDIRECT_BASE_URL + "/catalog";
         }

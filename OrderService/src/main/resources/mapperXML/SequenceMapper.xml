@@ -1,4 +1,5 @@
-<%--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 
        Copyright 2010-2022 the original author or authors.
 
@@ -14,32 +15,24 @@
        See the License for the specific language governing permissions and
        limitations under the License.
 
---%>
-<%@ include file="../common/IncludeTop.jsp"%>
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<div id="BackLink">
-	<a href="${pageContext.request.contextPath}/">Return to Main Menu</a>
-</div>
+<mapper namespace="org.mybatis.jpetstore.mapper.SequenceMapper">
 
-<div id="Catalog">
+  <cache />
 
-	<h2>${category.name}</h2>
+  <select id="getSequence" resultType="Sequence">
+    SELECT name, nextid
+    FROM SEQUENCE
+    WHERE NAME = #{name}
+  </select>
 
-	<table>
-		<tr>
-			<th>Product ID</th>
-			<th>Name</th>
-		</tr>
-		<c:forEach var="product" items="${products}">
-			<tr>
-				<td>${product.productId}</td>
-				<td>${product.name}</td>
-			</tr>
-		</c:forEach>
-	</table>
+  <update id="updateSequence">
+    UPDATE SEQUENCE
+    SET NEXTID = #{nextId}
+    WHERE NAME = #{name}
+  </update>
 
-</div>
-
-<%@ include file="../common/IncludeBottom.jsp"%>
-
-
+</mapper>

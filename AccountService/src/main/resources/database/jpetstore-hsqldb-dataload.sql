@@ -23,10 +23,10 @@ INSERT INTO account VALUES('ACID','acid@yourdomain.com','ABC', 'XYX', 'OK', '901
 INSERT INTO profile VALUES('j2ee','english','DOGS',1,1);
 INSERT INTO profile VALUES('ACID','english','CATS',1,1);
 
-INSERT INTO bannerdata VALUES ('FISH','<image src="../images/banner_fish.gif">');
-INSERT INTO bannerdata VALUES ('CATS','<image src="../images/banner_cats.gif">');
-INSERT INTO bannerdata VALUES ('DOGS','<image src="../images/banner_dogs.gif">');
-INSERT INTO bannerdata VALUES ('REPTILES','<image src="../images/banner_reptiles.gif">');
-INSERT INTO bannerdata VALUES ('BIRDS','<image src="../images/banner_birds.gif">');
+INSERT INTO bannerdata VALUES ('FISH','<image src="/catalog/images/banner_fish.gif">');
+INSERT INTO bannerdata VALUES ('CATS','<image src="/catalog/images/banner_cats.gif">');
+INSERT INTO bannerdata VALUES ('DOGS','<image src="/catalog/images/banner_dogs.gif">');
+INSERT INTO bannerdata VALUES ('REPTILES','<image src="/catalog/images/banner_reptiles.gif">');
+INSERT INTO bannerdata VALUES ('BIRDS','<image src="/catalog/images/banner_birds.gif">');
 
 

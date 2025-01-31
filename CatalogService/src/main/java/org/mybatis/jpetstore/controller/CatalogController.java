@@ -86,5 +86,4 @@ public class CatalogController {
         List<Product> productListByCategory = catalogService.getProductListByCategory(catalogId);
         return productListByCategory;
     }
-
 }

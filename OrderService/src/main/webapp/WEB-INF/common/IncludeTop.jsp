@@ -1,4 +1,6 @@
-<%@ page import="org.mybatis.jpetstore.domain.Account" %><%--
+<%@ page import="org.mybatis.jpetstore.domain.Account" %>
+<%@ page import="org.mybatis.jpetstore.domain.Product" %>
+<%@ page import="java.util.List" %><%--
 
        Copyright 2010-2016 the original author or authors.
 
@@ -25,7 +27,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<link rel="StyleSheet" href="/account/css/jpetstore.css" type="text/css"
+<link rel="StyleSheet" href="/order/css/jpetstore.css" type="text/css"
 	media="screen" />
 
 <meta name="generator"
@@ -46,7 +48,7 @@
 
 <div id="Logo">
 <div id="LogoContent"><a href="/catalog">
-	<img src="/account/images/logo-topbar.gif" />
+	<img src="/order/images/logo-topbar.gif" />
 </a></div>
 </div>
 	<%
@@ -57,8 +59,8 @@
 
 <div id="Menu">
 <div id="MenuContent"><a href="/cart/viewCart">
-	<img align="middle" name="img_cart" src="/account/images/cart.gif" />
-</a> <img align="middle" src="/account/images/separator.gif" /> <c:if
+	<img align="middle" name="img_cart" src="/order/images/cart.gif" />
+</a> <img align="middle" src="/order/images/separator.gif" /> <c:if
 	test="${account == null}">
 	<a href="/account/signonForm">
           Sign In
@@ -74,13 +76,13 @@
 		<a href="/account/signoff">
             Sign Out
 	      </a>
-		<img align="middle" src="/account/images/separator.gif" />
-		<a href="/account/editAccountForm">
+		<img align="middle" src="/order/images/separator.gif" />
+		<a href="/order/editAccountForm">
             My Account
 	      </a>
 	</c:if>
-</c:if> <img align="middle" src="/account/images/separator.gif" /> <a
-	href="/account/html/help.html">?</a></div>
+</c:if> <img align="middle" src="/order/images/separator.gif" /> <a
+	href="/order/html/help.html">?</a></div>
 </div>
 
 <div id="Search">
@@ -93,17 +95,16 @@
 </div>
 </div>
 
-<div id="QuickLinks">
-	<a href="/catalog/category?categoryId=FISH">
-	<img src="/catalog/images/sm_fish.gif" />
-</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=DOGS">
-	<img src="/catalog/images/sm_dogs.gif" />
-</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=REPTILES">
-	<img src="/catalog/images/sm_reptiles.gif" />
-</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=CATS">
-	<img src="/catalog/images/sm_cats.gif" />
-</a> <img src="/catalog/images/separator.gif" /> <a href="/catalog/category?categoryId=BIRDS">
-	<img src="/catalog/images/sm_birds.gif" />
+<div id="QuickLinks"><a href="/catalog/viewCategory/FISH">
+	<img src="/order/images/sm_fish.gif" />
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/DOGS">
+	<img src="/order/images/sm_dogs.gif" />
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/REPTILES">
+	<img src="/order/images/sm_reptiles.gif" />
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/CATS">
+	<img src="/order/images/sm_cats.gif" />
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/BIRDS">
+	<img src="/order/images/sm_birds.gif" />
 </a></div>
 
 </div>
