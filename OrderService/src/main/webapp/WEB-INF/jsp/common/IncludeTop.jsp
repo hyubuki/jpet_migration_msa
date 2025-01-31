@@ -94,15 +94,15 @@
 		</div>
 	</div>
 
-<div id="QuickLinks"><a href="/catalog/viewCategory/FISH">
+<div id="QuickLinks"><a href="/catalog/category?categoryId=FISH">
 	<img src="/order/images/sm_fish.gif" />
-</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/DOGS">
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/category?categoryId=DOGS">
 	<img src="/order/images/sm_dogs.gif" />
-</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/REPTILES">
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/category?categoryId=REPTILES">
 	<img src="/order/images/sm_reptiles.gif" />
-</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/CATS">
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/category?categoryId=CATS">
 	<img src="/order/images/sm_cats.gif" />
-</a> <img src="/order/images/separator.gif" /> <a href="/catalog/viewCategory/BIRDS">
+</a> <img src="/order/images/separator.gif" /> <a href="/catalog/category?categoryId=BIRDS">
 	<img src="/order/images/sm_birds.gif" />
 </a></div>
 

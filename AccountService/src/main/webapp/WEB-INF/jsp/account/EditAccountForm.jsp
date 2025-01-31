@@ -25,6 +25,7 @@
 		<tr>
 			<td>User ID:</td>
 			<td>${sessionScope.account.username}</td>
+			<input type="hidden" name="username" value="${sessionScope.account.username}">
 		</tr>
 		<tr>
 			<td>New password:</td>
