@@ -21,7 +21,7 @@ public class CartController {
 
     @GetMapping("/addItemToCart")
     public String addItemToCart(@RequestParam String workingItemId, HttpSession session, Model model) {
-        Cart cart = (Cart) session.getAttribute("cart");
+        Cart cart = getCart(session);
         if (cart.containsItemId(workingItemId)) {
             cart.incrementQuantityByItemId(workingItemId);
         } else {
@@ -31,6 +31,7 @@ public class CartController {
             cart.addItem(item,isInStock);
         }
         model.addAttribute("cart",cart);
+        session.setAttribute("cart",cart);
         return "cart/Cart";
     }
 
@@ -60,6 +61,7 @@ public class CartController {
             return "common/error";
         } else {
             model.addAttribute("cart", cart);
+            session.setAttribute("cart",cart);
             return "cart/Cart";
         }
     }
