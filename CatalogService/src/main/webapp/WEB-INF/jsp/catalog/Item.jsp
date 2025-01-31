@@ -18,7 +18,7 @@
 <%@ include file="../common/IncludeTop.jsp"%>
 
 <div id="BackLink">
-	<a href="${pageContext.request.contextPath}/catalog/main">Return to Main Menu</a>
+	<a href="/catalog">Return to Main Menu</a>
 </div>
 
 <div id="Catalog">
@@ -53,19 +53,11 @@
 
 	<tr>
 <%-- TODO : CartService _ addItemToCart--%>
-
-<%--		<td><stripes:link class="Button"--%>
-<%--			beanclass="org.mybatis.jpetstore.web.actions.CartActionBean"--%>
-<%--			event="addItemToCart">--%>
-<%--			<stripes:param name="workingItemId" value="${actionBean.item.itemId}" />--%>
-<%--       	Add to Cart--%>
-<%--       </stripes:link></td>--%>
+		<td><a class="Button" href="/cart/addItemToCart?workingItemId=${item.itemId}">Add to Cart</a></td>
 	</tr>
 </table>
-
 </div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
-
 
 

@@ -45,12 +45,7 @@
 			<td><fmt:formatNumber value="${item.listPrice}"
 				pattern="$#,##0.00" /></td>
 <%--			 TODO : CartService addItemToCart 필요--%>
-<%--			<td><stripes:link class="Button"--%>
-<%--				beanclass="org.mybatis.jpetstore.web.actions.CartActionBean"--%>
-<%--				event="addItemToCart">--%>
-<%--				<stripes:param name="workingItemId" value="${item.itemId}" />--%>
-<%--        	Add to Cart--%>
-<%--        </stripes:link></td>--%>
+			<td><a class="Button" href="/cart/addItemToCart?workingItemId=${item.itemId}">Add to Cart</a></td>
 		</tr>
 	</c:forEach>
 	<tr>
