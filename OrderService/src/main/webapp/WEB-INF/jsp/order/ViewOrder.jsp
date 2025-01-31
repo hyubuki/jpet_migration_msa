@@ -17,16 +17,14 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="BackLink"><stripes:link
-	beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean">
-	Return to Main Menu</stripes:link></div>
+<div id="BackLink"><a href="/catalog">Return to Main Menu</a></div>
 
 <div id="Catalog">
 
 <table>
 	<tr>
-		<th align="center" colspan="2">Order #${actionBean.order.orderId}
-		<fmt:formatDate value="${actionBean.order.orderDate}"
+		<th align="center" colspan="2">Order #${order.getOrderId()}
+		<fmt:formatDate value="${order.getOrderDate}"
 			pattern="yyyy/MM/dd hh:mm:ss" /></th>
 	</tr>
 	<tr>
@@ -34,93 +32,93 @@
 	</tr>
 	<tr>
 		<td>Card Type:</td>
-		<td><c:out value="${actionBean.order.cardType}" /></td>
+		<td><c:out value="${order.getCardType()}" /></td>
 	</tr>
 	<tr>
 		<td>Card Number:</td>
-		<td><c:out value="${actionBean.order.creditCard}" /> * Fake
+		<td><c:out value="${order.getCreditCard()}" /> * Fake
 		number!</td>
 	</tr>
 	<tr>
 		<td>Expiry Date (MM/YYYY):</td>
-		<td><c:out value="${actionBean.order.expiryDate}" /></td>
+		<td><c:out value="${order.getExpiryDate()}" /></td>
 	</tr>
 	<tr>
 		<th colspan="2">Billing Address</th>
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="${actionBean.order.billToFirstName}" /></td>
+		<td><c:out value="${order.getBillToFirstName()}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="${actionBean.order.billToLastName}" /></td>
+		<td><c:out value="${order.getBillToLastName()}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="${actionBean.order.billAddress1}" /></td>
+		<td><c:out value="${order.getBillAddress1()}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="${actionBean.order.billAddress2}" /></td>
+		<td><c:out value="${order.getBillAddress2()}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="${actionBean.order.billCity}" /></td>
+		<td><c:out value="${order.getBillCity()}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="${actionBean.order.billState}" /></td>
+		<td><c:out value="${order.getBillState()}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="${actionBean.order.billZip}" /></td>
+		<td><c:out value="${order.getBillZip()}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="${actionBean.order.billCountry}" /></td>
+		<td><c:out value="${order.getBillCountry()}" /></td>
 	</tr>
 	<tr>
 		<th colspan="2">Shipping Address</th>
 	</tr>
 	<tr>
 		<td>First name:</td>
-		<td><c:out value="${actionBean.order.shipToFirstName}" /></td>
+		<td><c:out value="${order.getShipToFirstName()}" /></td>
 	</tr>
 	<tr>
 		<td>Last name:</td>
-		<td><c:out value="${actionBean.order.shipToLastName}" /></td>
+		<td><c:out value="${order.getShipToLastName()}" /></td>
 	</tr>
 	<tr>
 		<td>Address 1:</td>
-		<td><c:out value="${actionBean.order.shipAddress1}" /></td>
+		<td><c:out value="${order.getShipAddress1()}" /></td>
 	</tr>
 	<tr>
 		<td>Address 2:</td>
-		<td><c:out value="${actionBean.order.shipAddress2}" /></td>
+		<td><c:out value="${order.getShipAddress2()}" /></td>
 	</tr>
 	<tr>
 		<td>City:</td>
-		<td><c:out value="${actionBean.order.shipCity}" /></td>
+		<td><c:out value="${order.getShipCity()}" /></td>
 	</tr>
 	<tr>
 		<td>State:</td>
-		<td><c:out value="${actionBean.order.shipState}" /></td>
+		<td><c:out value="${order.getShipState()}" /></td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
-		<td><c:out value="${actionBean.order.shipZip}" /></td>
+		<td><c:out value="${order.getShipZip()}" /></td>
 	</tr>
 	<tr>
 		<td>Country:</td>
-		<td><c:out value="${actionBean.order.shipCountry}" /></td>
+		<td><c:out value="${order.getShipCountry()}" /></td>
 	</tr>
 	<tr>
 		<td>Courier:</td>
-		<td><c:out value="${actionBean.order.courier}" /></td>
+		<td><c:out value="${order.getCourier()}" /></td>
 	</tr>
 	<tr>
-		<td colspan="2">Status: <c:out value="${actionBean.order.status}" /></td>
+		<td colspan="2">Status: <c:out value="${order.status}" /></td>
 	</tr>
 	<tr>
 		<td colspan="2">
@@ -132,16 +130,12 @@
 				<th>Price</th>
 				<th>Total Cost</th>
 			</tr>
-			<c:forEach var="lineItem" items="${actionBean.order.lineItems}">
+			<c:forEach var="lineItem" items="${order.getLineItems()}">
 				<tr>
-					<td><stripes:link
-						beanclass="org.mybatis.jpetstore.web.actions.CatalogActionBean"
-						event="viewItem">
-						<stripes:param name="itemId" value="${lineItem.item.itemId}" />
-						${lineItem.item.itemId}
-					</stripes:link></td>
-					<td><c:if test="${lineItem.item != null}">
-						${lineItem.item.attribute1}
+					<td><a href="/catalog/item?itemId=${LineItem.getItem().getItemId()}">
+							${LineItem.getItem().getItemId()}</a></td>
+					<td><c:if test="${lineItem.getItem() != null}">
+						${lineItem.getItem().getAttribute1()}
 						${lineItem.item.attribute2}
 						${lineItem.item.attribute3}
 						${lineItem.item.attribute4}

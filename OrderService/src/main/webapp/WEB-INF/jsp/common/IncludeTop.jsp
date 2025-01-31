@@ -1,6 +1,7 @@
 <%@ page import="org.mybatis.jpetstore.domain.Account" %>
 <%@ page import="org.mybatis.jpetstore.domain.Product" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="org.mybatis.jpetstore.domain.Order" %><%--
 
        Copyright 2010-2016 the original author or authors.
 
@@ -54,6 +55,7 @@
 	<%
 		Account account = (Account) session.getAttribute("account");
 		Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
+		Order order = (Order) session.getAttribute("order");
 		String msg = (String) request.getAttribute("msg");
 	%>
 
@@ -77,7 +79,7 @@
             Sign Out
 	      </a>
 		<img align="middle" src="/order/images/separator.gif" />
-		<a href="/order/editAccountForm">
+		<a href="/account/editAccountForm">
             My Account
 	      </a>
 	</c:if>

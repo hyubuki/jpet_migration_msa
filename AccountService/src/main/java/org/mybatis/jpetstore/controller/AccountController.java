@@ -60,7 +60,7 @@ public class AccountController {
     }
 
     @GetMapping("/signonForm")
-    public String signonForm(@RequestParam String msg, HttpServletRequest req) {
+    public String signonForm(@RequestParam(required = false) String msg, HttpServletRequest req) {
         if (msg != null)
             req.setAttribute("msg", msg);
         return "account/SignonForm";

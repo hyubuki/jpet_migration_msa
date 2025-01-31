@@ -17,8 +17,7 @@
 --%>
 <%@ include file="../common/IncludeTop.jsp"%>
 
-<div id="Catalog"><stripes:form
-	beanclass="org.mybatis.jpetstore.web.actions.OrderActionBean">
+<div id="Catalog"><form action="/order/newOrder" method="post">
 
 	<table>
 		<tr>
@@ -27,42 +26,42 @@
 
 		<tr>
 			<td>First name:</td>
-			<td><stripes:text name="order.shipToFirstName" /></td>
+			<td><input type="text" name="shipToFirstName" value="<%= order.getShipToFirstName() %>"></td>
 		</tr>
 		<tr>
 			<td>Last name:</td>
-			<td><stripes:text name="order.shipToLastName" /></td>
+			<td><input type="text" name="shipToLastName" value="<%= order.getShipToLastName() %>"></td>
 		</tr>
 		<tr>
 			<td>Address 1:</td>
-			<td><stripes:text size="40" name="order.shipAddress1" /></td>
+			<td><input type="text" name="shipAddress1" value="<%= order.getShipAddress1() %>"></td>
 		</tr>
 		<tr>
 			<td>Address 2:</td>
-			<td><stripes:text size="40" name="order.shipAddress2" /></td>
+			<td><input type="text" name="shipAddress2" value="<%= order.getShipAddress2() %>"></td>
 		</tr>
 		<tr>
 			<td>City:</td>
-			<td><stripes:text name="order.shipCity" /></td>
+			<td><input type="text" name="shipCity" value="<%= order.getShipCity() %>"></td>
 		</tr>
 		<tr>
 			<td>State:</td>
-			<td><stripes:text size="4" name="order.shipState" /></td>
+			<td><input type="text" name="shipState" value="<%= order.getShipState() %>"></td>
 		</tr>
 		<tr>
 			<td>Zip:</td>
-			<td><stripes:text size="10" name="order.shipZip" /></td>
+			<td><input type="text" name="shipZip" value="<%= order.getShipZip() %>"></td>
 		</tr>
 		<tr>
 			<td>Country:</td>
-			<td><stripes:text size="15" name="order.shipCountry" /></td>
+			<td><input type="text" name="shipCountry" value="<%= order.getShipCountry() %>"></td>
 		</tr>
 
 
 	</table>
+	<input type="hidden" name="shippingAddressRequired" value="false">
+	<input type="submit" name="newOrder" value="Continue">
 
-	<stripes:submit name="newOrder" value="Continue" />
-
-</stripes:form></div>
+	</form></div>
 
 <%@ include file="../common/IncludeBottom.jsp"%>
