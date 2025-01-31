@@ -51,28 +51,23 @@
 	<img src="/account/images/logo-topbar.gif" />
 </a></div>
 </div>
-	<%
-		Account account = (Account) session.getAttribute("account");
-		Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
-		String msg = (String) request.getAttribute("msg");
-	%>
 
 <div id="Menu">
 <div id="MenuContent"><a href="/cart/viewCart">
 	<img align="middle" name="img_cart" src="/account/images/cart.gif" />
 </a> <img align="middle" src="/account/images/separator.gif" /> <c:if
-	test="${account == null}">
+	test="${sessionScope.account == null}">
 	<a href="/account/signonForm">
           Sign In
 	    </a>
-</c:if> <c:if test="${account != null}">
-	<c:if test="${!isAuthenticated}">
+</c:if> <c:if test="${sessionScope.account != null}">
+	<c:if test="${!sessionScope.isAuthenticated}">
 		<a href="/account/signonForm">
             Sign In
 	      </a>
 	</c:if>
-</c:if> <c:if test="${account != null}">
-	<c:if test="${isAuthenticated}">
+</c:if> <c:if test="${sessionScope.account != null}">
+	<c:if test="${sessionScope.isAuthenticated}">
 		<a href="/account/signoff">
             Sign Out
 	      </a>

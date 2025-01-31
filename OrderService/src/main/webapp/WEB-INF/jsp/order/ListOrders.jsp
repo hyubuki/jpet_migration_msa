@@ -26,14 +26,10 @@
 		<th>Total Price</th>
 	</tr>
 
-	<c:forEach var="order" items="${actionBean.orderList}">
+	<c:forEach var="order" items="${sessionScope.orderList}">
 		<tr>
-			<td><stripes:link
-				beanclass="org.mybatis.jpetstore.web.actions.OrderActionBean"
-				event="viewOrder">
-				<stripes:param name="orderId" value="${order.orderId}" />
-			    ${order.orderId}
-			  </stripes:link></td>
+			<td><a href="/order/viewOrder?orderId=${order.orderId}">
+					${order.orderId}</a></td>
 			<td><fmt:formatDate value="${order.orderDate}"
 				pattern="yyyy/MM/dd hh:mm:ss" /></td>
 			<td>$<fmt:formatNumber value="${order.totalPrice}"

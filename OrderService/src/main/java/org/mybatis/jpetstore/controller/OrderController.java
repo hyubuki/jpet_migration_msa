@@ -25,9 +25,10 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/listOrders")
-    public String listOrders(HttpSession session) {
+    public String listOrders(HttpSession session, HttpServletRequest request) {
         Account account = (Account) session.getAttribute("account");
         List<Order> orderList = orderService.getOrdersByUsername(account.getUsername());
+        request.setAttribute("orderList", orderList);
         return "order/ListOrders";
     }
 

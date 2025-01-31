@@ -18,46 +18,46 @@
 <h3>Account Information</h3>
 
 <table>
-	<c:if test="${account != null}">
+	<c:if test="${sessionScope.account != null}">
 		<tr>
 			<td>First name:</td>
-			<td><input type="text" name="firstName" value="${account.getFirstName()}"></td>
+			<td><input type="text" name="firstName" value="${sessionScope.account.firstName}"></td>
 		</tr>
 		<tr>
 			<td>Last name:</td>
-			<td><input type="text" name="lastName" value="${account.getLastName()}"></td>
+			<td><input type="text" name="lastName" value="${sessionScope.account.lastName}"></td>
 		</tr>
 		<tr>
 			<td>Email:</td>
-			<td><input type="text" name="email" value="${account.getEmail()}"></td>
+			<td><input type="text" name="email" value="${sessionScope.account.email}"></td>
 		</tr>
 		<tr>
 			<td>Phone:</td>
-			<td><input type="text" name="phone" value="${account.getPhone()}"></td>
+			<td><input type="text" name="phone" value="${sessionScope.account.phone}"></td>
 		</tr>
 		<tr>
 			<td>Address 1:</td>
-			<td><input type="text" name="address1" value="${account.getAddress1()}"></td>
+			<td><input type="text" name="address1" value="${sessionScope.account.address1}"></td>
 		</tr>
 		<tr>
 			<td>Address 2:</td>
-			<td><input type="text" name="address2" value="${account.getAddress2()}"></td>
+			<td><input type="text" name="address2" value="${sessionScope.account.address2}"></td>
 		</tr>
 		<tr>
 			<td>City:</td>
-			<td><input type="text" name="city" value="${account.getCity()}"></td>
+			<td><input type="text" name="city" value="${sessionScope.account.city}"></td>
 		</tr>
 		<tr>
 			<td>State:</td>
-			<td><input type="text" name="state" value="${account.getState()}"></td>
+			<td><input type="text" name="state" value="${sessionScope.account.state}"></td>
 		</tr>
 		<tr>
 			<td>Zip:</td>
-			<td><input type="text" name="zip" value="${account.getZip()}"></td>
+			<td><input type="text" name="zip" value="${sessionScope.account.zip}"></td>
 		</tr>
 		<tr>
 			<td>Country:</td>
-			<td><input type="text" name="country" value="${account.getCountry()}"></td>
+			<td><input type="text" name="country" value="${sessionScope.account.country}"></td>
 		</tr>
 		</table>
 
@@ -67,27 +67,27 @@
 		<tr>
 			<td>Language Preference:</td>
 			<td><select name="languagePreference">
-				<option value="english">english</option>
-				<option value="japanese">japanese</option>
+				<option value="english" ${sessionScope.account.languagePreference eq 'english' ? 'selected' : ''}>english</option>
+				<option value="japanese" ${sessionScope.account.languagePreference eq 'japanese' ? 'selected' : ''}>japanese</option>
 			</select></td>
 		</tr>
 		<tr>
 			<td>Favourite Category:</td>
 			<td><select name="favouriteCategoryId">
-				<option value="FISH">FISH</option>
-				<option value="DOGS">DOGS</option>
-				<option value="REPTILES">REPTILES</option>
-				<option value="CATS">CATS</option>
-				<option value="BIRDS">BIRDS</option>
+				<option value="FISH" ${sessionScope.account.favouriteCategoryId eq 'FISH' ? 'selected' : ''}>FISH</option>
+				<option value="DOGS" ${sessionScope.account.favouriteCategoryId eq 'DOGS' ? 'selected' : ''}>DOGS</option>
+				<option value="REPTILES" ${sessionScope.account.favouriteCategoryId eq 'REPTILES' ? 'selected' : ''}>REPTILES</option>
+				<option value="CATS" ${sessionScope.account.favouriteCategoryId eq 'CATS' ? 'selected' : ''}>CATS</option>
+				<option value="BIRDS" ${sessionScope.account.favouriteCategoryId eq 'BIRDS' ? 'selected' : ''}>BIRDS</option>
 			</select></td>
 		</tr>
 		<tr>
 			<td>Enable MyList</td>
-			<td><input type="checkbox" name="listOption"></td>
+			<td><input type="checkbox" name="listOption" ${sessionScope.account.listOption ? 'checked' : ''}></td>
 		</tr>
 		<tr>
 			<td>Enable MyBanner</td>
-			<td><input type="checkbox" name="bannerOption"></td>
+			<td><input type="checkbox" name="bannerOption ${sessionScope.account.bannerOption ? 'checked' : ''}"></td>
 		</tr>
 	</c:if>
 	<c:if test="${account == null}">
