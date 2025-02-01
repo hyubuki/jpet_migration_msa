@@ -78,7 +78,7 @@ public class AccountController {
         } else {
             account.setPassword(null);
             session.setAttribute("account", existAccount);
-            session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
+            session.setAttribute("myList", httpFacade.getProductListByCategory(existAccount.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);
             return "redirect:" + REDIRECT_BASE_URL + "/catalog";
         }
