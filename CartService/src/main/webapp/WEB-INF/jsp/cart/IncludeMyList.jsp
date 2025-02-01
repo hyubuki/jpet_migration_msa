@@ -15,12 +15,12 @@
        limitations under the License.
 
 --%>
-<c:if test="${!empty accountBean.myList}">
+<c:if test="${!empty sessionScope.myList}">
 	<p>Pet Favorites <br />
 	Shop for more of your favorite pets here.</p>
 	<ul>
 <%--		Todo accountBean --%>
-		<c:forEach var="product" items="${myList}">
+		<c:forEach var="product" items="${sessionScope.myList}">
 			<li><a href="/catalog/product?productId=${proudct.productId}">${product.name}</a> (${product.productId})</li>
 		</c:forEach>
 	</ul>
