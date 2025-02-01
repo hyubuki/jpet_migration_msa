@@ -84,9 +84,9 @@
 	</c:if></div>
 
 <div id="MyList">
-  <c:if test="${account != null}">
-	<c:if test="${!isAuthenticated}">
-	  <c:if test="${!empty account.listOption}">
+  <c:if test="${sessionScope.account != null}">
+	<c:if test="${!sessionScope.isAuthenticated}">
+	  <c:if test="${sessionScope.account.listOption}">
 	    <%@ include file="IncludeMyList.jsp"%>
       </c:if>
 	</c:if>
