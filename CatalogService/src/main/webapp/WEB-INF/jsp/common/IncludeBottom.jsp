@@ -23,9 +23,9 @@
 </div>
 
 <div id="Banner"><c:if test="${account != null }">
-	<c:if test="${isAuthenticated}">
-		<c:if test="${account.isBannerOption()}">
-          ${account.getBannerName()}
+	<c:if test="${sessionScope.isAuthenticated}">
+		<c:if test="${sessionScope.account.isBannerOption()}">
+          ${sessionScope.account.bannerName}
         </c:if>
 	</c:if>
 </c:if></div>
