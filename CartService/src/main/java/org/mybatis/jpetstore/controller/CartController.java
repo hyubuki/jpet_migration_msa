@@ -43,7 +43,10 @@ public class CartController {
         return "cart/Cart";
     }
 
-
+    /*
+        session에 담아두면 어디서든지 sessionScope로 접근 가능하기 때문에
+        불필요한 메소드인 것 같습니다.
+     */
     @GetMapping("/getCart")
     public Cart getCart(HttpSession session) {
         if (session.getAttribute("cart") == null) {
@@ -84,9 +87,13 @@ public class CartController {
             }
         }
         model.addAttribute("cart",cart);
+        session.setAttribute("cart",cart);
         return "cart/Cart";
     }
 
+    /*
+        checkout이라는 url을 접근하는 버튼이 기존 웹 앱에도 없는 것 같습니다!!
+     */
     @GetMapping("/checkout")
     public String checkOut(HttpSession session, Model model) {
         Cart cart = getCart(session);
