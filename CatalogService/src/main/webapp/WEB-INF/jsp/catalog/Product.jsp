@@ -18,7 +18,7 @@
 <%@ include file="../common/IncludeTop.jsp"%>
 
 <div id="BackLink">
-	<a href = "/catalog/product?productId=${product.productId}">
+	<a href="/catalog/category?categoryId=${product.categoryId}">
 	Return to ${product.categoryId}
 	</a></div>
 
