@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -29,14 +30,23 @@ public class AccountController {
 
 
     @GetMapping("/newAccountForm")
-    public String newAccountForm() {
+    public String newAccountForm(HttpSession session) {
+        if (session.getAttribute("account") != null) {
+            // 로그인이 되어 있으면 메인 페이지로 리다이렉트
+            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        }
         return "account/NewAccountForm";
     }
 
     @PostMapping("/newAccount")
     public String newAccount(Account account, HttpSession session) {
+        if (session.getAttribute("account") != null) {
+            // 로그인이 되어 있으면 메인 페이지로 리다이렉트
+            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        }
         accountService.insertAccount(account);
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
+        session.setAttribute("csrf_token", UUID.randomUUID().toString());
 
         // 카탈로그 서비스 사용
         session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
@@ -50,7 +60,13 @@ public class AccountController {
     }
 
     @PostMapping("/editAccount")
-    public String editAccount(Account account, HttpSession session) {
+    public String editAccount(Account account, @RequestParam String csrf, HttpSession session, HttpServletRequest req) {
+        if (csrf == null || session.getAttribute("account") == null || !csrf.equals(session.getAttribute("csrf_token"))) {
+            // csrf가 null이거나 로그인이 안되어있거나 csrf가 일치하지 않으면 다시 돌아감
+            String value = "This is not a valid request";
+            req.setAttribute("msg", value);
+            return "account/EditAccountForm";
+        }
         accountService.updateAccount(account);
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
 
@@ -60,7 +76,11 @@ public class AccountController {
     }
 
     @GetMapping("/signonForm")
-    public String signonForm(@RequestParam(required = false) String msg, HttpServletRequest req) {
+    public String signonForm(@RequestParam(required = false) String msg, HttpServletRequest req, HttpSession session) {
+        if (session.getAttribute("account") != null) {
+            // 로그인이 되어 있으면, 로그인 불가
+            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        }
         if (msg != null)
             req.setAttribute("msg", msg);
         return "account/SignonForm";
@@ -77,6 +97,7 @@ public class AccountController {
             return "account/SignonForm";
         } else {
             account.setPassword(null);
+            session.setAttribute("csrf_token", UUID.randomUUID().toString());
             session.setAttribute("account", existAccount);
             session.setAttribute("myList", httpFacade.getProductListByCategory(existAccount.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);

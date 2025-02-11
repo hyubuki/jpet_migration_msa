@@ -25,8 +25,13 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/listOrders")
-    public String listOrders(HttpSession session, HttpServletRequest request) {
+    public String listOrders(HttpSession session, HttpServletRequest request, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
+            redirect.addAttribute("msg", msg);
+            return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
+        }
         List<Order> orderList = orderService.getOrdersByUsername(account.getUsername());
         request.setAttribute("orderList", orderList);
         return "order/ListOrders";
@@ -35,7 +40,7 @@ public class OrderController {
     @GetMapping("/newOrderForm")
     public String newOrderForm(HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");
-         Cart cart = (Cart) session.getAttribute("cart");
+        Cart cart = (Cart) session.getAttribute("cart");
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
@@ -55,7 +60,12 @@ public class OrderController {
     }
 
     @PostMapping("/newOrder")
-    public String newOrder(Order order, @RequestParam(required = false) boolean shippingAddressRequired, @RequestParam(required = false) boolean confirmed, @RequestParam(required = false) boolean changeShipInfo, HttpServletRequest req, HttpSession session) {
+    public String newOrder(Order order, @RequestParam(required = false) boolean shippingAddressRequired, @RequestParam(required = false) boolean confirmed, @RequestParam(required = false) boolean changeShipInfo, @RequestParam String csrf, HttpServletRequest req, HttpSession session) {
+        if (csrf == null || !csrf.equals(session.getAttribute("csrf_token"))) {
+            String msg = "This is not a valid request";
+            req.setAttribute("msg", msg);
+            return "common/Error";
+        }
         Order sessionOrder = (Order) session.getAttribute("order");
         if (shippingAddressRequired) {
             changeBillInfo(sessionOrder, order);
@@ -82,9 +92,14 @@ public class OrderController {
     }
 
     @GetMapping("/viewOrder")
-    public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session) {
+    public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");
 
+        if (account == null) {
+            String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
+            redirect.addAttribute("msg", msg);
+            return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
+        }
         Order order = orderService.getOrder(orderId);
         if (account.getUsername().equals(order.getUsername())) {
             req.setAttribute("order", order);

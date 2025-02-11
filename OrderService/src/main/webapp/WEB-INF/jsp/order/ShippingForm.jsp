@@ -59,6 +59,7 @@
 
 
 	</table>
+	<input type="hidden" name="csrf" value="${sessionScope.csrf_token}">
 	<input type="submit" name="newOrder?changeShipInfo=true" value="Continue">
 
 	</form></div>

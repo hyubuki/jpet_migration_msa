@@ -26,6 +26,7 @@
 			<td>User ID:</td>
 			<td>${sessionScope.account.username}</td>
 			<input type="hidden" name="username" value="${sessionScope.account.username}">
+			<input type="hidden" name="csrf" value="${sessionScope.csrf_token}">
 		</tr>
 		<tr>
 			<td>New password:</td>

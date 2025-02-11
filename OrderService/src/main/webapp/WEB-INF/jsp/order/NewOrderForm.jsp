@@ -83,6 +83,7 @@
 		</tr>
 
 	</table>
+	<input type="hidden" name="csrf" value="${sessionScope.csrf_token}">
 	<input type="submit" name="newOrder" value="Continue">
 
 </form></div>
