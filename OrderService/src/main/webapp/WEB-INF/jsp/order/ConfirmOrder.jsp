@@ -106,6 +106,7 @@ press continue...
 
 </table>
 <form action="/order/newOrder?confirmed=true" method="post">
+	<input type="hidden" name="csrf" value="${sessionScope.csrf_token}">
 	<input type="submit" class="Button" value="Confirm">
 </form>
 
