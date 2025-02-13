@@ -2,17 +2,20 @@ package org.mybatis.jpetstore.controller;
 
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
+import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 @Controller
@@ -113,5 +116,14 @@ public class CatalogController {
         return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
     }
 
-
+    @KafkaListener(topics="prod_compensation", groupId = "group_1")
+    public void incrInventoryQuantity(Object data) {
+        System.out.println("Received");
+        Order order = (Order) data;
+        order.getLineItems().forEach(lineItem -> {
+            String itemId = lineItem.getItemId();
+            Integer increment = lineItem.getQuantity();
+            System.out.println(itemId + ", " + increment);
+        });
+    }
 }

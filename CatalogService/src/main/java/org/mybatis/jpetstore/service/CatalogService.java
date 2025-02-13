@@ -28,6 +28,7 @@ import org.mybatis.jpetstore.mapper.ItemMapper;
 import org.mybatis.jpetstore.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Class CatalogService.
@@ -93,6 +94,7 @@ public class CatalogService {
   }
 
 
+  @Transactional
   public boolean updateItemQuantity(String itemId, Integer increment){
     Map<String,Object> request = new HashMap<String,Object>();
     try{

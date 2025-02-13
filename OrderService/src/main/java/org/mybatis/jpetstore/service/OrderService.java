@@ -23,6 +23,7 @@ import org.mybatis.jpetstore.mapper.LineItemMapper;
 import org.mybatis.jpetstore.mapper.OrderMapper;
 import org.mybatis.jpetstore.mapper.SequenceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,14 +43,16 @@ public class OrderService {
   private final SequenceMapper sequenceMapper;
   private final LineItemMapper lineItemMapper;
   private final HttpFacade httpFacade;
+  private final KafkaTemplate<String, Object> kafkaTemplate;
 
   @Autowired
   public OrderService(OrderMapper orderMapper, SequenceMapper sequenceMapper,
-                      LineItemMapper lineItemMapper, HttpFacade httpFacade) {
+                      LineItemMapper lineItemMapper, HttpFacade httpFacade, KafkaTemplate<String, Object> kafkaTemplate) {
     this.orderMapper = orderMapper;
     this.sequenceMapper = sequenceMapper;
     this.lineItemMapper = lineItemMapper;
     this.httpFacade = httpFacade;
+    this.kafkaTemplate = kafkaTemplate;
   }
 
   /**
@@ -61,23 +64,30 @@ public class OrderService {
   @Transactional
   public void insertOrder(Order order) {
     order.setOrderId(getNextId("ordernum"));
+    Map<String, Object> param = new HashMap<>();
     order.getLineItems().forEach(lineItem -> {
       String itemId = lineItem.getItemId();
       Integer increment = lineItem.getQuantity();
-      Map<String, Object> param = new HashMap<>(2);
       param.put("itemId", itemId);
       param.put("increment", increment);
+      // http 통신을 id마다 하지말고, 한번에 할 것
       boolean resp = httpFacade.updateInventoryQuantity(param);
-      if (!resp)
-        throw new RuntimeException("Failed to update inventory quantity");
+      if (!resp) {
+       // 응답이 5xx, Timeout일 경우,
+      }
     });
-
-    orderMapper.insertOrder(order);
-    orderMapper.insertOrderStatus(order);
-    order.getLineItems().forEach(lineItem -> {
-      lineItem.setOrderId(order.getOrderId());
-      lineItemMapper.insertLineItem(lineItem);
-    });
+    try {
+      throw new Exception("Test");
+//      orderMapper.insertOrder(order);
+//      orderMapper.insertOrderStatus(order);
+//      order.getLineItems().forEach(lineItem -> {
+//        lineItem.setOrderId(order.getOrderId());
+//        lineItemMapper.insertLineItem(lineItem);
+//      });
+    } catch(Exception e) {
+      // 주문 오류 시
+      kafkaTemplate.send("prod_compensation", order);
+    }
   }
 
   /**
