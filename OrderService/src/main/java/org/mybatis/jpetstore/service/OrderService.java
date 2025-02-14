@@ -68,22 +68,21 @@ public class OrderService {
     order.getLineItems().forEach(lineItem -> {
       String itemId = lineItem.getItemId();
       Integer increment = lineItem.getQuantity();
-      param.put("itemId", itemId);
-      param.put("increment", increment);
+      param.put(itemId, increment);
       // http 통신을 id마다 하지말고, 한번에 할 것
-      boolean resp = httpFacade.updateInventoryQuantity(param);
-      if (!resp) {
-       // 응답이 5xx, Timeout일 경우,
-      }
     });
+    boolean resp = httpFacade.updateInventoryQuantity(param);
+    if (!resp) {
+      // 응답이 5xx, Timeout일 경우,
+    }
     try {
-      throw new Exception("Test");
-//      orderMapper.insertOrder(order);
-//      orderMapper.insertOrderStatus(order);
-//      order.getLineItems().forEach(lineItem -> {
-//        lineItem.setOrderId(order.getOrderId());
-//        lineItemMapper.insertLineItem(lineItem);
-//      });
+//      throw new Exception("Force Exception");
+      orderMapper.insertOrder(order);
+      orderMapper.insertOrderStatus(order);
+      order.getLineItems().forEach(lineItem -> {
+        lineItem.setOrderId(order.getOrderId());
+        lineItemMapper.insertLineItem(lineItem);
+      });
     } catch(Exception e) {
       // 주문 오류 시
       kafkaTemplate.send("prod_compensation", param);
