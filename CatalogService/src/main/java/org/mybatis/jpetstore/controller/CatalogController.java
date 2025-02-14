@@ -1,26 +1,33 @@
 package org.mybatis.jpetstore.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
+import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 @Controller
 @RequestMapping("/")
 public class CatalogController {
 
-    @Autowired
+
     private final CatalogService catalogService;
+
+    @Autowired
     public CatalogController(CatalogService catalogService){
         this.catalogService = catalogService;
     }
@@ -108,10 +115,20 @@ public class CatalogController {
 
     @ResponseBody
     @GetMapping("/updateQuantity")
-    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam String itemId, @RequestParam Integer increment){
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment){
         Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment);
         return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
     }
 
+    @KafkaListener(topics="prod_compensation", groupId = "group_1")
+    public void incrInventoryQuantity(HashMap<String, Object> data) {
+        List<String> itemId = new ArrayList<>();
+        List<Integer> increment = new ArrayList<>();
 
+        for (String key : data.keySet()) {
+            itemId.add(key);
+            increment.add((int) data.get(key));
+        }
+        catalogService.rollBackInventoryQuantity(itemId, increment);
+    }
 }

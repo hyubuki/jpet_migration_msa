@@ -28,6 +28,7 @@ import org.mybatis.jpetstore.mapper.ItemMapper;
 import org.mybatis.jpetstore.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Class CatalogService.
@@ -93,16 +94,35 @@ public class CatalogService {
   }
 
 
-  public boolean updateItemQuantity(String itemId, Integer increment){
-    Map<String,Object> request = new HashMap<String,Object>();
+  @Transactional
+  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment){
     try{
-      request.put("itemId",itemId);
-      request.put("increment",increment);
-      itemMapper.updateInventoryQuantity(request);
+      // lock 획득
+      itemMapper.lockItemsForUpdate(itemId);
+
+      // 각각 업데이트
+      for(int i = 0; i < itemId.size(); i++) {
+        itemMapper.updateInventoryQuantity(itemId.get(i), increment.get(i));
+      }
     }catch (Exception e){
       return false;
     }
     return true;
+  }
+
+  @Transactional
+  public void rollBackInventoryQuantity(List<String> itemId, List<Integer> increment) {
+    try {
+      // lock 획득
+      itemMapper.lockItemsForUpdate(itemId);
+
+      for (int i = 0; i < itemId.size(); i++) {
+        itemMapper.rollBackInventoryQuantity(itemId.get(i), increment.get(i));
+      }
+    } catch (Exception e) {
+      // 보상 트랜잭션 실패
+      System.out.println(e.getMessage());
+    }
   }
 
   public Integer getItemQuantity(String itemId){

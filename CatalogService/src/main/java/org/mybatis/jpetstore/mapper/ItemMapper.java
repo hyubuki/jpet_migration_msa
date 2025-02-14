@@ -20,6 +20,7 @@ import java.util.Map;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.jpetstore.domain.Item;
 /**
  * The Interface ItemMapper.
@@ -29,7 +30,11 @@ import org.mybatis.jpetstore.domain.Item;
 @Mapper
 public interface ItemMapper {
 
-  void updateInventoryQuantity(Map<String, Object> param);
+  void lockItemsForUpdate(List<String> itemId);
+
+  void updateInventoryQuantity(@Param("itemId") String itemId, @Param("increment") Integer increment);
+
+  void rollBackInventoryQuantity(@Param("itemId") String itemId, @Param("increment") Integer increment);
 
   int getInventoryQuantity(String itemId);
 
