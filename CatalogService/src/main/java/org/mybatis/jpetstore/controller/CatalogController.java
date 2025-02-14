@@ -1,5 +1,6 @@
 package org.mybatis.jpetstore.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Order;
@@ -22,8 +23,10 @@ import java.util.Map;
 @RequestMapping("/")
 public class CatalogController {
 
-    @Autowired
+
     private final CatalogService catalogService;
+
+    @Autowired
     public CatalogController(CatalogService catalogService){
         this.catalogService = catalogService;
     }
@@ -117,13 +120,10 @@ public class CatalogController {
     }
 
     @KafkaListener(topics="prod_compensation", groupId = "group_1")
-    public void incrInventoryQuantity(Object data) {
-        System.out.println("Received");
-        Order order = (Order) data;
-        order.getLineItems().forEach(lineItem -> {
-            String itemId = lineItem.getItemId();
-            Integer increment = lineItem.getQuantity();
-            System.out.println(itemId + ", " + increment);
-        });
+    public void incrInventoryQuantity(HashMap<String, Object> data) {
+        System.out.println("received");
+        for (String key: data.keySet()) {
+            System.out.println(key + ", " + data.get(key));
+        }
     }
 }

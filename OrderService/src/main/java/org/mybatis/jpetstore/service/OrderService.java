@@ -86,7 +86,7 @@ public class OrderService {
 //      });
     } catch(Exception e) {
       // 주문 오류 시
-      kafkaTemplate.send("prod_compensation", order);
+      kafkaTemplate.send("prod_compensation", param);
     }
   }
 
