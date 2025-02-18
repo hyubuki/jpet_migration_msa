@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.jpetstore.domain.Category;
+import org.mybatis.jpetstore.domain.InventoryUpdateStatus;
 
 /**
  * The Interface CategoryMapper.
@@ -30,7 +31,5 @@ import org.mybatis.jpetstore.domain.Category;
 public interface CategoryMapper {
 
   List<Category> getCategoryList();
-
   Category getCategory(String categoryId);
-
 }

@@ -77,12 +77,21 @@ public class OrderController {
             session.setAttribute("order", sessionOrder);
             return "order/ConfirmOrder";
         } else if (order != null) {
-            orderService.insertOrder(sessionOrder);
-            
-            session.removeAttribute("cart");
+            try{
+                orderService.insertOrder(sessionOrder);
+                session.removeAttribute("cart");
 
-            String msg = "Thank you, your order has been submitted.";
-            req.setAttribute("msg", msg);
+                String msg = "Thank you, your order has been submitted.";
+                req.setAttribute("msg", msg);
+
+            }catch(Exception e){ // order 실패시 Error page로 이동
+
+                String msg = "Fail to order";
+                req.setAttribute("msg",msg);
+
+                return "common/Error";
+            }
+
             return "order/ViewOrder";
         } else {
             String msg = "An error occurred processing your order (order was null).";

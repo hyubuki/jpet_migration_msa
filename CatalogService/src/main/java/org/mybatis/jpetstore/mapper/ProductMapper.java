@@ -29,7 +29,6 @@ import org.mybatis.jpetstore.domain.Product;
 
 @Mapper
 public interface ProductMapper {
-
   List<Product> getProductListByCategory(String categoryId);
 
   Product getProduct(String productId);

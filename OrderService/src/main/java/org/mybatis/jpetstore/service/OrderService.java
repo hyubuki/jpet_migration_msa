@@ -27,6 +27,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,19 +63,37 @@ public class OrderService {
    *          the order
    */
   @Transactional
-  public void insertOrder(Order order) {
+  public void insertOrder(Order order) throws Exception {
+
     order.setOrderId(getNextId("ordernum"));
+
     Map<String, Object> param = new HashMap<>();
+    List<String> itemIds = new ArrayList<>();
+
     order.getLineItems().forEach(lineItem -> {
       String itemId = lineItem.getItemId();
       Integer increment = lineItem.getQuantity();
       param.put(itemId, increment);
+      itemIds.add(itemId);
       // http 통신을 id마다 하지말고, 한번에 할 것
     });
+
     boolean resp = httpFacade.updateInventoryQuantity(param);
+    // 5xx error, Time-out 발생한 경우 (비정상 실패)
     if (!resp) {
-      // 응답이 5xx, Timeout일 경우,
+        // 즉시 재요청 - 수량 변경 commit 성공 여부 확인
+        Boolean isCommitSuccess = httpFacade.isInventoryUpdateCommitSuccess(order.getOrderId());
+
+        // case1 : commit 성공한 경우 -> 보상 트랜잭션
+        if(isCommitSuccess){
+          kafkaTemplate.send("prod_compensation",param);
+        }
+        else {
+          // case2 : commit 실패한 경우 -> 실패 처리
+          throw new Exception("주문 실패");
+        }
     }
+
     try {
 //      throw new Exception("Force Exception");
       orderMapper.insertOrder(order);
