@@ -24,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/")
 public class CatalogController {
 
-
     private final CatalogService catalogService;
 
     @Autowired

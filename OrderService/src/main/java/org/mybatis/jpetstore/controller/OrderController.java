@@ -5,6 +5,7 @@ import org.mybatis.jpetstore.domain.Cart;
 import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,7 +79,7 @@ public class OrderController {
             return "order/ConfirmOrder";
         } else if (order != null) {
             try{
-                orderService.insertOrder(sessionOrder);
+                orderService.insertOrder(sessionOrder,session);
                 session.removeAttribute("cart");
 
                 String msg = "Thank you, your order has been submitted.";
@@ -98,6 +99,13 @@ public class OrderController {
             req.setAttribute("msg", msg);
             return "common/Error";
         }
+    }
+
+
+
+    @KafkaListener(topicPattern = "k")
+    public void delayReqeust() {
+
     }
 
     @GetMapping("/viewOrder")

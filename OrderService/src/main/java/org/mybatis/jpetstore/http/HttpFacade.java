@@ -35,7 +35,7 @@ public class HttpFacade {
     public boolean isInventoryUpdateCommitSuccess(Integer orderId){
         String url = CATALOG_SERVICE_URL + "/isInventoryUpdated?orderId=" + orderId;
         ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(url,Boolean.class);
-        return responseEntity.getBody();
+        return Boolean.TRUE.equals(responseEntity.getBody());
     }
 
     public Item getItem(String itemId) {
