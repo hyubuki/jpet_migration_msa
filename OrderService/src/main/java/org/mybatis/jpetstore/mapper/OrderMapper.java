@@ -15,10 +15,12 @@
  */
 package org.mybatis.jpetstore.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.*;
 import org.mybatis.jpetstore.domain.Order;
+import org.mybatis.jpetstore.domain.OrderRetryStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Interface OrderMapper.
@@ -35,5 +37,12 @@ public interface OrderMapper {
   void insertOrder(Order order);
 
   void insertOrderStatus(Order order);
+
+  void insertStatus(OrderRetryStatus status);
+
+  void updateStatus(OrderRetryStatus status);
+
+  void deleteStatus(int orderid);
+  Optional<OrderRetryStatus> getStatus(int orderid);
 
 }

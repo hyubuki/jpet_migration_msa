@@ -5,6 +5,7 @@ import org.mybatis.jpetstore.domain.Cart;
 import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,18 +78,34 @@ public class OrderController {
             session.setAttribute("order", sessionOrder);
             return "order/ConfirmOrder";
         } else if (order != null) {
-            orderService.insertOrder(sessionOrder);
-            
-            session.removeAttribute("cart");
+            try{
+                orderService.insertOrder(sessionOrder,session);
+                session.removeAttribute("cart");
 
-            String msg = "Thank you, your order has been submitted.";
-            req.setAttribute("msg", msg);
+                String msg = "Thank you, your order has been submitted.";
+                req.setAttribute("msg", msg);
+
+            }catch(Exception e){ // order 실패시 Error page로 이동
+
+                String msg = "Fail to order";
+                req.setAttribute("msg",msg);
+
+                return "common/Error";
+            }
+
             return "order/ViewOrder";
         } else {
             String msg = "An error occurred processing your order (order was null).";
             req.setAttribute("msg", msg);
             return "common/Error";
         }
+    }
+
+
+
+    @KafkaListener(topicPattern = "k")
+    public void delayReqeust() {
+
     }
 
     @GetMapping("/viewOrder")

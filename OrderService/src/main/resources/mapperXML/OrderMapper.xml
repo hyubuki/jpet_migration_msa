@@ -106,4 +106,31 @@
     VALUES (#{orderId,jdbcType=NUMERIC}, #{orderId,jdbcType=NUMERIC}, #{orderDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
 
+  <!-- Insert -->
+  <insert id="insertStatus">
+    INSERT INTO OrderRetryStatus (orderid, status)
+    VALUES (#{orderid}, #{status});
+  </insert>
+
+  <!-- Update -->
+  <update id="updateStatus">
+    UPDATE OrderRetryStatus
+    SET status = #{status}
+    WHERE orderid = #{orderid};
+  </update>
+
+  <!-- Delete -->
+  <delete id="deleteStatus">
+    DELETE FROM OrderRetryStatus
+    WHERE orderid = #{orderid};
+  </delete>
+
+  <!-- Select -->
+  <select id="getStatus" resultType="OrderRetryStatus">
+    SELECT orderid, status
+    FROM OrderRetryStatus
+    WHERE orderid = #{orderid};
+  </select>
+
+
 </mapper>

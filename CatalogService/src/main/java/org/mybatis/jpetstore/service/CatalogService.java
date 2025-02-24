@@ -15,15 +15,14 @@
  */
 package org.mybatis.jpetstore.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.mybatis.jpetstore.domain.Category;
+import org.mybatis.jpetstore.domain.InventoryUpdateStatus;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.mapper.CategoryMapper;
+import org.mybatis.jpetstore.mapper.InventoryUpdateStatusMapper;
 import org.mybatis.jpetstore.mapper.ItemMapper;
 import org.mybatis.jpetstore.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +40,14 @@ public class CatalogService {
   private final CategoryMapper categoryMapper;
   private final ItemMapper itemMapper;
   private final ProductMapper productMapper;
+  private final InventoryUpdateStatusMapper inventoryUpdateStatusMapper;
 
   @Autowired
-  public CatalogService(CategoryMapper categoryMapper, ItemMapper itemMapper, ProductMapper productMapper) {
+  public CatalogService(CategoryMapper categoryMapper, ItemMapper itemMapper, ProductMapper productMapper, InventoryUpdateStatusMapper inventoryUpdateStatusMapper) {
     this.categoryMapper = categoryMapper;
     this.itemMapper = itemMapper;
     this.productMapper = productMapper;
+    this.inventoryUpdateStatusMapper = inventoryUpdateStatusMapper;
   }
 
   public List<Category> getCategoryList() {
@@ -95,7 +96,7 @@ public class CatalogService {
 
 
   @Transactional
-  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment){
+  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, String orderId){
     try{
       // lock 획득
       itemMapper.lockItemsForUpdate(itemId);
@@ -104,10 +105,19 @@ public class CatalogService {
       for(int i = 0; i < itemId.size(); i++) {
         itemMapper.updateInventoryQuantity(itemId.get(i), increment.get(i));
       }
+      // 성공 여부 업데이트
+      inventoryUpdateStatusMapper.insertInventoryUpdateStatus(new InventoryUpdateStatus(orderId));
+
     }catch (Exception e){
       return false;
     }
     return true;
+  }
+
+  public boolean isInventoryUpdateSuccess(Integer orderId){
+    Optional<InventoryUpdateStatus> inventoryUpdateStatus = inventoryUpdateStatusMapper.getInventoryUpdateStatusByOrderId(orderId);
+    if (inventoryUpdateStatus.isPresent()) return true;
+    else return false;
   }
 
   @Transactional

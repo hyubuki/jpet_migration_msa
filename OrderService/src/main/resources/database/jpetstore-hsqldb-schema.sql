@@ -66,3 +66,9 @@ CREATE TABLE sequence
     nextid             int          not null,
     constraint pk_sequence primary key (name)
 );
+
+create table OrderRetryStatus (
+    orderid             int not null,
+    status              varchar(7),
+    constraint pk_status primary key (orderid)
+);

@@ -24,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/")
 public class CatalogController {
 
-
     private final CatalogService catalogService;
 
     @Autowired
@@ -114,10 +113,32 @@ public class CatalogController {
     }
 
     @ResponseBody
+    @GetMapping("/getQuantities")
+    public List<Integer> getInventoryQuantities(@RequestBody List<String> itemIds){
+
+        List<Integer>quantityOfItems = new ArrayList<>();
+        for (String itemId : itemIds){
+            Integer quantity = catalogService.getItemQuantity(itemId); // 후에 단일 쿼리 조회로 가져올 수 있게 변경 예정
+            quantityOfItems.add(quantity);
+        }
+        return quantityOfItems;
+    }
+
+    @ResponseBody
     @GetMapping("/updateQuantity")
-    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment){
-        Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment);
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam String orderId){
+        Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment,orderId);
         return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @GetMapping("/isInventoryUpdated")
+    public ResponseEntity<Boolean> isInventoryUpdatedSuccess(@RequestParam Integer orderId){
+
+        Boolean isCommitSuccess = catalogService.isInventoryUpdateSuccess(orderId);
+        return new ResponseEntity<Boolean>(isCommitSuccess,HttpStatus.OK);
+
     }
 
     @KafkaListener(topics="prod_compensation", groupId = "group_1")
@@ -131,4 +152,5 @@ public class CatalogController {
         }
         catalogService.rollBackInventoryQuantity(itemId, increment);
     }
+
 }
