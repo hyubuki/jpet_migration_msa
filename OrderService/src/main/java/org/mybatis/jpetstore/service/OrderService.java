@@ -15,11 +15,14 @@
  */
 package org.mybatis.jpetstore.service;
 
+import com.sun.net.httpserver.Authenticator;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.domain.OrderRetryStatus;
 import org.mybatis.jpetstore.domain.Sequence;
 import org.mybatis.jpetstore.dto.ProductRequestMessage;
+import org.mybatis.jpetstore.exception.OrderFailException;
+import org.mybatis.jpetstore.exception.RetryUnknownException;
 import org.mybatis.jpetstore.http.HttpFacade;
 import org.mybatis.jpetstore.mapper.LineItemMapper;
 import org.mybatis.jpetstore.mapper.OrderMapper;
@@ -52,7 +55,6 @@ public class OrderService {
 
   // 재요청 실패로 inventory update 여부를 알 수 없는 상태
   private static final String UNKNOWN = "unknown";
-
   // 주문 성공한 상태
   private static final String SUCCESS = "success";
 
@@ -76,21 +78,37 @@ public class OrderService {
    *  the order
    */
   @Transactional
-  public void insertOrder(Order order, HttpSession session) throws Exception {
+  public void insertOrder(Order order, HttpSession session) throws OrderFailException, RetryUnknownException {
 
-    // TODO : 아 유저의 stauts 비어있는 경우는 그냥 요청 안해보고 넘어가도 될듯 (첫 주문 요청인 경우)
-    Integer lastOrderId = (Integer) session.getAttribute("lastOrderId");
+    Order sessionOrder  = (Order) session.getAttribute("order");
 
+    // 유저의 orderId가 있다면 OrderRetryStatus 상태 확인 (첫 주문이 아닌 경우)
     // 지난 주문 내역이 있는 경우
-    if(session.getAttribute("lastOrderId") != null){
-      Optional<OrderRetryStatus> orderRetryStatus = orderMapper.getStatus(lastOrderId);
-      if (orderRetryStatus.get().getStatus() == UNKNOWN);
+    if(sessionOrder != null){
+      
+      Optional<OrderRetryStatus> orderRetryStatus = orderMapper.getStatus(sessionOrder.getOrderId());
+      if (!orderRetryStatus.isPresent()){
+         throw new OrderFailException("지난 주문에 대한 상태 값이 존재하지 않습니다.");
+      }
+      // Unknown 재요청 실패한 경우 -> 재요청 필요
+      if (orderRetryStatus.get().getStatus().equals(UNKNOWN)){
+
+        Map<String, Object> param = getIncrementAndItemsParam(sessionOrder);
+        updateCommitSuccessCheck(sessionOrder,param);
+      }
     }
 
-    // TODO :  유저의 orderId가 있다면 OrderRetryStatus 상태 확인 (첫 주문이 아닌 경우)
+    Map<String, Object> param = getIncrementAndItemsParam(order);
 
-    order.setOrderId(getNextId("ordernum"));
+    boolean resp = httpFacade.updateInventoryQuantity(param);
 
+    // 즉시 재요청 : 5xx error, Time-out 발생한 경우 (비정상 실패)
+    if (!resp) {
+      updateCommitSuccessCheck(sessionOrder, param);
+    }
+  }
+
+  private static Map<String, Object> getIncrementAndItemsParam(Order order) {
     Map<String, Object> param = new HashMap<>();
     List<String> itemIds = new ArrayList<>();
 
@@ -101,58 +119,34 @@ public class OrderService {
       itemIds.add(itemId);
       // http 통신을 id마다 하지말고, 한번에 할 것
     });
+    return param;
+  }
 
-    boolean resp = httpFacade.updateInventoryQuantity(param);
+  private void updateCommitSuccessCheck(Order sessionOrder, Map<String, Object> param) throws OrderFailException, RetryUnknownException {
+    try{
+      // 즉시 재요청 - 수량 변경 commit 성공 여부 확인
+      Boolean isCommitSuccess = httpFacade.isInventoryUpdateCommitSuccess(sessionOrder.getOrderId());
 
-    // 즉시 재요청 : 5xx error, Time-out 발생한 경우 (비정상 실패)
-    if (!resp) {
-
-        try{
-          // 즉시 재요청 - 수량 변경 commit 성공 여부 확인
-          Boolean isCommitSuccess = httpFacade.isInventoryUpdateCommitSuccess(order.getOrderId());
-
-          // fail : Known_case1 : commit 성공한 경우 -> 보상 트랜잭션
-          if(isCommitSuccess){
-            kafkaTemplate.send("prod_compensation",param);
-            orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(),FAIL));
-            session.setAttribute("lastOrderContent",param);
-          }
-          else {
-            // fail : Known_case2 : commit 실패한 경우 -> 실패 처리
-            orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(),FAIL));
-            session.setAttribute("lastOrderContent",param);
-            throw new Exception("주문 실패");
-          }
-
-        } catch(HttpServerErrorException serverError){
-          // Unknown : 즉시 재요청에 server Error 발생, 트랜잭션 커밋 성공 여부를 알 수 없는 경우
-          orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(),UNKNOWN));
-          session.setAttribute("lastOrderContent",param);
-
-        }catch( ResourceAccessException timeOut){
-          // Unknown : 즉시 재요청 자체를 실패 , 이또한 트랜잭션 커밋 성공 여부를 알 수 없음.
-          orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(),UNKNOWN));
-          session.setAttribute("lastOrderContent",param);
-        }
+      // fail : Known_case1 : commit 성공한 경우 -> 보상 트랜잭션
+      if(isCommitSuccess){
+        kafkaTemplate.send("prod_compensation", param);
+        orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(),FAIL));
+      }
+      else if (!isCommitSuccess) {
+        // fail : Known_case2 : commit 실패한 경우 -> 실패 처리
+        orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(), FAIL));
+        throw new OrderFailException("주문 실패");
+      }
     }
-
-    try {
-//      throw new Exception("Force Exception");
-      orderMapper.insertOrder(order);
-      orderMapper.insertOrderStatus(order);
-      order.getLineItems().forEach(lineItem -> {
-        lineItem.setOrderId(order.getOrderId());
-        lineItemMapper.insertLineItem(lineItem);
-      });
-    } catch(Exception e) {
-      // 주문 오류 시
-      kafkaTemplate.send("prod_compensation", param);
-    }
-
-    // Status_ Success : 주문 성공
-    orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(),SUCCESS));
-    session.setAttribute("lastOrderId",order.getOrderId());
-    session.setAttribute("lastOrderContent",param);
+    catch(HttpServerErrorException serverError){
+        // Unknown : 즉시 재요청에 server Error 발생, 트랜잭션 커밋 성공 여부를 알 수 없는 경우
+        orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(),UNKNOWN));
+        throw new RetryUnknownException("서버 에러 발생");
+      } catch( ResourceAccessException timeOut) {
+        // Unknown : 즉시 재요청 자체를 실패 , 이또한 트랜잭션 커밋 성공 여부를 알 수 없음.
+        orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(), UNKNOWN));
+        throw new RetryUnknownException("리소스 접근 예외 발생 - time out");
+      }
   }
 
   /**
@@ -207,6 +201,7 @@ public class OrderService {
     sequenceMapper.updateSequence(parameterObject);
     return sequence.getNextId();
   }
+
 
 
 }
