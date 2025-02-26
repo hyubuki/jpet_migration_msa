@@ -30,7 +30,7 @@ import org.mybatis.jpetstore.domain.Item;
 @Mapper
 public interface ItemMapper {
 
-  void lockItemsForUpdate(List<String> itemId);
+  List<String> lockItemsForUpdate(List<String> itemId);
 
   void updateInventoryQuantity(@Param("itemId") String itemId, @Param("increment") Integer increment);
 

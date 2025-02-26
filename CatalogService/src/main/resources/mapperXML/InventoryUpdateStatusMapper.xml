@@ -23,8 +23,6 @@
 
     <cache />
 
-
-
     <select id="getInventoryUpdateStatusByOrderId" resultType="InventoryUpdateStatus">
         SELECT orderid as orderId
         FROM inventoryUpdateStatus
