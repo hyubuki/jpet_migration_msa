@@ -2,16 +2,12 @@ package org.mybatis.jpetstore.domain;
 import java.io.Serializable;
 
 public class InventoryUpdateStatus implements Serializable {
-    private String orderId; // unique
-    public InventoryUpdateStatus(String orderId) {
+    private Integer orderId; // unique
+    public InventoryUpdateStatus(Integer orderId) {
         this.orderId = orderId;
     }
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
-    }
-    @Override
-    public String toString(){
-        return "orderId:" + this.orderId;
     }
 }
 

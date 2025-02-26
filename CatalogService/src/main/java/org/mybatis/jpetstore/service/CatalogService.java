@@ -96,7 +96,7 @@ public class CatalogService {
 
 
   @Transactional
-  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, String orderId){
+  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId){
     try{
       // lock 획득
       itemMapper.lockItemsForUpdate(itemId);
@@ -109,6 +109,8 @@ public class CatalogService {
       inventoryUpdateStatusMapper.insertInventoryUpdateStatus(new InventoryUpdateStatus(orderId));
 
     }catch (Exception e){
+      System.out.println(e);
+      System.out.println(e.getMessage());
       return false;
     }
     return true;

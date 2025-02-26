@@ -20,11 +20,11 @@ public class HttpFacade {
 
     private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog";
 
-    public boolean updateInventoryQuantity(Map<String, Object> param) {
+    public boolean updateInventoryQuantity(Map<String, Object> param, Integer orderId) {
 
         String quantityString = param.values().stream().map(String::valueOf).collect(Collectors.joining(","));
 
-        String url = CATALOG_SERVICE_URL + "/updateQuantity?itemId=" + String.join(",", param.keySet()) + "&increment=" + quantityString;
+        String url = CATALOG_SERVICE_URL + "/updateQuantity?itemId=" + String.join(",", param.keySet()) + "&increment=" + quantityString + "&orderId=" + orderId;
 
         ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(url, Boolean.class);
         Boolean responses = responseEntity.getBody();

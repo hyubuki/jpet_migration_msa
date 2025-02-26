@@ -126,7 +126,7 @@ public class CatalogController {
 
     @ResponseBody
     @GetMapping("/updateQuantity")
-    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam String orderId){
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam Integer orderId){
         Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment,orderId);
         return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
     }

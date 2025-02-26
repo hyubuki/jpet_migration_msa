@@ -111,12 +111,6 @@ public class OrderController {
     }
 
 
-
-    @KafkaListener(topicPattern = "k")
-    public void delayReqeust() {
-
-    }
-
     @GetMapping("/viewOrder")
     public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
         Account account = (Account) session.getAttribute("account");

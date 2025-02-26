@@ -109,14 +109,14 @@
   <!-- Insert -->
   <insert id="insertStatus">
     INSERT INTO OrderRetryStatus (orderid, status)
-    VALUES (#{orderid}, #{status});
+    VALUES (#{orderid,jdbcType=NUMERIC}, #{status, jdbcType=VARCHAR});
   </insert>
 
   <!-- Update -->
   <update id="updateStatus">
     UPDATE OrderRetryStatus
-    SET status = #{status}
-    WHERE orderid = #{orderid};
+    SET status = #{status, jdbcType=NUMERIC}
+    WHERE orderid = #{orderid, jdbcType=VARCHAR};
   </update>
 
   <!-- Delete -->
