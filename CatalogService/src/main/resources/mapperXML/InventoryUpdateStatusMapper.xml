@@ -29,7 +29,7 @@
         WHERE orderid = #{orderid}
     </select>
 
-    <insert id="insertInventoryUpdateStatus">
+    <insert id="insertInventoryUpdateStatus" parameterType="InventoryUpdateStatus">
         INSERT INTO inventoryUpdateStatus (orderid)
         VALUES (#{orderid})
     </insert>

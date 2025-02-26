@@ -94,7 +94,6 @@ public class CatalogService {
     return itemMapper.getInventoryQuantity(itemId) > 0;
   }
 
-
   @Transactional
   public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId){
     try{
