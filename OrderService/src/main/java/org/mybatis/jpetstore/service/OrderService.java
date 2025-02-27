@@ -89,6 +89,7 @@ public class OrderService {
 
       // Unknown 재요청 실패한 경우 -> 재요청 필요
       if (orderRetryStatus.get().getStatus().equals(UNKNOWN)){
+        System.out.println("UNKNOWN_CHECK");
         Map<String, Object> param = getIncrementAndItemsParam(order);
         updateCommitSuccessCheck(order,param);
       }
@@ -144,12 +145,14 @@ public class OrderService {
         System.out.println("Unknown_case1_serverError");
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(),UNKNOWN));
         throw new RetryUnknownException("서버 에러 발생");
+
       } catch( ResourceAccessException timeOut) {
-        System.out.println("Unknown_case2_ResourceAccessError");
         // Unknown : 즉시 재요청 자체를 실패 , 이또한 트랜잭션 커밋 성공 여부를 알 수 없음.
+        System.out.println("Unknown_case2_ResourceAccessError");
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(), UNKNOWN));
         throw new RetryUnknownException("리소스 접근 예외 발생 - time out");
       }
+    System.out.println("문제 없음");
   }
 
   /**
