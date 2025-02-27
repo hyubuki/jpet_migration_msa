@@ -112,7 +112,6 @@ public class CatalogService {
       System.out.println(e.getMessage());
       return false;
     }
-    return true;
   }
 
   public boolean isInventoryUpdateSuccess(Integer orderId){

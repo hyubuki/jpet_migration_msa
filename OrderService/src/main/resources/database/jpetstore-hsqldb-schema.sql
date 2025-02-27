@@ -69,6 +69,6 @@ CREATE TABLE sequence
 
 create table OrderRetryStatus (
     orderid             int not null,
-    status              varchar(30),
+    status              varchar(30 ),
     constraint pk_status primary key (orderid)
 );

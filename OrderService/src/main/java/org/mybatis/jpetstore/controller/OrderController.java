@@ -87,13 +87,14 @@ public class OrderController {
             return "order/ConfirmOrder";
         }
 
-        else if (order != null) {
+        else if (sessionOrder != null) {
             try{
                 orderService.insertOrder(sessionOrder,session);
                 session.removeAttribute("cart");
 
                 String msg = "Thank you, your order has been submitted.";
                 req.setAttribute("msg", msg);
+                return "order/ViewOrder";
 
             } catch(RetryUnknownException e){
                 return "order/ConfirmOrder";
@@ -102,7 +103,7 @@ public class OrderController {
                 req.setAttribute("msg",e.getMessage());
                 return "common/Error";
             }
-            return "order/ViewOrder";
+
         } else {
             String msg = "An error occurred processing your order (order was null).";
             req.setAttribute("msg", msg);

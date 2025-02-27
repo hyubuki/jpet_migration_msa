@@ -79,26 +79,19 @@ public class OrderService {
    */
   @Transactional
   public void insertOrder(Order order, HttpSession session) throws OrderFailException, RetryUnknownException {
-    // 매개변수로 들어온 order도 사실 session order라는 사실 반영해서 수정 필요함.
-    Order sessionOrder  = (Order) session.getAttribute("order");
 
-    // 유저의 orderId가 있다면 OrderRetryStatus 상태 확인 (첫 주문이 아닌 경우)
-    // 지난 주문 내역이 있는 경우
-    if(sessionOrder != null){
-      
-      Optional<OrderRetryStatus> orderRetryStatus = orderMapper.getStatus(sessionOrder.getOrderId());
+      Optional<OrderRetryStatus> orderRetryStatus = orderMapper.getStatus(order.getOrderId());
 
       if (!orderRetryStatus.isPresent()){
-          orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(), UNPROCESSED));
-          orderRetryStatus = orderMapper.getStatus(sessionOrder.getOrderId());
+          orderMapper.insertStatus(new OrderRetryStatus(order.getOrderId(), UNPROCESSED));
+          orderRetryStatus = orderMapper.getStatus(order.getOrderId());
       }
 
       // Unknown 재요청 실패한 경우 -> 재요청 필요
       if (orderRetryStatus.get().getStatus().equals(UNKNOWN)){
-        Map<String, Object> param = getIncrementAndItemsParam(sessionOrder);
-        updateCommitSuccessCheck(sessionOrder,param);
+        Map<String, Object> param = getIncrementAndItemsParam(order);
+        updateCommitSuccessCheck(order,param);
       }
-    }
 
     Map<String, Object> param = getIncrementAndItemsParam(order);
     boolean resp = httpFacade.updateInventoryQuantity(param,order.getOrderId());
@@ -106,10 +99,10 @@ public class OrderService {
 
     // 즉시 재요청 : 5xx error, Time-out 발생한 경우 (비정상 실패)
     if (!resp) {
-      updateCommitSuccessCheck(sessionOrder, param);
+      updateCommitSuccessCheck(order, param);
     }
 
-    orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(), SUCCESS));
+    orderMapper.updateStatus(new OrderRetryStatus(order.getOrderId(), SUCCESS));
 
   }
 
