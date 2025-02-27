@@ -94,9 +94,9 @@ public class CatalogService {
     return itemMapper.getInventoryQuantity(itemId) > 0;
   }
 
-  @Transactional
-  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId){
-    try{
+  @Transactional(rollbackFor = Exception.class)
+  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId) throws Exception{
+
       // lock 획득
       itemMapper.lockItemsForUpdate(itemId);
 
@@ -107,11 +107,10 @@ public class CatalogService {
       // 성공 여부 업데이트
       inventoryUpdateStatusMapper.insertInventoryUpdateStatus(new InventoryUpdateStatus(orderId));
 
-    }catch (Exception e){
-      System.out.println(e);
-      System.out.println(e.getMessage());
-      return false;
-    }
+      throw new Exception("재요청시 rollback으로 인한 업데이트 실패 로직 테스트");
+
+
+//    return true;
   }
 
   public boolean isInventoryUpdateSuccess(Integer orderId){
@@ -129,6 +128,7 @@ public class CatalogService {
       for (int i = 0; i < itemId.size(); i++) {
         itemMapper.rollBackInventoryQuantity(itemId.get(i), increment.get(i));
       }
+
     } catch (Exception e) {
       // 보상 트랜잭션 실패
       System.out.println(e.getMessage());

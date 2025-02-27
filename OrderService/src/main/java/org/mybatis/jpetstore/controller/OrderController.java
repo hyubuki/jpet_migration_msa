@@ -101,6 +101,7 @@ public class OrderController {
 
             } catch(OrderFailException e){ // order 실패시 Error page로 이동
                 req.setAttribute("msg",e.getMessage());
+                System.out.println("common/Error");
                 return "common/Error";
             }
 

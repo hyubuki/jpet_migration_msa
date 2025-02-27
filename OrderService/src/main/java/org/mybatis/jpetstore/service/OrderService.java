@@ -99,6 +99,7 @@ public class OrderService {
 
     // 즉시 재요청 : 5xx error, Time-out 발생한 경우 (비정상 실패)
     if (!resp) {
+      System.out.println("재요청 발생 ,updateCommitSuccessCheck start");
       updateCommitSuccessCheck(order, param);
     }
 
@@ -127,19 +128,23 @@ public class OrderService {
 
       // fail : Known_case1 : commit 성공한 경우 -> 보상 트랜잭션
       if(isCommitSuccess){
+        System.out.println("Known_case1_commitSuccess");
         kafkaTemplate.send("prod_compensation", param);
         orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(),FAIL));
       }
       else if (!isCommitSuccess) {
         // fail : Known_case2 : commit 실패한 경우 -> 실패 처리
+        System.out.println("Known_case2_commitFail");
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(), FAIL));
         throw new OrderFailException("주문 실패");
       }
     } catch(HttpServerErrorException serverError){
         // Unknown : 즉시 재요청에 server Error 발생, 트랜잭션 커밋 성공 여부를 알 수 없는 경우
+        System.out.println("Unknown_case1_serverError");
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(),UNKNOWN));
         throw new RetryUnknownException("서버 에러 발생");
       } catch( ResourceAccessException timeOut) {
+        System.out.println("Unknown_case2_ResourceAccessError");
         // Unknown : 즉시 재요청 자체를 실패 , 이또한 트랜잭션 커밋 성공 여부를 알 수 없음.
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(), UNKNOWN));
         throw new RetryUnknownException("리소스 접근 예외 발생 - time out");
