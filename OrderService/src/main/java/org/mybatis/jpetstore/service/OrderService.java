@@ -130,7 +130,8 @@ public class OrderService {
       if(isCommitSuccess){
         System.out.println("Known_case1_commitSuccess");
         kafkaTemplate.send("prod_compensation", param);
-        orderMapper.insertStatus(new OrderRetryStatus(sessionOrder.getOrderId(),FAIL));
+        orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(),FAIL));
+        throw new OrderFailException("주문 실패");
       }
       else if (!isCommitSuccess) {
         // fail : Known_case2 : commit 실패한 경우 -> 실패 처리

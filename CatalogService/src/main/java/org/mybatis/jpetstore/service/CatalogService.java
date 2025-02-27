@@ -95,7 +95,7 @@ public class CatalogService {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public boolean updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId) throws Exception{
+  public void updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId) throws Exception{
 
       // lock 획득
       itemMapper.lockItemsForUpdate(itemId);
@@ -106,11 +106,6 @@ public class CatalogService {
       }
       // 성공 여부 업데이트
       inventoryUpdateStatusMapper.insertInventoryUpdateStatus(new InventoryUpdateStatus(orderId));
-
-      throw new Exception("재요청시 rollback으로 인한 업데이트 실패 로직 테스트");
-
-
-//    return true;
   }
 
   public boolean isInventoryUpdateSuccess(Integer orderId){
