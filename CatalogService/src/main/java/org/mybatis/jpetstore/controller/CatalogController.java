@@ -126,16 +126,20 @@ public class CatalogController {
 
     @ResponseBody
     @GetMapping("/updateQuantity")
-    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam String orderId){
-        Boolean isUpdated = catalogService.updateItemQuantity(itemId,increment,orderId);
-        return new ResponseEntity<Boolean>(isUpdated,HttpStatus.OK);
+    public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam Integer orderId){
+        try{
+            catalogService.updateItemQuantity(itemId,increment,orderId);
+            return new ResponseEntity<>(Boolean.FALSE,HttpStatus.OK); // test용 False 처리
+        }catch (Exception e){
+            return new ResponseEntity<>(Boolean.FALSE,HttpStatus.OK);
+        }
     }
 
 
     @ResponseBody
     @GetMapping("/isInventoryUpdated")
-    public ResponseEntity<Boolean> isInventoryUpdatedSuccess(@RequestParam Integer orderId){
-
+    public ResponseEntity<Boolean> isInventoryUpdatedSuccess(@RequestParam Integer orderId) throws InterruptedException {
+        Thread.sleep(50000); // unknoown_case2_timeout 테스트를 위해 의도적으로 50초의 sleep 발생시킴
         Boolean isCommitSuccess = catalogService.isInventoryUpdateSuccess(orderId);
         return new ResponseEntity<Boolean>(isCommitSuccess,HttpStatus.OK);
 

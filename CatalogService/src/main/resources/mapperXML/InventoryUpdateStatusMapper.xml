@@ -23,15 +23,13 @@
 
     <cache />
 
-
-
     <select id="getInventoryUpdateStatusByOrderId" resultType="InventoryUpdateStatus">
         SELECT orderid as orderId
         FROM inventoryUpdateStatus
         WHERE orderid = #{orderid}
     </select>
 
-    <insert id="insertInventoryUpdateStatus">
+    <insert id="insertInventoryUpdateStatus" parameterType="InventoryUpdateStatus">
         INSERT INTO inventoryUpdateStatus (orderid)
         VALUES (#{orderid})
     </insert>
@@ -40,7 +38,6 @@
     <delete id="deleteInventoryUpdateStatusByOrderId">
         DELETE FROM inventoryUpdateStatus WHERE orderid = #{orderid}
     </delete>
-
 
 
 </mapper>

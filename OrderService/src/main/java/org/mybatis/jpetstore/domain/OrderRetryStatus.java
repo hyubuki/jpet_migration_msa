@@ -1,6 +1,8 @@
 package org.mybatis.jpetstore.domain;
 
-public class OrderRetryStatus {
+import java.io.Serializable;
+
+public class OrderRetryStatus implements Serializable {
     private Integer orderid;
     private String status;
 

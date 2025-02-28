@@ -8,5 +8,6 @@
         <mapper resource="mapperXML/CategoryMapper.xml"/>
         <mapper resource="mapperXML/ItemMapper.xml"/>
         <mapper resource="mapperXML/ProductMapper.xml"/>
+        <mapper resource="mapperXML/InventoryUpdateStatusMapper.xml"/>
     </mappers>
 </configuration>

@@ -3,6 +3,8 @@ package org.mybatis.jpetstore.controller;
 import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.domain.Cart;
 import org.mybatis.jpetstore.domain.Order;
+import org.mybatis.jpetstore.exception.OrderFailException;
+import org.mybatis.jpetstore.exception.RetryUnknownException;
 import org.mybatis.jpetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -50,6 +52,7 @@ public class OrderController {
         else if (cart != null) {
             Order order = new Order();
             order.initOrder(account, cart);
+            order.setOrderId(orderService.getNextId("ordernum"));
             session.setAttribute("order", order);
             return "order/NewOrderForm";
         }
@@ -62,38 +65,46 @@ public class OrderController {
 
     @PostMapping("/newOrder")
     public String newOrder(Order order, @RequestParam(required = false) boolean shippingAddressRequired, @RequestParam(required = false) boolean confirmed, @RequestParam(required = false) boolean changeShipInfo, @RequestParam String csrf, HttpServletRequest req, HttpSession session) {
+
         if (csrf == null || !csrf.equals(session.getAttribute("csrf_token"))) {
             String msg = "This is not a valid request";
             req.setAttribute("msg", msg);
             return "common/Error";
         }
+
         Order sessionOrder = (Order) session.getAttribute("order");
+
         if (shippingAddressRequired) {
             changeBillInfo(sessionOrder, order);
             session.setAttribute("order", sessionOrder);
             return "order/ShippingForm";
-        } else if(!confirmed) {
+        }
+
+        else if(!confirmed) {
             if (changeShipInfo)
                 changeShipInfo(sessionOrder, order);
             session.setAttribute("order", sessionOrder);
             return "order/ConfirmOrder";
-        } else if (order != null) {
+        }
+
+        else if (sessionOrder != null) {
             try{
                 orderService.insertOrder(sessionOrder,session);
                 session.removeAttribute("cart");
 
                 String msg = "Thank you, your order has been submitted.";
                 req.setAttribute("msg", msg);
+                return "order/ViewOrder";
 
-            }catch(Exception e){ // order 실패시 Error page로 이동
+            } catch(RetryUnknownException e){
+                return "order/ConfirmOrder";
 
-                String msg = "Fail to order";
-                req.setAttribute("msg",msg);
-
+            } catch(OrderFailException e){ // order 실패시 Error page로 이동
+                req.setAttribute("msg",e.getMessage());
+                System.out.println("common/Error");
                 return "common/Error";
             }
 
-            return "order/ViewOrder";
         } else {
             String msg = "An error occurred processing your order (order was null).";
             req.setAttribute("msg", msg);
@@ -101,12 +112,6 @@ public class OrderController {
         }
     }
 
-
-
-    @KafkaListener(topicPattern = "k")
-    public void delayReqeust() {
-
-    }
 
     @GetMapping("/viewOrder")
     public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
