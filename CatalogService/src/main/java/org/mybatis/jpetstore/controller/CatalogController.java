@@ -139,7 +139,7 @@ public class CatalogController {
     @ResponseBody
     @GetMapping("/isInventoryUpdated")
     public ResponseEntity<Boolean> isInventoryUpdatedSuccess(@RequestParam Integer orderId) throws InterruptedException {
-        Thread.sleep(50000); // unknoown_case2_timeout 테스트를 위해 의도적으로 50초의 sleep 발생시킴
+//        Thread.sleep(50000); // unknoown_case2_timeout 테스트를 위해 의도적으로 50초의 sleep 발생시킴
         Boolean isCommitSuccess = catalogService.isInventoryUpdateSuccess(orderId);
         return new ResponseEntity<Boolean>(isCommitSuccess,HttpStatus.OK);
 
