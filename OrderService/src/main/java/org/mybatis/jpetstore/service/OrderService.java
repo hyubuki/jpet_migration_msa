@@ -87,25 +87,33 @@ public class OrderService {
           orderRetryStatus = orderMapper.getStatus(order.getOrderId());
       }
 
-      // Unknown 재요청 실패한 경우 -> 재요청 필요
-      if (orderRetryStatus.get().getStatus().equals(UNKNOWN)){
-        System.out.println("UNKNOWN_CHECK");
-        Map<String, Object> param = getIncrementAndItemsParam(order);
-        updateCommitSuccessCheck(order,param);
+      if(orderRetryStatus.get().getStatus().equals(SUCCESS)){
+        return;
       }
 
-    Map<String, Object> param = getIncrementAndItemsParam(order);
-    boolean resp = httpFacade.updateInventoryQuantity(param,order.getOrderId());
-    System.out.println("updateInventoryQuantity:" + resp);
+      // Unknown 재요청 실패한 경우 -> 재요청 필요
+      if (orderRetryStatus.get().getStatus().equals(UNKNOWN)){
+        updateCommitSuccessCheck(order);
+      }
+
+    Map<String, Object> incrementPerItem = getIncrementAndItemsParam(order);
+    boolean resp = httpFacade.updateInventoryQuantity(incrementPerItem,order.getOrderId());
 
     // 즉시 재요청 : 5xx error, Time-out 발생한 경우 (비정상 실패)
     if (!resp) {
-      System.out.println("재요청 발생 ,updateCommitSuccessCheck start");
-      updateCommitSuccessCheck(order, param);
+      updateCommitSuccessCheck(order);
     }
 
-    orderMapper.updateStatus(new OrderRetryStatus(order.getOrderId(), SUCCESS));
+    try{
+      orderMapper.insertOrder(order);
+    }catch (Exception e){
+      kafkaTemplate.send("product_compensation",incrementPerItem);
+    }
 
+
+
+
+    orderMapper.updateStatus(new OrderRetryStatus(order.getOrderId(), SUCCESS));
   }
 
   private static Map<String, Object> getIncrementAndItemsParam(Order order) {
@@ -122,24 +130,18 @@ public class OrderService {
     return param;
   }
 
-  private void updateCommitSuccessCheck(Order sessionOrder, Map<String, Object> param) throws OrderFailException, RetryUnknownException {
+  private void updateCommitSuccessCheck(Order sessionOrder) throws OrderFailException, RetryUnknownException {
     try{
       // 즉시 재요청 - 수량 변경 commit 성공 여부 확인
       Boolean isCommitSuccess = httpFacade.isInventoryUpdateCommitSuccess(sessionOrder.getOrderId());
 
-      // fail : Known_case1 : commit 성공한 경우 -> 보상 트랜잭션
-      if(isCommitSuccess){
-        System.out.println("Known_case1_commitSuccess");
-        kafkaTemplate.send("prod_compensation", param);
-        orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(),FAIL));
-        throw new OrderFailException("주문 실패");
-      }
-      else if (!isCommitSuccess) {
+      if (!isCommitSuccess) {
         // fail : Known_case2 : commit 실패한 경우 -> 실패 처리
         System.out.println("Known_case2_commitFail");
         orderMapper.updateStatus(new OrderRetryStatus(sessionOrder.getOrderId(), FAIL));
         throw new OrderFailException("주문 실패");
       }
+
     } catch(HttpServerErrorException serverError){
         // Unknown : 즉시 재요청에 server Error 발생, 트랜잭션 커밋 성공 여부를 알 수 없는 경우
         System.out.println("Unknown_case1_serverError");
@@ -173,7 +175,6 @@ public class OrderService {
       item.setQuantity(httpFacade.getInventoryQuantity(lineItem.getItemId()));
       lineItem.setItem(item);
     });
-
     return order;
   }
 
@@ -197,6 +198,7 @@ public class OrderService {
    *
    * @return the next id
    */
+  @Transactional
   public int getNextId(String name) {
     Sequence sequence = sequenceMapper.getSequence(new Sequence(name, -1));
     if (sequence == null) {

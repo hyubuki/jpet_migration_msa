@@ -145,7 +145,7 @@ public class CatalogController {
 
     }
 
-    @KafkaListener(topics="prod_compensation", groupId = "group_1")
+    @KafkaListener(topics="product_compensation", groupId = "group_1")
     public void incrInventoryQuantity(HashMap<String, Object> data) {
         List<String> itemId = new ArrayList<>();
         List<Integer> increment = new ArrayList<>();

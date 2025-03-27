@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class HttpFacade {
     @Autowired
     RestTemplate restTemplate;
-
     private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog";
 
     public boolean updateInventoryQuantity(Map<String, Object> param, Integer orderId) {
