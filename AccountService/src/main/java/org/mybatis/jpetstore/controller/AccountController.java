@@ -1,21 +1,14 @@
 package org.mybatis.jpetstore.controller;
 
-
 import org.mybatis.jpetstore.domain.Account;
-import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.http.HttpFacade;
 import org.mybatis.jpetstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Controller

@@ -1,9 +1,8 @@
 package org.mybatis.jpetstore.controller;
 
-import org.mybatis.jpetstore.HttpRequest.HttpGetRequest;
 import org.mybatis.jpetstore.domain.Cart;
-import org.mybatis.jpetstore.domain.CartItem;
 import org.mybatis.jpetstore.domain.Item;
+import org.mybatis.jpetstore.service.CartService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,23 +12,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Iterator;
 
 @Controller
 @RequestMapping("/")
 public class CartController {
 
+    private final CartService cartService;
+
+    public CartController(final CartService cartService) {
+        this.cartService = cartService;
+    }
+
     @GetMapping("/addItemToCart")
     public String addItemToCart(@RequestParam String workingItemId, HttpSession session, Model model) {
-        Cart cart = getCart(session);
-        if (cart.containsItemId(workingItemId)) {
-            cart.incrementQuantityByItemId(workingItemId);
-        } else {
-            boolean isInStock = Boolean.TRUE.equals(HttpGetRequest.isItemInStockFromCatalogService(workingItemId));
-            Item item = HttpGetRequest.getItemFromCatalogService(workingItemId);
-            assert item != null;
-            cart.addItem(item,isInStock);
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null){
+            cart = new Cart();
         }
+
+        cartService.addItem(cart,workingItemId);
+
         model.addAttribute("cart",cart);
         session.setAttribute("cart",cart);
         return "cart/Cart";
@@ -38,15 +41,16 @@ public class CartController {
 
     @GetMapping("/viewCart")
     public String viewCart(Model model, HttpSession session) {
-        Cart cart = getCart(session);
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null){
+            cart = new Cart();
+        }
+
         model.addAttribute("cart", cart);
         return "cart/Cart";
     }
 
-    /*
-        session에 담아두면 어디서든지 sessionScope로 접근 가능하기 때문에
-        불필요한 메소드인 것 같습니다.
-     */
     @GetMapping("/getCart")
     public Cart getCart(HttpSession session) {
         if (session.getAttribute("cart") == null) {
@@ -57,8 +61,15 @@ public class CartController {
 
     @GetMapping("/remove/item")
     public String removeItemFromCart(@RequestParam String itemId, HttpSession session, Model model) {
-        Cart cart = getCart(session);
-        Item item = cart.removeItemById(itemId);
+
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null){
+            cart = new Cart();
+        }
+
+        Item item = cartService.removeItem(cart,itemId);
+
         if (item == null) {
             model.addAttribute("msg", "Attempted to remove null CartItem from Cart.");
             return "common/error";
@@ -71,36 +82,17 @@ public class CartController {
 
     @PostMapping("/update")
     public String updateCartQuantities(HttpServletRequest request, HttpSession session, Model model) {
-        Cart cart = getCart(session);
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext()) {
-            CartItem cartItem = cartItems.next();
-            String itemId = cartItem.getItem().getItemId();
-            try {
-                int quantity = Integer.parseInt(request.getParameter(itemId));
-                cart.setQuantityByItemId(itemId, quantity);
-                if (quantity < 1) {
-                    cartItems.remove();
-                }
-            } catch (Exception e) {
-                // ignore parse exceptions on purpose
-            }
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null){
+            cart = new Cart();
         }
+
+        cartService.updateCartItem(cart,request.getParameterMap());
         model.addAttribute("cart",cart);
         session.setAttribute("cart",cart);
         return "cart/Cart";
     }
-
-    /*
-        checkout이라는 url을 접근하는 버튼이 기존 웹 앱에도 없는 것 같습니다!!
-     */
-    @GetMapping("/checkout")
-    public String checkOut(HttpSession session, Model model) {
-        Cart cart = getCart(session);
-        model.addAttribute("cart",cart);
-        return "cart/Checkout";
-    }
-
 
 
 }
