@@ -6,6 +6,3 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka:2.8.1'
 }
 
-war {
-    webXml = file('src/main/webapp/web.xml')
-}
