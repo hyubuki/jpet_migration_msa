@@ -1,0 +1,9 @@
+group = 'org.mybatis'
+version = '1.0.0'
+archivesBaseName = 'jpetstore-catalog'
+
+dependencies {
+    implementation 'org.springframework.kafka:spring-kafka:2.8.1'
+}
+
+// web.xml already in WEB-INF
