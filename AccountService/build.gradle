@@ -1,0 +1,7 @@
+group = 'org.mybatis'
+version = '1.0.0'
+archivesBaseName = 'jpetstore-account'
+
+war {
+    webXml = file('src/main/webapp/web.xml')
+}
