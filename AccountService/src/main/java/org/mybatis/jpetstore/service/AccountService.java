@@ -16,62 +16,64 @@
 package org.mybatis.jpetstore.service;
 
 import org.mybatis.jpetstore.domain.Account;
-import org.mybatis.jpetstore.mapper.AccountMapper;
+import org.mybatis.jpetstore.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 /**
- * The Class AccountService.
- *
- * @author Eduardo Macarron
+ * 계정 관련 비즈니스 로직을 담당합니다.
  */
 @Service
 public class AccountService {
 
-  private final AccountMapper accountMapper;
+  private final AccountRepository accountRepository;
 
   @Autowired
-  public AccountService(AccountMapper accountMapper) {
-    this.accountMapper = accountMapper;
-  }
-
-  public Account getAccount(String username) {
-    return accountMapper.getAccountByUsername(username);
-  }
-
-  public Account getAccount(String username, String password) {
-    return accountMapper.getAccountByUsernameAndPassword(username, password);
+  public AccountService(AccountRepository accountRepository) {
+    this.accountRepository = accountRepository;
   }
 
   /**
-   * Insert account.
+   * 사용자 이름으로 계정 정보를 조회합니다.
    *
-   * @param account
-   *          the account
+   * @param username 사용자 이름
+   * @return 계정 정보
+   */
+  public Account getAccount(String username) {
+    return accountRepository.findByUsername(username);
+  }
+
+  /**
+   * 사용자 이름과 비밀번호로 계정 정보를 조회합니다.
+   *
+   * @param username 사용자 이름
+   * @param password 비밀번호
+   * @return 계정 정보
+   */
+  public Account getAccount(String username, String password) {
+    return accountRepository.findByUsernameAndPassword(username, password);
+  }
+
+  /**
+   * 새로운 계정을 등록합니다.
+   *
+   * @param account 등록할 계정
    */
   @Transactional
   public void insertAccount(Account account) {
-    accountMapper.insertAccount(account);
-    accountMapper.insertProfile(account);
-    accountMapper.insertSignon(account);
+    accountRepository.insert(account);
   }
 
   /**
-   * Update account.
+   * 계정 정보를 수정합니다.
    *
-   * @param account
-   *          the account
+   * @param account 수정할 계정
    */
   @Transactional
   public void updateAccount(Account account) {
-    accountMapper.updateAccount(account);
-    accountMapper.updateProfile(account);
-
-    Optional.ofNullable(account.getPassword()).filter(password -> password.length() > 0)
-        .ifPresent(password -> accountMapper.updateSignon(account));
+    accountRepository.update(account);
   }
 
 }

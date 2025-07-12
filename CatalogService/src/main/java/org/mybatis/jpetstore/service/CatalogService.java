@@ -198,6 +198,33 @@ public class CatalogService {
   }
 
   /**
+   * 여러 아이템의 재고 수량을 조회합니다.
+   *
+   * @param itemIds 아이템 ID 목록
+   * @return 각 아이템의 현재 수량 목록
+   */
+  public List<Integer> getInventoryQuantities(List<String> itemIds){
+    return itemIds.stream()
+            .map(this::getItemQuantity)
+            .toList();
+  }
+
+  /**
+   * 재고 복구 요청 데이터를 처리합니다.
+   *
+   * @param data 복구할 아이템과 수량 정보
+   */
+  public void rollbackInventory(Map<String, Object> data){
+    List<String> itemId = new ArrayList<>();
+    List<Integer> increment = new ArrayList<>();
+    for (String key : data.keySet()) {
+      itemId.add(key);
+      increment.add((Integer) data.get(key));
+    }
+    rollBackInventoryQuantity(itemId, increment);
+  }
+
+  /**
    * 특정 아이템의 재고 수량을 조회합니다.
    *
    * @param itemId 아이템 ID

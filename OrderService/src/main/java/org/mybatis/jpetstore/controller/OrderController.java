@@ -3,11 +3,8 @@ package org.mybatis.jpetstore.controller;
 import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.domain.Cart;
 import org.mybatis.jpetstore.domain.Order;
-import org.mybatis.jpetstore.exception.OrderFailException;
-import org.mybatis.jpetstore.exception.RetryUnknownException;
 import org.mybatis.jpetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,9 +47,7 @@ public class OrderController {
             return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
         }
         else if (cart != null) {
-            Order order = new Order();
-            order.initOrder(account, cart);
-            order.setOrderId(orderService.getNextId("ordernum"));
+            Order order = orderService.createOrder(account, cart);
             session.setAttribute("order", order);
             return "order/NewOrderForm";
         }
@@ -74,42 +69,12 @@ public class OrderController {
 
         Order sessionOrder = (Order) session.getAttribute("order");
 
-        if (shippingAddressRequired) {
-            changeBillInfo(sessionOrder, order);
-            session.setAttribute("order", sessionOrder);
-            return "order/ShippingForm";
+        var result = orderService.handleOrderProcess(sessionOrder, order, shippingAddressRequired,
+                confirmed, changeShipInfo, session);
+        if (result.getMessage() != null) {
+            req.setAttribute("msg", result.getMessage());
         }
-
-        else if(!confirmed) {
-            if (changeShipInfo)
-                changeShipInfo(sessionOrder, order);
-            session.setAttribute("order", sessionOrder);
-            return "order/ConfirmOrder";
-        }
-
-        else if (sessionOrder != null) {
-            try{
-                orderService.insertOrder(sessionOrder,session);
-                session.removeAttribute("cart");
-
-                String msg = "Thank you, your order has been submitted.";
-                req.setAttribute("msg", msg);
-                return "order/ViewOrder";
-
-            } catch(RetryUnknownException e){
-                return "order/ConfirmOrder";
-
-            } catch(OrderFailException e){ // order 실패시 Error page로 이동
-                req.setAttribute("msg",e.getMessage());
-                System.out.println("common/Error");
-                return "common/Error";
-            }
-
-        } else {
-            String msg = "An error occurred processing your order (order was null).";
-            req.setAttribute("msg", msg);
-            return "common/Error";
-        }
+        return result.getViewName();
     }
 
 
@@ -133,28 +98,4 @@ public class OrderController {
         }
     }
 
-    public void changeBillInfo(Order sessionOrder, Order order) {
-        sessionOrder.setCardType(order.getCardType());
-        sessionOrder.setCreditCard(order.getCreditCard());
-        sessionOrder.setExpiryDate(order.getExpiryDate());
-        sessionOrder.setBillToFirstName(order.getBillToFirstName());
-        sessionOrder.setBillToLastName(order.getBillToLastName());
-        sessionOrder.setBillAddress1(order.getBillAddress1());
-        sessionOrder.setBillAddress2(order.getBillAddress2());
-        sessionOrder.setBillCity(order.getBillCity());
-        sessionOrder.setBillState(order.getBillState());
-        sessionOrder.setBillZip(order.getBillZip());
-        sessionOrder.setBillCountry(order.getBillCountry());
-    }
-
-    public void changeShipInfo(Order sessionOrder, Order order) {
-        sessionOrder.setShipToFirstName(order.getShipToFirstName());
-        sessionOrder.setShipToLastName(order.getShipToLastName());
-        sessionOrder.setShipAddress1(order.getShipAddress1());
-        sessionOrder.setShipAddress2(order.getShipAddress2());
-        sessionOrder.setShipCity(order.getShipCity());
-        sessionOrder.setShipState(order.getShipState());
-        sessionOrder.setShipZip(order.getShipZip());
-        sessionOrder.setShipCountry(order.getShipCountry());
-    }
 }

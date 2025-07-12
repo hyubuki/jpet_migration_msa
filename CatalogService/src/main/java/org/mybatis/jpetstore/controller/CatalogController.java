@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -144,9 +143,7 @@ public class CatalogController {
     @ResponseBody
     @GetMapping("/getQuantities")
     public List<Integer> getInventoryQuantities(@RequestBody List<String> itemIds){
-        return itemIds.stream()
-                .map(catalogService::getItemQuantity)
-                .toList();
+        return catalogService.getInventoryQuantities(itemIds);
     }
 
     /**
@@ -181,14 +178,7 @@ public class CatalogController {
      */
     @KafkaListener(topics="product_compensation", groupId = "group_1")
     public void incrInventoryQuantity(HashMap<String, Object> data) {
-        List<String> itemId = new ArrayList<>();
-        List<Integer> increment = new ArrayList<>();
-
-        for (String key : data.keySet()) {
-            itemId.add(key);
-            increment.add((int) data.get(key));
-        }
-        catalogService.rollBackInventoryQuantity(itemId, increment);
+        catalogService.rollbackInventory(data);
     }
 
 }
