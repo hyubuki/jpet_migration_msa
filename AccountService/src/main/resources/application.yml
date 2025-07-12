@@ -1,0 +1,11 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  datasource:
+    schema: classpath:database/jpetstore-hsqldb-schema.sql
+    data: classpath:database/jpetstore-hsqldb-dataload.sql
+mybatis:
+  type-aliases-package: org.mybatis.jpetstore.domain
+  mapper-locations: classpath:mapperXML/*.xml
