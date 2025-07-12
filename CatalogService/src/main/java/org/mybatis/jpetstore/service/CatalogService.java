@@ -21,10 +21,10 @@ import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.InventoryUpdateStatus;
 import org.mybatis.jpetstore.domain.Item;
 import org.mybatis.jpetstore.domain.Product;
-import org.mybatis.jpetstore.mapper.CategoryMapper;
-import org.mybatis.jpetstore.mapper.InventoryUpdateStatusMapper;
-import org.mybatis.jpetstore.mapper.ItemMapper;
-import org.mybatis.jpetstore.mapper.ProductMapper;
+import org.mybatis.jpetstore.repository.CategoryRepository;
+import org.mybatis.jpetstore.repository.InventoryUpdateStatusRepository;
+import org.mybatis.jpetstore.repository.ItemRepository;
+import org.mybatis.jpetstore.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,91 +37,158 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CatalogService {
 
-  private final CategoryMapper categoryMapper;
-  private final ItemMapper itemMapper;
-  private final ProductMapper productMapper;
-  private final InventoryUpdateStatusMapper inventoryUpdateStatusMapper;
+  private final CategoryRepository categoryRepository;
+  private final ItemRepository itemRepository;
+  private final ProductRepository productRepository;
+  private final InventoryUpdateStatusRepository inventoryUpdateStatusRepository;
 
   @Autowired
-  public CatalogService(CategoryMapper categoryMapper, ItemMapper itemMapper, ProductMapper productMapper, InventoryUpdateStatusMapper inventoryUpdateStatusMapper) {
-    this.categoryMapper = categoryMapper;
-    this.itemMapper = itemMapper;
-    this.productMapper = productMapper;
-    this.inventoryUpdateStatusMapper = inventoryUpdateStatusMapper;
-  }
-
-  public List<Category> getCategoryList() {
-    return categoryMapper.getCategoryList();
-  }
-
-  public Category getCategory(String categoryId) {
-    return categoryMapper.getCategory(categoryId);
-  }
-
-  public Product getProduct(String productId) {
-    return productMapper.getProduct(productId);
-  }
-
-  public List<Product> getProductListByCategory(String categoryId) {
-    return productMapper.getProductListByCategory(categoryId);
+  /**
+   * 필수 저장소를 주입하여 {@code CatalogService} 인스턴스를 생성합니다.
+   *
+   * @param categoryRepository 카테고리 저장소
+   * @param itemRepository 아이템 저장소
+   * @param productRepository 상품 저장소
+   * @param inventoryUpdateStatusRepository 재고 업데이트 상태 저장소
+   */
+  public CatalogService(CategoryRepository categoryRepository, ItemRepository itemRepository, ProductRepository productRepository, InventoryUpdateStatusRepository inventoryUpdateStatusRepository) {
+    this.categoryRepository = categoryRepository;
+    this.itemRepository = itemRepository;
+    this.productRepository = productRepository;
+    this.inventoryUpdateStatusRepository = inventoryUpdateStatusRepository;
   }
 
   /**
-   * Search product list.
+   * 모든 카테고리 목록을 조회합니다.
    *
-   * @param keywords
-   *          the keywords
+   * @return 카테고리 목록
+   */
+  public List<Category> getCategoryList() {
+    return categoryRepository.findAll();
+  }
+
+  /**
+   * ID로 카테고리를 조회합니다.
    *
-   * @return the list
+   * @param categoryId 카테고리 ID
+   * @return 카테고리 또는 없으면 {@code null}
+   */
+  public Category getCategory(String categoryId) {
+    return categoryRepository.findById(categoryId);
+  }
+
+  /**
+   * ID로 상품을 조회합니다.
+   *
+   * @param productId 상품 ID
+   * @return 상품 객체 또는 없으면 {@code null}
+   */
+  public Product getProduct(String productId) {
+    return productRepository.findById(productId);
+  }
+
+  /**
+   * 지정한 카테고리에 속한 상품 목록을 조회합니다.
+   *
+   * @param categoryId 카테고리 ID
+   * @return 상품 목록
+   */
+  public List<Product> getProductListByCategory(String categoryId) {
+    return productRepository.findByCategory(categoryId);
+  }
+
+  /**
+   * 키워드를 포함하는 상품을 검색합니다.
+   *
+   * @param keywords 공백으로 구분된 검색어
+   * @return 검색된 상품 목록
    */
   public List<Product> searchProductList(String keywords) {
-    List<Product> products = new ArrayList<>();
-    for (String keyword : keywords.split("\\s+")) {
-      products.addAll(productMapper.searchProductList("%" + keyword.toLowerCase() + "%"));
-    }
-    return products;
+    return Arrays.stream(keywords.split("\\s+"))
+        .map(k -> "%" + k.toLowerCase() + "%")
+        .map(productRepository::search)
+        .flatMap(Collection::stream)
+        .toList();
   }
 
+  /**
+   * 특정 상품에 속한 아이템 목록을 조회합니다.
+   *
+   * @param productId 상품 ID
+   * @return 아이템 목록
+   */
   public List<Item> getItemListByProduct(String productId) {
-    return itemMapper.getItemListByProduct(productId);
+    return itemRepository.findByProduct(productId);
   }
 
+  /**
+   * ID로 아이템을 조회합니다.
+   *
+   * @param itemId 아이템 ID
+   * @return 아이템 객체 또는 없으면 {@code null}
+   */
   public Item getItem(String itemId) {
-    return itemMapper.getItem(itemId);
+    return itemRepository.findById(itemId);
   }
 
+  /**
+   * 아이템이 재고에 존재하는지 확인합니다.
+   *
+   * @param itemId 아이템 ID
+   * @return 수량이 0보다 크면 {@code true}
+   */
   public boolean isItemInStock(String itemId) {
-    return itemMapper.getInventoryQuantity(itemId) > 0;
+    return itemRepository.getInventoryQuantity(itemId) > 0;
   }
 
+  /**
+   * 여러 아이템의 재고 수량을 변경하고 상태를 기록합니다.
+   *
+   * @param itemId   아이템 ID 목록
+   * @param increment 각각 증가할 수량
+   * @param orderId  관련 주문 ID
+   * @throws Exception 잠금이나 업데이트 실패 시 발생
+   */
   @Transactional(rollbackFor = Exception.class)
   public void updateItemQuantity(List<String> itemId, List<Integer> increment, Integer orderId) throws Exception{
 
       // lock 획득
-      itemMapper.lockItemsForUpdate(itemId);
+      itemRepository.lockForUpdate(itemId);
 
       // 각각 업데이트
       for(int i = 0; i < itemId.size(); i++) {
-        itemMapper.updateInventoryQuantity(itemId.get(i), increment.get(i));
+        itemRepository.updateInventoryQuantity(itemId.get(i), increment.get(i));
       }
       // 성공 여부 업데이트
-      inventoryUpdateStatusMapper.insertInventoryUpdateStatus(new InventoryUpdateStatus(orderId));
+      inventoryUpdateStatusRepository.insertStatus(new InventoryUpdateStatus(orderId));
   }
 
+  /**
+   * 주어진 주문의 재고 업데이트 성공 여부를 확인합니다.
+   *
+   * @param orderId 주문 ID
+   * @return 업데이트가 완료되었으면 {@code true}
+   */
   public boolean isInventoryUpdateSuccess(Integer orderId){
-    Optional<InventoryUpdateStatus> inventoryUpdateStatus = inventoryUpdateStatusMapper.getInventoryUpdateStatusByOrderId(orderId);
+    Optional<InventoryUpdateStatus> inventoryUpdateStatus = inventoryUpdateStatusRepository.findByOrderId(orderId);
     if (inventoryUpdateStatus.isPresent()) return true;
     else return false;
   }
 
+  /**
+   * 지정한 아이템들의 재고 수량을 되돌립니다.
+   *
+   * @param itemId   아이템 ID 목록
+   * @param increment 복구할 수량
+   */
   @Transactional
   public void rollBackInventoryQuantity(List<String> itemId, List<Integer> increment) {
     try {
       // lock 획득
-      itemMapper.lockItemsForUpdate(itemId);
+      itemRepository.lockForUpdate(itemId);
 
       for (int i = 0; i < itemId.size(); i++) {
-        itemMapper.rollBackInventoryQuantity(itemId.get(i), increment.get(i));
+        itemRepository.rollBackInventoryQuantity(itemId.get(i), increment.get(i));
       }
 
     } catch (Exception e) {
@@ -130,8 +197,14 @@ public class CatalogService {
     }
   }
 
+  /**
+   * 특정 아이템의 재고 수량을 조회합니다.
+   *
+   * @param itemId 아이템 ID
+   * @return 현재 수량
+   */
   public Integer getItemQuantity(String itemId){
-    Integer quantity = itemMapper.getInventoryQuantity(itemId);
+    Integer quantity = itemRepository.getInventoryQuantity(itemId);
     return quantity;
   }
 

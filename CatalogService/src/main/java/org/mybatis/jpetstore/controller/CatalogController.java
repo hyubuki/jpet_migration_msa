@@ -1,9 +1,7 @@
 package org.mybatis.jpetstore.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.jpetstore.domain.Category;
 import org.mybatis.jpetstore.domain.Item;
-import org.mybatis.jpetstore.domain.Order;
 import org.mybatis.jpetstore.domain.Product;
 import org.mybatis.jpetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -31,52 +28,71 @@ public class CatalogController {
         this.catalogService = catalogService;
     }
 
+    /**
+     * 메인 페이지를 보여줍니다.
+     */
     @GetMapping("/")
     public String viewMain(){
         return "catalog/Main";
     }
 
+    /**
+     * 카테고리 상세 페이지를 보여줍니다.
+     *
+     * @param categoryId 카테고리 ID
+     * @param model 뷰 모델
+     * @return 뷰 이름
+     */
     @GetMapping("/category")
     public String viewCategory(@RequestParam String categoryId, Model model){
-        // category
+        // 카테고리 조회
         Category category = catalogService.getCategory(categoryId);
-        // product name
+        // 상품 목록 조회
         List<Product> productList = catalogService.getProductListByCategory(categoryId);
-        // set model
+        // 모델 설정
         model.addAttribute("category",category);
         model.addAttribute("products",productList);
         return "catalog/Category";
     }
 
+    /**
+     * 상품 상세 페이지를 보여줍니다.
+     */
     @GetMapping("/product")
     public String viewProduct(@RequestParam String productId, Model model){
-        // product by productId
+        // 상품 조회
         Product product = catalogService.getProduct(productId);
-        // Product
+        // 해당 상품의 아이템 목록 조회
         List<Item> itemList = catalogService.getItemListByProduct(productId);
-        // set model
+        // 모델 설정
         model.addAttribute("product",product);
         model.addAttribute("itemList",itemList);
-        // ItemList by productId
+        // 뷰 반환
         return "catalog/Product";
     }
 
+    /**
+     * 아이템 상세 페이지를 보여줍니다.
+     */
     @GetMapping("/item")
     public String viewItem(@RequestParam String itemId, Model model){
-        // item
+        // 아이템 조회
         Item item = catalogService.getItem(itemId);
-        // product of item
+        // 아이템이 속한 상품 조회
         Product product = item.getProduct();
-        // set model
+        // 모델 설정
         model.addAttribute("item",item);
         model.addAttribute("product",product);
         return "catalog/Item";
     }
 
+    /**
+     * 입력한 키워드로 상품을 검색합니다.
+     */
     @GetMapping("/searchProducts")
     public String searchProducts(@RequestParam String keywords, Model model){
         if(keywords == null ||  keywords.length() < 1){
-            String errorMessage = "Please enter a keyword to search for, then press the search button.";
+            String errorMessage = "검색어를 입력한 후 검색 버튼을 눌러주세요.";
             model.addAttribute("message",errorMessage);
         }else{
             List<Product> productList = catalogService.searchProductList(keywords.toLowerCase());
@@ -85,57 +101,72 @@ public class CatalogController {
         return "catalog/SearchProducts";
     }
 
+    /**
+     * 지정한 카테고리의 상품 목록을 반환합니다.
+     */
     @ResponseBody
     @PostMapping("/get/productList")
     public List<Product> getProductList(@RequestParam String catalogId){
-        List<Product> productListByCategory = catalogService.getProductListByCategory(catalogId);
-        return productListByCategory;
+        return catalogService.getProductListByCategory(catalogId);
     }
 
+    /**
+     * 아이템 재고 여부를 확인합니다.
+     */
     @ResponseBody
     @GetMapping("/isItemInStock")
     public Boolean getIsItemInStock(@RequestParam String itemId){
-        Boolean isItemInStock = catalogService.isItemInStock(itemId);
-        return isItemInStock;
+        return catalogService.isItemInStock(itemId);
     }
 
+    /**
+     * 아이템 정보를 반환합니다.
+     */
     @ResponseBody
     @GetMapping("/getItem")
     public Item getItem(@RequestParam String itemId) {
         return catalogService.getItem(itemId);
     }
 
+    /**
+     * 아이템의 현재 재고 수량을 반환합니다.
+     */
     @ResponseBody
     @GetMapping("/getQuantity")
     public ResponseEntity<Integer> getInventoryQuantity(@RequestParam String itemId){
         Integer quantity = catalogService.getItemQuantity(itemId);
-        return new ResponseEntity<Integer>(quantity,HttpStatus.OK);
+        return new ResponseEntity<>(quantity, HttpStatus.OK);
     }
 
+    /**
+     * 여러 아이템의 재고 수량을 반환합니다.
+     */
     @ResponseBody
     @GetMapping("/getQuantities")
     public List<Integer> getInventoryQuantities(@RequestBody List<String> itemIds){
-
-        List<Integer>quantityOfItems = new ArrayList<>();
-        for (String itemId : itemIds){
-            Integer quantity = catalogService.getItemQuantity(itemId); // 후에 단일 쿼리 조회로 가져올 수 있게 변경 예정
-            quantityOfItems.add(quantity);
-        }
-        return quantityOfItems;
+        return itemIds.stream()
+                .map(catalogService::getItemQuantity)
+                .toList();
     }
 
+    /**
+     * 주문에 대한 재고 수량을 업데이트합니다.
+     */
     @ResponseBody
     @GetMapping("/updateQuantity")
     public ResponseEntity<Boolean> updateInventoryQuantity(@RequestParam List<String> itemId, @RequestParam List<Integer> increment, @RequestParam Integer orderId){
         try{
             catalogService.updateItemQuantity(itemId,increment,orderId);
-            return new ResponseEntity<>(Boolean.FALSE,HttpStatus.OK); // test용 False 처리
+            return new ResponseEntity<>(Boolean.FALSE,HttpStatus.OK); // 테스트용 FALSE 처리
         }catch (Exception e){
             return new ResponseEntity<>(Boolean.FALSE,HttpStatus.OK);
         }
     }
 
 
+    /**
+     * 주문 처리 시 재고가 정상적으로 업데이트되었는지 확인합니다.
+     */
     @ResponseBody
     @GetMapping("/isInventoryUpdated")
     public ResponseEntity<Boolean> isInventoryUpdatedSuccess(@RequestParam Integer orderId) throws InterruptedException {
@@ -145,6 +176,9 @@ public class CatalogController {
 
     }
 
+    /**
+     * 주문 실패 시 재고를 복구하기 위한 Kafka 리스너입니다.
+     */
     @KafkaListener(topics="product_compensation", groupId = "group_1")
     public void incrInventoryQuantity(HashMap<String, Object> data) {
         List<String> itemId = new ArrayList<>();
