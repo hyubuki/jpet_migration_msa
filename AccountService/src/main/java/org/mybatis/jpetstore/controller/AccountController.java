@@ -14,7 +14,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/")
 public class AccountController {
-//    private static final String REDIRECT_BASE_URL="http://localhost:8080";
 
     @Autowired
     private AccountService accountService;
