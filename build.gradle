@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.18' apply false
+    id 'org.springframework.boot' version '3.5.3' apply false
     id 'io.spring.dependency-management' version '1.1.4' apply false
 }
 
@@ -17,20 +17,18 @@ subprojects {
     }
 
     ext {
-        hsqldbVersion = '2.5.2'
+        hsqldbVersion = '2.7.3'
     }
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2'
+        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
         implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-        implementation 'javax.servlet:jstl'
-        implementation 'org.apache.taglibs:taglibs-standard-spec:1.2.5'
-        implementation 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
+        implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+        implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
         implementation "org.hsqldb:hsqldb:${hsqldbVersion}"
-        implementation 'org.springframework.session:spring-session-data-redis:2.5.5'
-        implementation 'io.lettuce:lettuce-core:6.1.8.RELEASE'
-        implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+        implementation 'org.springframework.session:spring-session-data-redis'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 

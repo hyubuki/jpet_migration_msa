@@ -3,6 +3,6 @@ version = '1.0-SNAPSHOT'
 archivesBaseName = 'jpetstore-order'
 
 dependencies {
-    implementation 'org.springframework.kafka:spring-kafka:2.8.1'
+    implementation 'org.springframework.kafka:spring-kafka:3.3.7'
 }
 
