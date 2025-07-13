@@ -1,7 +1,26 @@
 plugins {
     id 'java-library'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:3.5.3"
+    }
+}
+
 
 group = 'org.mybatis'
 version = '1.0.0'
 archivesBaseName = 'jpetstore-common'
+
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    api 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    api 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    api 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+    api "org.hsqldb:hsqldb:2.7.3"
+    api 'org.springframework.session:spring-session-data-redis'
+    api 'org.springframework.boot:spring-boot-starter-data-redis'
+}

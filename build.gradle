@@ -14,28 +14,12 @@ subprojects {
     repositories {
         mavenCentral()
     }
-
-    ext {
-        hsqldbVersion = '2.7.3'
-    }
 }
 
 configure(subprojects.findAll { it.name != commonLibName }) {
     apply plugin: 'war'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
-        implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-        implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
-        implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
-        implementation "org.hsqldb:hsqldb:${hsqldbVersion}"
-        implementation 'org.springframework.session:spring-session-data-redis'
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
 
     tasks.named('bootWar') {
         manifest {
@@ -46,4 +30,5 @@ configure(subprojects.findAll { it.name != commonLibName }) {
 
 project(':CommonLibrary') {
     apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
 }

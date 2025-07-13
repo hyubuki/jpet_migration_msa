@@ -13,6 +13,17 @@ spring:
     init:
       schema-locations: classpath:database/jpetstore-hsqldb-schema.sql
       data-locations: classpath:database/jpetstore-hsqldb-dataload.sql
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      repositories:
+        enabled: false
+  session:
+    redis:
+      namespace: JPetStore6
+      repository-type: indexed
+
 mybatis:
   type-aliases-package: org.mybatis.jpetstore.domain
   mapper-locations: classpath:mapperXML/*.xml
