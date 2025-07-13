@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 package org.mybatis.jpetstore.domain;
+// Shared domain model used by multiple services
 
 import java.io.Serializable;
 
@@ -23,7 +24,9 @@ import java.io.Serializable;
  * @author Eduardo Macarron
  */
 public class Account implements Serializable {
+
   private static final long serialVersionUID = 8751282105532159742L;
+
   private String username;
   private String password;
   private String email;

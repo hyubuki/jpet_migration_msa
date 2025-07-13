@@ -1,4 +1,5 @@
 package org.mybatis.jpetstore.domain;
+// Shared domain model used by multiple services
 import java.io.Serializable;
 
 public class InventoryUpdateStatus implements Serializable {

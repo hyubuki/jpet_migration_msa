@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 package org.mybatis.jpetstore.domain;
+// Shared domain model used by multiple services
 
 import java.io.Serializable;
 import java.math.BigDecimal;
