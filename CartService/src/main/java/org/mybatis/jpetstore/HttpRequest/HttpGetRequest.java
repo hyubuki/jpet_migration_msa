@@ -2,19 +2,25 @@ package org.mybatis.jpetstore.HttpRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.jpetstore.domain.Item;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Service
 public class HttpGetRequest {
-    public static Item getItemFromCatalogService(String itemId) {
+
+    @Value("${gateway.base-url}")
+    private String gatewayBaseUrl;
+
+    public Item getItemFromCatalogService(String itemId) {
         // TODO : 배포시 해당 URL로 변경
         try {
             // url 설정
-            URL url = new URL(String.format("http://localhost:8080/catalog/getItem?itemId=%s",itemId));
+            URL url = new URL(String.format("%s/catalog/getItem?itemId=%s", gatewayBaseUrl, itemId));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // 요청 방식 설정 (GET)
             connection.setRequestMethod("GET");
@@ -48,11 +54,11 @@ public class HttpGetRequest {
     }
 
 
-    public static Boolean isItemInStockFromCatalogService(String itemId) {
+    public Boolean isItemInStockFromCatalogService(String itemId) {
         // TODO : 배포시 해당 URL로 변경
         try {
             // url 설정
-            URL url = new URL(String.format("http://localhost:8080/catalog/isItemInStock?itemId=%s",itemId));
+            URL url = new URL(String.format("%s/catalog/isItemInStock?itemId=%s", gatewayBaseUrl, itemId));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // 요청 방식 설정 (GET)
             connection.setRequestMethod("GET");

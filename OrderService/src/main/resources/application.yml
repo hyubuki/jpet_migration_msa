@@ -27,3 +27,8 @@ spring:
 mybatis:
   type-aliases-package: org.mybatis.jpetstore.domain
   mapper-locations: classpath:mapperXML/*.xml
+
+gateway:
+  base-url: http://localhost:8080
+kafka:
+  bootstrap-servers: localhost:9092

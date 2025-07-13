@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class OrderController {
-    private static final String REDIRECT_BASE_URL="http://localhost:8080";
+    @Value("${gateway.base-url}")
+    private String redirectBaseUrl;
 
     @Autowired
     OrderService orderService;
@@ -30,7 +32,7 @@ public class OrderController {
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
+            return "redirect:" + redirectBaseUrl + "/account/signonForm";
         }
         List<Order> orderList = orderService.getOrdersByUsername(account.getUsername());
         request.setAttribute("orderList", orderList);
@@ -44,7 +46,7 @@ public class OrderController {
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
+            return "redirect:" + redirectBaseUrl + "/account/signonForm";
         }
         else if (cart != null) {
             Order order = orderService.createOrder(account, cart);
@@ -85,7 +87,7 @@ public class OrderController {
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + REDIRECT_BASE_URL + "/account/signonForm";
+            return "redirect:" + redirectBaseUrl + "/account/signonForm";
         }
         Order order = orderService.getOrder(orderId);
         if (account.getUsername().equals(order.getUsername())) {

@@ -2,6 +2,7 @@ package org.mybatis.jpetstore.repository;
 
 import org.mybatis.jpetstore.HttpRequest.HttpGetRequest;
 import org.mybatis.jpetstore.domain.Item;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CatalogRepository {
 
+    @Autowired
+    private HttpGetRequest httpGetRequest;
+
     /**
      * 지정한 ID의 상품을 조회합니다.
      *
@@ -17,7 +21,7 @@ public class CatalogRepository {
      * @return 상품 정보
      */
     public Item findItem(String itemId) {
-        return HttpGetRequest.getItemFromCatalogService(itemId);
+        return httpGetRequest.getItemFromCatalogService(itemId);
     }
 
     /**
@@ -27,7 +31,7 @@ public class CatalogRepository {
      * @return 재고 존재 여부
      */
     public boolean isItemInStock(String itemId) {
-        Boolean result = HttpGetRequest.isItemInStockFromCatalogService(itemId);
+        Boolean result = httpGetRequest.isItemInStockFromCatalogService(itemId);
         return Boolean.TRUE.equals(result);
     }
 }
