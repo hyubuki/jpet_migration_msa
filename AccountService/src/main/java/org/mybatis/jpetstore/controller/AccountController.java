@@ -1,5 +1,6 @@
 package org.mybatis.jpetstore.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.http.HttpFacade;
 import org.mybatis.jpetstore.service.AccountService;
@@ -7,19 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
 public class AccountController {
-//    private static final String REDIRECT_BASE_URL="http://localhost:8080";
 
     @Autowired
     private AccountService accountService;
     @Autowired
     private HttpFacade httpFacade;
+    @Value("${gateway.base-url}")
+    private String redirectBaseUrl;
 
 
     @GetMapping("/newAccountForm")
@@ -27,7 +29,7 @@ public class AccountController {
         String REDIRECT_BASE_URL = httpFacade.getBaseUrl(request);
         if (session.getAttribute("account") != null) {
             // 로그인이 되어 있으면 메인 페이지로 리다이렉트
-            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+            return "redirect:" + redirectBaseUrl + "/catalog";
         }
         return "account/NewAccountForm";
     }
@@ -37,7 +39,7 @@ public class AccountController {
         String REDIRECT_BASE_URL = httpFacade.getBaseUrl(request);
         if (session.getAttribute("account") != null) {
             // 로그인이 되어 있으면 메인 페이지로 리다이렉트
-            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+            return "redirect:" + redirectBaseUrl + "/catalog";
         }
         accountService.insertAccount(account);
         session.setAttribute("account", accountService.getAccount(account.getUsername()));
@@ -46,7 +48,7 @@ public class AccountController {
         // 카탈로그 서비스 사용
         session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
         session.setAttribute("isAuthenticated", true);
-        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        return "redirect:" + redirectBaseUrl + "/catalog";
     }
 
     @GetMapping("/editAccountForm")
@@ -68,7 +70,7 @@ public class AccountController {
         // 카탈로그 서비스 사용
         String REDIRECT_BASE_URL = httpFacade.getBaseUrl(request);
         session.setAttribute("myList", httpFacade.getProductListByCategory(account.getFavouriteCategoryId()));
-        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        return "redirect:" + redirectBaseUrl + "/catalog";
     }
 
     @GetMapping("/signonForm")
@@ -76,7 +78,7 @@ public class AccountController {
         String REDIRECT_BASE_URL = httpFacade.getBaseUrl(request);
         if (session.getAttribute("account") != null) {
             // 로그인이 되어 있으면, 로그인 불가
-            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+            return "redirect:" + redirectBaseUrl + "/catalog";
         }
         if (msg != null)
             req.setAttribute("msg", msg);
@@ -99,7 +101,7 @@ public class AccountController {
             session.setAttribute("account", existAccount);
             session.setAttribute("myList", httpFacade.getProductListByCategory(req, existAccount.getFavouriteCategoryId()));
             session.setAttribute("isAuthenticated", true);
-            return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+            return "redirect:" + redirectBaseUrl + "/catalog";
         }
     }
 
@@ -107,6 +109,6 @@ public class AccountController {
     public String signoff(HttpServletRequest request, HttpSession session) {
         String REDIRECT_BASE_URL = httpFacade.getBaseUrl(request);
         session.invalidate();
-        return "redirect:" + REDIRECT_BASE_URL + "/catalog";
+        return "redirect:" + redirectBaseUrl + "/catalog";
     }
 }

@@ -1,2 +1,2 @@
 rootProject.name = 'JPetStore6-microservices'
-include 'AccountService', 'CartService', 'CatalogService', 'OrderService'
+include 'AccountService', 'CartService', 'CatalogService', 'OrderService', 'CommonLibrary'

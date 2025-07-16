@@ -1,3 +1,7 @@
 group = 'org.mybatis'
 version = '1.0.0'
 archivesBaseName = 'jpetstore-cart'
+
+dependencies {
+    implementation project(':CommonLibrary')
+}
