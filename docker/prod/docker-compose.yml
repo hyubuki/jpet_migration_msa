@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  account-service:
+    build:
+      context: ../..
+      dockerfile: ./AccountService/Dockerfile
+    ports:
+      - "8081:8081"
+
+  cart-service:
+    build:
+      context: ../..
+      dockerfile: ./CartService/Dockerfile
+    ports:
+      - "8082:8082"
+
+  catalog-service:
+    build:
+      context: ../..
+      dockerfile: ./CatalogService/Dockerfile
+    ports:
+      - "8083:8083"
+
+  order-service:
+    build:
+      context: ../..
+      dockerfile: ./OrderService/Dockerfile
+    ports:
+      - "8084:8084"
