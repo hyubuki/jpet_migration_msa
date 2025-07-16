@@ -13,6 +13,7 @@ spring:
     init:
       schema-locations: classpath:database/jpetstore-hsqldb-schema.sql
       data-locations: classpath:database/jpetstore-hsqldb-dataload.sql
+
   data:
     redis:
       host: localhost

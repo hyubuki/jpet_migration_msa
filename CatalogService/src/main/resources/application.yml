@@ -23,7 +23,6 @@ spring:
     redis:
       namespace: JPetStore6
       repository-type: indexed
-
 mybatis:
   type-aliases-package: org.mybatis.jpetstore.domain
   mapper-locations: classpath:mapperXML/*.xml
