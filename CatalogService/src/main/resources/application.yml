@@ -1,8 +1,8 @@
 server:
   port: 8083
   address: 0.0.0.0
-#  servlet:
-#    context-path: /catalog
+  servlet:
+    context-path: /catalog
 
 spring:
   mvc:
@@ -31,4 +31,4 @@ mybatis:
 gateway:
   base-url: ${GATEWAY_BASE_URL:http://localhost}
 kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}bootstrap-servers: localhost:9092
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
