@@ -6,6 +6,11 @@ services:
       dockerfile: ./AccountService/Dockerfile
     ports:
       - "8081:8081"
+    extra_hosts:
+      - "myhost:host-gateway"
+    env_file:
+      - ./common.env
+      - ./account_service.env
 
   cart-service:
     build:
@@ -13,6 +18,11 @@ services:
       dockerfile: ./CartService/Dockerfile
     ports:
       - "8082:8082"
+    extra_hosts:
+      - "myhost:host-gateway"
+    env_file:
+      - ./common.env
+      - ./cart_service.env
 
   catalog-service:
     build:
@@ -20,6 +30,11 @@ services:
       dockerfile: ./CatalogService/Dockerfile
     ports:
       - "8083:8083"
+    extra_hosts:
+      - "myhost:host-gateway"
+    env_file:
+      - ./common.env
+      - ./catalog_service.env
 
   order-service:
     build:
@@ -27,3 +42,8 @@ services:
       dockerfile: ./OrderService/Dockerfile
     ports:
       - "8084:8084"
+    extra_hosts:
+      - "myhost:host-gateway"
+    env_file:
+      - ./common.env
+      - ./order_service.env
