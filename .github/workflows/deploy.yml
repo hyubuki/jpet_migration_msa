@@ -15,8 +15,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Detect which services need to be rebuilt based on git changes
-
       - name: Detect changed modules
         id: detect
         run: |
@@ -34,6 +32,14 @@ jobs:
           echo "modules=$modules" >> $GITHUB_OUTPUT
           services=$(echo $modules | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
           echo "services=$services" >> $GITHUB_OUTPUT
+
+      - name: Set Environment Variables
+        run: |
+          echo "${{ secrets.COMMON_ENV }}" > docker/prod/common.env
+          echo "${{ secrets.ACCOUNT_SERVICE_ENV }}" > docker/prod/account_service.env
+          echo "${{ secrets.CART_SERVICE_ENV }}" > docker/prod/cart_service.env
+          echo "${{ secrets.CATALOG_SERVICE_ENV }}" > docker/prod/catalog_service.env
+
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.2.2
         with:
