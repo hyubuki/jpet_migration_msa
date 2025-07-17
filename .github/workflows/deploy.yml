@@ -6,11 +6,35 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Server Instance using SSH
+    name: Build and Deploy changed services
     runs-on: ubuntu-latest
     environment: prod
     steps:
-      - name: executing remote ssh commands using ssh key
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Detect which services need to be rebuilt based on git changes
+
+      - name: Detect changed modules
+        id: detect
+        run: |
+          changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | awk -F/ '{print $1}' | sort -u)
+          modules=""
+          for d in $changed; do
+            case "$d" in
+              AccountService|CartService|CatalogService|OrderService)
+                modules="$modules $d";;
+              CommonLibrary)
+                modules="AccountService CartService CatalogService OrderService";;
+            esac
+          done
+          modules=$(echo $modules | xargs -n1 | sort -u | xargs)
+          echo "modules=$modules" >> $GITHUB_OUTPUT
+          services=$(echo $modules | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
+          echo "services=$services" >> $GITHUB_OUTPUT
+      - name: Deploy to server
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -18,4 +42,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            echo "Deploying JPetStore6-microservices to production server"
+            services="${{ steps.detect.outputs.services }}"
+            cd ${{ secrets.DEPLOY_PATH }}
+            if [ -n "$services" ]; then
+              docker compose -f docker/prod/docker-compose.yml up -d --build $services
+            else
+              echo "No service changes detected"
+            fi
+
