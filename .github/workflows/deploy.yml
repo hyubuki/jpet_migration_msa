@@ -49,7 +49,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             services="${{ steps.detect.outputs.services }}"
-            cd ${{ secrets.DEPLOY_PATH }}
             if [ -n "$services" ]; then
               docker compose -f docker/prod/docker-compose.yml up -d --build $services
             else
