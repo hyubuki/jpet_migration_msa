@@ -70,4 +70,3 @@ jobs:
             else
               echo "No service changes detected"
             fi
-            
