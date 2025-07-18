@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/")
 public class CatalogController {
 
     private final CatalogService catalogService;

@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
 public class OrderController {
     @Value("${gateway.base-url}")
     private String redirectBaseUrl;
