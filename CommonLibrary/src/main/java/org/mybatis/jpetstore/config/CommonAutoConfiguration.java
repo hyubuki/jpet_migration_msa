@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(RedisConfig.class)
-public class Minskim2AutoConfiguration {
+public class CommonAutoConfiguration {
 }
