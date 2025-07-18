@@ -44,7 +44,7 @@ jobs:
         run: |
           for module in ${{ steps.detect.outputs.modules }}; do
             service=$(echo $module | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
-            image="${{ secrets.DOCKER_USERNAME }}/$service"
+            image="${{ secrets.DOCKER_USERNAME }}/jpetstore6/$service"
             docker build -t $image -f $module/Dockerfile .
             docker tag $image:latest $image:${{ github.sha }}
             docker push $image:latest
@@ -61,12 +61,12 @@ jobs:
           script: |
             services="${{ steps.detect.outputs.services }}"
             cd ${{ secrets.DEPLOY_PATH }}
-            git fetch --all
+            git pull
             echo "${{ secrets.COMMON_ENV }}" > docker/prod/common.env
             echo "${{ secrets.ACCOUNT_SERVICE_ENV }}" > docker/prod/account_service.env
             echo "${{ secrets.CART_SERVICE_ENV }}" > docker/prod/cart_service.env
             echo "${{ secrets.CATALOG_SERVICE_ENV }}" > docker/prod/catalog_service.env
-            chmod 755 account_service.env cart_service.env catalog_service.env common.env
+            echo "${{ secrets.ORDER_SERVICE_ENV }}" > docker/prod/order_service.env
             
             if [ -n "$services" ]; then
               docker compose -f docker/prod/docker-compose.yml pull $services

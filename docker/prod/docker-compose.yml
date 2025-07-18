@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   account-service:
-    image: minskim2/account-service:latest
+    image: minskim2/jpetstore6/account-service:latest
     ports:
       - "8081:8081"
     extra_hosts:
@@ -11,7 +11,7 @@ services:
       - ./account_service.env
 
   cart-service:
-    image: minskim2/cart-service:latest
+    image: minskim2/jpetstore6/cart-service:latest
     ports:
       - "8082:8082"
     extra_hosts:
@@ -21,7 +21,7 @@ services:
       - ./cart_service.env
 
   catalog-service:
-    image: minskim2/catalog-service:latest
+    image: minskim2/jpetstore6/catalog-service:latest
     ports:
       - "8083:8083"
     extra_hosts:
@@ -31,7 +31,7 @@ services:
       - ./catalog_service.env
 
   order-service:
-    image: minskim2/order-service:latest
+    image: minskim2/jpetstore6/order-service:latest
     ports:
       - "8084:8084"
     extra_hosts:
