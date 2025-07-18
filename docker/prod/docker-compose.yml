@@ -1,9 +1,7 @@
 version: '3.8'
 services:
   account-service:
-    build:
-      context: ../..
-      dockerfile: ./AccountService/Dockerfile
+    image: minskim2/account-service:latest
     ports:
       - "8081:8081"
     extra_hosts:
@@ -13,9 +11,7 @@ services:
       - ./account_service.env
 
   cart-service:
-    build:
-      context: ../..
-      dockerfile: ./CartService/Dockerfile
+    image: minskim2/cart-service:latest
     ports:
       - "8082:8082"
     extra_hosts:
@@ -25,9 +21,7 @@ services:
       - ./cart_service.env
 
   catalog-service:
-    build:
-      context: ../..
-      dockerfile: ./CatalogService/Dockerfile
+    image: minskim2/catalog-service:latest
     ports:
       - "8083:8083"
     extra_hosts:
@@ -37,9 +31,7 @@ services:
       - ./catalog_service.env
 
   order-service:
-    build:
-      context: ../..
-      dockerfile: ./OrderService/Dockerfile
+    image: minskim2/order-service:latest
     ports:
       - "8084:8084"
     extra_hosts:

@@ -40,12 +40,15 @@ jobs:
           echo "services=$services" >> $GITHUB_OUTPUT
 
       - name: Build and push docker images
-        if: steps.detect.outputs.modules != ''
+        if: steps.detect.outputs.services != ''
         run: |
-          for module in ${{ steps.detect.outputs.modules }}; do
-            image="${{ secrets.DOCKER_USERNAME }}/$(echo $module | tr '[:upper:]' '[:lower:]')"
+          for $module in ${{ steps.detect.outputs.modules }}; do
+            service=$(echo $module | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
+            image="${{ secrets.DOCKER_USERNAME }}/$service"
             docker build -t $image -f $module/Dockerfile .
-            docker push $image
+            ducker tag $image:latest $image:${{ github.sha }}
+            docker push $image:latest
+            docker push $image:${{ github.sha }}
           done
 
       - name: Deploy to server
@@ -63,6 +66,7 @@ jobs:
             echo "${{ secrets.ACCOUNT_SERVICE_ENV }}" > docker/prod/account_service.env
             echo "${{ secrets.CART_SERVICE_ENV }}" > docker/prod/cart_service.env
             echo "${{ secrets.CATALOG_SERVICE_ENV }}" > docker/prod/catalog_service.env
+            chmod 755 account_service.env cart_service.env catalog_service.env common.env
             
             if [ -n "$services" ]; then
               docker compose -f docker/prod/docker-compose.yml pull $services
