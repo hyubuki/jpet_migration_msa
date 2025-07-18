@@ -26,9 +26,9 @@ public class RedisConfig {
         // 쿠키 설정
         cookieSerializer.setCookiePath("/");
         cookieSerializer.setCookieName("SESSION");
-        cookieSerializer.setUseSecureCookie(true);
+        cookieSerializer.setUseSecureCookie(false);
         cookieSerializer.setUseHttpOnlyCookie(true);
-        cookieSerializer.setSameSite("None");
+        cookieSerializer.setSameSite("Lax");
 
         return cookieSerializer;
     }
