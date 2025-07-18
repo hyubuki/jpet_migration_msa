@@ -44,7 +44,7 @@ jobs:
         run: |
           for module in ${{ steps.detect.outputs.modules }}; do
             service=$(echo $module | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
-            image="${{ secrets.DOCKER_USERNAME }}/jpetstore6/$service"
+            image="${{ secrets.DOCKER_USERNAME }}/$service"
             docker build -t $image -f $module/Dockerfile .
             docker tag $image:latest $image:${{ github.sha }}
             docker push $image:latest
