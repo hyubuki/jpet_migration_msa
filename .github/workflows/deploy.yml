@@ -67,6 +67,7 @@ jobs:
             if [ -n "$services" ]; then
               docker compose -f docker/prod/docker-compose.yml pull $services
               docker compose -f docker/prod/docker-compose.yml up -d $services
+              docker image prune -f
             else
               echo "No service changes detected"
             fi

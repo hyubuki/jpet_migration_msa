@@ -36,7 +36,7 @@
 	</tr>
 	<c:forEach var="item" items="${itemList}">
 		<tr>
-			<td><a href = "${pageContext.request.contextPath}/item?itemId=${item.itemId}">
+			<td><a href = "/catalog/item?itemId=${item.itemId}">
 				${item.itemId}
 			</a></td>
 			<td>${item.product.productId}</td>

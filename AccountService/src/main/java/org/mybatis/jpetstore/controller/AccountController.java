@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/")
 public class AccountController {
 
     @Autowired

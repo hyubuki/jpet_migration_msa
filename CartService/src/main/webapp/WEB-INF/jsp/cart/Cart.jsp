@@ -26,7 +26,7 @@
 <div id="Cart">
 
 <h2>Shopping Cart</h2>
-	<form action="${pageContext.request.contextPath}/cart/update" method="post">
+	<form action="/cart/update" method="post">
 	<table>
 		<tr>
 			<th><b>Item ID</b></th>
@@ -48,7 +48,7 @@
 		<c:forEach var="cartItem" items="${cart.cartItems}">
 			<tr>
                 <td>
-                    <a href="${pageContext.request.contextPath}/catalog/item?itemId=${cartItem.item.itemId}">
+                    <a href="/catalog/item?itemId=${cartItem.item.itemId}">
                             ${cartItem.item.itemId}</a>
                 </td>
 				<td>${cartItem.item.product.productId}</td>
