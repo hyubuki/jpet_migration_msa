@@ -2,8 +2,9 @@ package org.mybatis.jpetstore.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.mybatis.jpetstore.controller.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,12 +23,13 @@ class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private AccountService accountService;
-
     @MockitoBean
     private HttpFacade httpFacade;
+
+    @Value("${gateway.base-url}")
+    private String redirectBaseUrl;
 
     // 계정을 생성하면 메인 화면으로 리다이렉트된다
     @Test
@@ -41,7 +43,7 @@ class AccountControllerTest {
                 .param("password", "pass")
                 .param("favouriteCategoryId", "CAT"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 수정 폼 요청 시 정상적으로 뷰를 반환한다
@@ -83,7 +85,7 @@ class AccountControllerTest {
                 .param("csrf", "token")
                 .param("username", "user"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 로그인된 상태에서 로그인 폼을 요청하면 메인으로 이동한다
@@ -93,7 +95,7 @@ class AccountControllerTest {
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/signonForm").session(session))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 비로그인 상태에서 로그인 폼을 요청하면 폼을 반환한다
@@ -111,7 +113,7 @@ class AccountControllerTest {
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/signoff").session(session))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 로그인 상태에서 새 계정 폼을 요청하면 메인 화면으로 이동한다
@@ -121,7 +123,7 @@ class AccountControllerTest {
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/newAccountForm").session(session))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 비로그인 상태에서 새 계정 폼을 요청하면 폼을 반환한다
@@ -137,13 +139,13 @@ class AccountControllerTest {
     void signonWithValidUserRedirects() throws Exception {
         Account account = new Account();
         when(accountService.getAccount("user", "pass")).thenReturn(account);
-        when(httpFacade.getProductListByCategory((String)org.mockito.ArgumentMatchers.any())).thenReturn(java.util.Collections.emptyList());
+        when(httpFacade.getProductListByCategory(org.mockito.ArgumentMatchers.anyString())).thenReturn(java.util.Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/signon")
                 .param("username", "user")
                 .param("password", "pass"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/catalog"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
     }
 
     // 잘못된 사용자 정보로 로그인하면 로그인 폼을 다시 보여준다

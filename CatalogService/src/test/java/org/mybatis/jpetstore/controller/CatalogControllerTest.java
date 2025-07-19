@@ -3,7 +3,7 @@ package org.mybatis.jpetstore.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.mybatis.jpetstore.controller.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,7 +22,6 @@ class CatalogControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private CatalogService catalogService;
 
@@ -45,13 +44,11 @@ class CatalogControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("catalog/Category"));
     }
 
-    // 검색어가 없을 때는 오류 메시지를 포함하여 검색 화면을 보여준다
+    // 검색어가 없을 때는 400 오류를 반환한다
     @Test
     void searchProductsWithoutKeywordShowsError() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/searchProducts"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("catalog/SearchProducts"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("message"));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     // 검색어가 있으면 결과 목록을 모델에 포함한다

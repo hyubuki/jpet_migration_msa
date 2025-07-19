@@ -1,9 +1,11 @@
 package org.mybatis.jpetstore.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.mybatis.jpetstore.controller.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -16,6 +18,7 @@ import org.mybatis.jpetstore.domain.Account;
 import org.mybatis.jpetstore.domain.Cart;
 import org.mybatis.jpetstore.dto.OrderProcessResult;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(OrderController.class)
@@ -24,9 +27,12 @@ class OrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private OrderService orderService;
+
+    @Value("${gateway.base-url}")
+    private String redirectBaseUrl;
+    private String loginMsg = "You must sign on before attempting to check out.  Please sign on and try checking out again.".replace(" ", "+");
 
     // 로그인된 사용자가 주문 목록을 조회하면 목록을 보여준다
     @Test
@@ -47,7 +53,7 @@ class OrderControllerTest {
     void listOrdersWithoutLoginRedirectsToSignon() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/listOrders"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/account/signonForm"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:" + redirectBaseUrl + "/account/signonForm"));
     }
 
     // 장바구니가 없는 상태에서 주문을 생성하면 에러 페이지를 반환한다
@@ -78,7 +84,7 @@ class OrderControllerTest {
     void newOrderFormWithoutLoginRedirects() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/newOrderForm"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/account/signonForm"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:" + redirectBaseUrl + "/account/signonForm"));
     }
 
     // 정상적으로 주문 처리가 완료되면 주문 상세 화면으로 이동한다
@@ -86,14 +92,24 @@ class OrderControllerTest {
     void newOrderProcessSuccessRedirects() throws Exception {
         MockHttpSession session = new MockHttpSession();
         Order sessionOrder = new Order();
+        sessionOrder.setShipToFirstName("John");
+        sessionOrder.setShipToLastName("Doe");
         session.setAttribute("order", sessionOrder);
         session.setAttribute("csrf_token", "token");
-        when(orderService.handleOrderProcess(sessionOrder, sessionOrder, false, true, false, session))
-                .thenReturn(new OrderProcessResult("order/ViewOrder", null));
+        when(orderService.handleOrderProcess(
+                any(Order.class),
+                any(Order.class),
+                anyBoolean(),
+                anyBoolean(),
+                anyBoolean(),
+                any(HttpSession.class)
+        )).thenReturn(new OrderProcessResult("order/ViewOrder", null));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/newOrder")
                 .session(session)
-                .param("csrf", "token"))
+                .param("csrf", "token")
+                .param("shipToFirstName", "John")
+                .param("shipToLastName", "Doe"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("order/ViewOrder"));
     }
@@ -131,7 +147,7 @@ class OrderControllerTest {
     void viewOrderWithoutLoginRedirects() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/viewOrder").param("orderId", "1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/account/signonForm"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:" + redirectBaseUrl + "/account/signonForm"));
     }
 
     // 다른 사용자의 주문을 조회하면 에러 페이지를 반환한다

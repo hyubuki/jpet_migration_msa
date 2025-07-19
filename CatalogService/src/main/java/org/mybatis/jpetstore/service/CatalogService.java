@@ -42,7 +42,6 @@ public class CatalogService {
   private final ProductRepository productRepository;
   private final InventoryUpdateStatusRepository inventoryUpdateStatusRepository;
 
-  @Autowired
   /**
    * 필수 저장소를 주입하여 {@code CatalogService} 인스턴스를 생성합니다.
    *
@@ -51,6 +50,7 @@ public class CatalogService {
    * @param productRepository 상품 저장소
    * @param inventoryUpdateStatusRepository 재고 업데이트 상태 저장소
    */
+  @Autowired
   public CatalogService(CategoryRepository categoryRepository, ItemRepository itemRepository, ProductRepository productRepository, InventoryUpdateStatusRepository inventoryUpdateStatusRepository) {
     this.categoryRepository = categoryRepository;
     this.itemRepository = itemRepository;

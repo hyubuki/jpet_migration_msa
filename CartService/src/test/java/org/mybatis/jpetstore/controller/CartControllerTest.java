@@ -3,7 +3,7 @@ package org.mybatis.jpetstore.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.mybatis.jpetstore.controller.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -19,7 +19,6 @@ class CartControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private CartService cartService;
 
