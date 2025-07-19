@@ -1,7 +1,7 @@
 FROM gradle:8.4-jdk21 AS build
 WORKDIR /workspace
 COPY . .
-RUN ./gradlew :OrderService:bootWar --no-daemon
+RUN ./gradlew :OrderService:bootWar -x test --no-daemon
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
