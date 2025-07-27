@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,13 +18,14 @@ import java.util.stream.Collectors;
 public class HttpFacade {
     @Autowired
     RestTemplate restTemplate;
-    private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog";
+    @Value("${gateway.base-url}")
+    private String gatewayBaseUrl;
 
     public boolean updateInventoryQuantity(Map<String, Object> param, Integer orderId) {
 
         String quantityString = param.values().stream().map(String::valueOf).collect(Collectors.joining(","));
 
-        String url = CATALOG_SERVICE_URL + "/updateQuantity?itemId=" + String.join(",", param.keySet()) + "&increment=" + quantityString + "&orderId=" + orderId;
+        String url = gatewayBaseUrl + "/catalog/updateQuantity?itemId=" + String.join(",", param.keySet()) + "&increment=" + quantityString + "&orderId=" + orderId;
 
         ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(url, Boolean.class);
         Boolean responses = responseEntity.getBody();
@@ -32,13 +34,13 @@ public class HttpFacade {
     }
 
     public boolean isInventoryUpdateCommitSuccess(Integer orderId){
-        String url = CATALOG_SERVICE_URL + "/isInventoryUpdated?orderId=" + orderId;
+        String url = gatewayBaseUrl + "/catalog/isInventoryUpdated?orderId=" + orderId;
         ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(url,Boolean.class);
         return Boolean.TRUE.equals(responseEntity.getBody());
     }
 
     public Item getItem(String itemId) {
-        String url = CATALOG_SERVICE_URL + "/getItem?itemId=" + itemId;
+        String url = gatewayBaseUrl + "/catalog/getItem?itemId=" + itemId;
 
         ResponseEntity<Item> responseEntity = restTemplate.getForEntity(url, Item.class);
         Item response = responseEntity.getBody();
@@ -46,7 +48,7 @@ public class HttpFacade {
     }
 
     public int getInventoryQuantity(String itemId) {
-        String url = CATALOG_SERVICE_URL + "/getQuantity?itemId=" + itemId;
+        String url = gatewayBaseUrl + "/catalog/getQuantity?itemId=" + itemId;
 
         ResponseEntity<Integer> responseEntity = restTemplate.getForEntity(url, Integer.class);
         int response = responseEntity.getBody();

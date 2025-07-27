@@ -1,0 +1,34 @@
+server:
+  port: 8082
+  address: 0.0.0.0
+  servlet:
+    context-path: /cart
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  sql:
+    init:
+      schema-locations: classpath:database/jpetstore-hsqldb-schema.sql
+      data-locations: classpath:database/jpetstore-hsqldb-dataload.sql
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      repositories:
+        enabled: false
+  session:
+    redis:
+      namespace: JPetStore6
+      repository-type: indexed
+
+mybatis:
+  type-aliases-package: org.mybatis.jpetstore.domain
+  mapper-locations: classpath:mapperXML/*.xml
+
+gateway:
+  base-url: ${GATEWAY_BASE_URL:http://localhost}
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
