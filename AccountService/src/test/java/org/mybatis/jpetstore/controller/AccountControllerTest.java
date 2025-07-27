@@ -1,19 +1,19 @@
 package org.mybatis.jpetstore.controller;
 
 import org.junit.jupiter.api.Test;
+import org.mybatis.jpetstore.account.controller.AccountController;
+import org.mybatis.jpetstore.common.domain.Account;
+import org.mybatis.jpetstore.common.grpc.CatalogGrpcClient;
+import org.mybatis.jpetstore.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.mock.web.MockHttpSession;
-
-import org.mybatis.jpetstore.service.AccountService;
-import org.mybatis.jpetstore.http.HttpFacade;
-import org.mybatis.jpetstore.domain.Account;
 
 import static org.mockito.Mockito.when;
 
@@ -26,7 +26,7 @@ class AccountControllerTest {
     @MockitoBean
     private AccountService accountService;
     @MockitoBean
-    private HttpFacade httpFacade;
+    private CatalogGrpcClient catalogGrpcClient;
 
     @Value("${gateway.base-url}")
     private String redirectBaseUrl;
@@ -35,7 +35,7 @@ class AccountControllerTest {
     @Test
     void newAccountCreatesAccountAndRedirects() throws Exception {
         when(accountService.getAccount("user")).thenReturn(new Account());
-        when(httpFacade.getProductListByCategory(org.mockito.ArgumentMatchers.any()))
+        when(catalogGrpcClient.getProductListByCategory(org.mockito.ArgumentMatchers.any()))
                 .thenReturn(java.util.Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/newAccount")
@@ -73,7 +73,7 @@ class AccountControllerTest {
         Account account = new Account();
         account.setUsername("user");
         account.setFavouriteCategoryId("CAT");
-        when(httpFacade.getProductListByCategory("CAT")).thenReturn(java.util.Collections.emptyList());
+        when(catalogGrpcClient.getProductListByCategory("CAT")).thenReturn(java.util.Collections.emptyList());
         when(accountService.getAccount("user")).thenReturn(account);
 
         MockHttpSession session = new MockHttpSession();
@@ -139,7 +139,7 @@ class AccountControllerTest {
     void signonWithValidUserRedirects() throws Exception {
         Account account = new Account();
         when(accountService.getAccount("user", "pass")).thenReturn(account);
-        when(httpFacade.getProductListByCategory(org.mockito.ArgumentMatchers.anyString())).thenReturn(java.util.Collections.emptyList());
+        when(catalogGrpcClient.getProductListByCategory(org.mockito.ArgumentMatchers.anyString())).thenReturn(java.util.Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/signon")
                 .param("username", "user")

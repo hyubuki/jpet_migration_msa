@@ -1,7 +1,7 @@
-<%@ page import="org.mybatis.jpetstore.domain.Account" %>
-<%@ page import="org.mybatis.jpetstore.domain.Product" %>
+<%@ page import="org.mybatis.jpetstore.common.domain.Account" %>
+<%@ page import="org.mybatis.jpetstore.common.domain.Product" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.mybatis.jpetstore.domain.Order" %><%--
+<%@ page import="org.mybatis.jpetstore.common.domain.Order" %><%--
 
        Copyright 2010-2016 the original author or authors.
 

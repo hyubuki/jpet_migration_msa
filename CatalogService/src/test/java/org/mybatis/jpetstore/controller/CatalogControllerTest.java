@@ -1,6 +1,7 @@
 package org.mybatis.jpetstore.controller;
 
 import org.junit.jupiter.api.Test;
+import org.mybatis.jpetstore.catalog.controller.CatalogController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -8,10 +9,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import org.mybatis.jpetstore.service.CatalogService;
-import org.mybatis.jpetstore.domain.Category;
-import org.mybatis.jpetstore.domain.Product;
-import org.mybatis.jpetstore.domain.Item;
+import org.mybatis.jpetstore.catalog.service.CatalogService;
+import org.mybatis.jpetstore.common.domain.Category;
+import org.mybatis.jpetstore.common.domain.Product;
+import org.mybatis.jpetstore.common.domain.Item;
 
 import java.util.Collections;
 

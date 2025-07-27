@@ -2,6 +2,7 @@ package org.mybatis.jpetstore.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
+import org.mybatis.jpetstore.order.controller.OrderController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,11 +13,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.mock.web.MockHttpSession;
 
-import org.mybatis.jpetstore.service.OrderService;
-import org.mybatis.jpetstore.domain.Order;
-import org.mybatis.jpetstore.domain.Account;
-import org.mybatis.jpetstore.domain.Cart;
-import org.mybatis.jpetstore.dto.OrderProcessResult;
+import org.mybatis.jpetstore.order.service.OrderService;
+import org.mybatis.jpetstore.common.domain.Order;
+import org.mybatis.jpetstore.common.domain.Account;
+import org.mybatis.jpetstore.common.domain.Cart;
+import org.mybatis.jpetstore.order.dto.OrderProcessResult;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;

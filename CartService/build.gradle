@@ -1,7 +1,9 @@
-group = 'org.mybatis'
+group = 'org.mybatis.jpetstore.cart'
 version = '1.0.0'
 archivesBaseName = 'jpetstore-cart'
 
 dependencies {
     implementation project(':CommonLibrary')
+    implementation 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }

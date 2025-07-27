@@ -25,10 +25,16 @@ spring:
       repository-type: indexed
 
 mybatis:
-  type-aliases-package: org.mybatis.jpetstore.domain
+  type-aliases-package: org.mybatis.jpetstore.*.domain
   mapper-locations: classpath:mapperXML/*.xml
 
 gateway:
   base-url: ${GATEWAY_BASE_URL:http://localhost}
-kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+grpc:
+  client:
+    catalog:
+      address: ${CATALOG_GRPC_ADDRESS:static://localhost:9093} # gRPC 서버 주소
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext # 암호화 되지 않는 설정. 운영 환경에서는 TLS를 사용하여 보안 통신을 설정해야 함

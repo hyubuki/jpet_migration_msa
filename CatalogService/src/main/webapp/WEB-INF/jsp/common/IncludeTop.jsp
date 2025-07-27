@@ -1,4 +1,4 @@
-<%@ page import="org.mybatis.jpetstore.domain.Account" %><%--
+<%@ page import="org.mybatis.jpetstore.common.domain.Account" %><%--
 
        Copyright 2010-2016 the original author or authors.
 

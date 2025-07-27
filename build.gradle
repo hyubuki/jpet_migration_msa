@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '3.5.3' apply false
     id 'io.spring.dependency-management' version '1.1.4' apply false
+    id 'com.google.protobuf' version '0.9.4' apply false
 }
 
 def commonLibName = 'CommonLibrary'
@@ -35,4 +36,5 @@ configure(subprojects.findAll { it.name != commonLibName }) {
 project(':CommonLibrary') {
     apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.google.protobuf'
 }

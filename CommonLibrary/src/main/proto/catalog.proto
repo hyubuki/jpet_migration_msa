@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package jpetstore;
+
+option java_multiple_files = true;
+option java_package = "org.mybatis.jpetstore.grpc";
+option java_outer_classname = "CatalogProtos";
+
+message ProductRequest {
+  string categoryId = 1;
+}
+
+message ProductProto {
+  string productId = 1;
+  string categoryId = 2;
+  string name = 3;
+  string description = 4;
+}
+
+message ProductList {
+  repeated ProductProto products = 1;
+}
+
+message ItemRequest {
+  string itemId = 1;
+}
+
+message ItemProto {
+  string itemId = 1;
+  string productId = 2;
+  double listPrice = 3;
+  double unitCost = 4;
+  int32 supplierId = 5;
+  string status = 6;
+  string attribute1 = 7;
+  string attribute2 = 8;
+  string attribute3 = 9;
+  string attribute4 = 10;
+  string attribute5 = 11;
+  int32 quantity = 12;
+  ProductProto product = 13;
+}
+
+message ItemResponse {
+  ItemProto item = 1;
+}
+
+message StockResponse {
+  bool inStock = 1;
+}
+
+message QuantityResponse {
+  int32 quantity = 1;
+}
+
+message UpdateInventoryRequest {
+  repeated string itemId = 1;
+  repeated int32 increment = 2;
+  int32 orderId = 3;
+}
+
+message IsInventoryUpdatedRequest {
+  int32 orderId = 1;
+}
+
+message BooleanResponse {
+  bool result = 1;
+}
+
+service CatalogService {
+  rpc GetProductList(ProductRequest) returns (ProductList);
+  rpc GetItem(ItemRequest) returns (ItemResponse);
+  rpc IsItemInStock(ItemRequest) returns (StockResponse);
+  rpc GetInventoryQuantity(ItemRequest) returns (QuantityResponse);
+  rpc UpdateInventoryQuantity(UpdateInventoryRequest) returns (BooleanResponse);
+  rpc IsInventoryUpdated(IsInventoryUpdatedRequest) returns (BooleanResponse);
+}

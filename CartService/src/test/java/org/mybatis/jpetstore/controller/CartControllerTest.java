@@ -1,16 +1,17 @@
 package org.mybatis.jpetstore.controller;
 
 import org.junit.jupiter.api.Test;
+import org.mybatis.jpetstore.cart.controller.CartController;
+import org.mybatis.jpetstore.common.domain.Cart;
+import org.mybatis.jpetstore.cart.service.CartService;
+import org.mybatis.jpetstore.common.domain.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.mock.web.MockHttpSession;
-
-import org.mybatis.jpetstore.service.CartService;
-import org.mybatis.jpetstore.domain.Cart;
 
 import static org.mockito.Mockito.when;
 
@@ -61,7 +62,7 @@ class CartControllerTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("cart", new Cart());
         when(cartService.removeItem(org.mockito.ArgumentMatchers.any(Cart.class), org.mockito.ArgumentMatchers.eq("I1")))
-                .thenReturn(new org.mybatis.jpetstore.domain.Item());
+                .thenReturn(new Item());
         mockMvc.perform(MockMvcRequestBuilders.get("/remove/item").session(session).param("itemId", "I1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("cart/Cart"));
