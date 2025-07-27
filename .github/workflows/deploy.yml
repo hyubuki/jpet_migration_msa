@@ -2,7 +2,7 @@ name: Deploy JPetStore6-microservices with prod environment
 
 on:
   push:
-    branches: [ 'convert-spring_boot' ]
+    branches: [ 'main' ]
 
 jobs:
   deploy:
