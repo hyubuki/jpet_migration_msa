@@ -8,6 +8,5 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     implementation 'org.springframework.kafka:spring-kafka:3.3.7'
     implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.3'
 }
 
