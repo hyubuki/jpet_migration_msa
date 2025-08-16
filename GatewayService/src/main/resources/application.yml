@@ -34,10 +34,6 @@ spring:
               uri: lb://order-service
               predicates:
                 - Path=/order/**
-            - id: discovery-server
-              uri: lb://discovery-server
-              predicates:
-                - Path=/**
 
 eureka:
   client:
