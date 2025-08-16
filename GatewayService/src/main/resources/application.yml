@@ -12,11 +12,27 @@ spring:
         webflux:
           discovery:
             locator:
-              lower-case-service-id: true
-              enabled: true
+              enabled: false # 자동 라우팅 비활성화
           default-filters:
             - RemoveResponseHeader=Server
             - AddResponseHeader=X-Gateway, gateway-service
+          routes:
+            - id: account-service
+              uri: lb://account
+              predicates:
+                - Path=/account/**
+            - id: cart-service
+              uri: lb://cart
+              predicates:
+                - Path=/cart/**
+            - id: catalog-service
+              uri: lb://catalog
+              predicates:
+                - Path=/catalog/**
+            - id: order-service
+              uri: lb://order
+              predicates:
+                - Path=/order/**
 
 eureka:
   client:
