@@ -16,6 +16,7 @@ spring:
           default-filters:
             - RemoveResponseHeader=Server
             - AddResponseHeader=X-Gateway, gateway-service
+            - PreserveHostHeader
           routes:
             - id: account-service
               uri: lb://account-service
