@@ -28,22 +28,24 @@ jobs:
           modules=""
           for d in $changed; do
             case "$d" in
-              AccountService|CartService|CatalogService|OrderService)
+              AccountService|CartService|CatalogService|OrderService|GatewayService|DiscoveryServer)
                 modules="$modules $d";;
               CommonLibrary)
                 modules="AccountService CartService CatalogService OrderService";;
+              .github|docker)
+                modules="AccountService CartService CatalogService OrderService DiscoveryServer GatewayService";;
             esac
           done
           modules=$(echo $modules | xargs -n1 | sort -u | xargs)
           echo "modules=$modules" >> $GITHUB_OUTPUT
-          services=$(echo $modules | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
+          services=$(echo $modules | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g' | sed 's/GatewayService/gateway-service/g' | sed 's/DiscoveryServer/discovery-server/g')
           echo "services=$services" >> $GITHUB_OUTPUT
 
       - name: Build and push docker images
         if: steps.detect.outputs.services != ''
         run: |
           for module in ${{ steps.detect.outputs.modules }}; do
-            service=$(echo $module | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g')
+            service=$(echo $module | sed 's/AccountService/account-service/g' | sed 's/CartService/cart-service/g' | sed 's/CatalogService/catalog-service/g' | sed 's/OrderService/order-service/g' | sed 's/GatewayService/gateway-service/g' | sed 's/DiscoveryServer/discovery-server/g')
             image="${{ secrets.DOCKER_USERNAME }}/$service"
             docker build -t $image -f $module/Dockerfile .
             docker tag $image:latest $image:${{ github.sha }}
