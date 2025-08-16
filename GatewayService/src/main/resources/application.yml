@@ -1,16 +1,22 @@
 server:
-  port: 8080
+  port: 8880
   address: 0.0.0.0
+  forward-headers-strategy: native  # X-Forwarded-* 신뢰
 
 spring:
   application:
     name: gateway-service
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      server:
+        webflux:
+          discovery:
+            locator:
+              lower-case-service-id: true
+              enabled: true
+          default-filters:
+            - RemoveResponseHeader=Server
+            - AddResponseHeader=X-Gateway, gateway-service
 
 eureka:
   client:
