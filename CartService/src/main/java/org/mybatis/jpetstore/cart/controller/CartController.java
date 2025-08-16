@@ -30,8 +30,8 @@ public class CartController {
 
         cartService.addItem(cart,workingItemId);
 
-        model.addAttribute("cart",cart);
-        session.setAttribute("cart",cart);
+        model.addAttribute("cart", cart);
+        session.setAttribute("cart", cart);
         return "cart/Cart";
     }
 
