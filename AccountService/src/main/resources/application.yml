@@ -36,7 +36,7 @@ gateway:
 grpc:
   client:
     catalog:
-      address: ${CATALOG_GRPC_ADDRESS:static://localhost:9093} # gRPC 서버 주소
+      address: discovery:///catalog-service # gRPC 서버 주소
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext # 암호화 되지 않는 설정. 운영 환경에서는 TLS를 사용하여 보안 통신을 설정해야 함
