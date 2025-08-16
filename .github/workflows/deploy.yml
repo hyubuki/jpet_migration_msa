@@ -32,7 +32,7 @@ jobs:
                 modules="$modules $d";;
               CommonLibrary)
                 modules="AccountService CartService CatalogService OrderService";;
-              .github|docker)
+              docker)
                 modules="AccountService CartService CatalogService OrderService DiscoveryServer GatewayService";;
             esac
           done
@@ -63,7 +63,8 @@ jobs:
           script: |
             services="${{ steps.detect.outputs.services }}"
             cd ${{ secrets.DEPLOY_PATH }}
-            git pull
+            git checkout ${{ secrets.DEPLOY_BRANCH }}
+            git pull origin ${{ secrets.DEPLOY_BRANCH }}
             echo "${{ secrets.COMMON_ENV }}" > docker/prod/common.env
             echo "${{ secrets.ACCOUNT_SERVICE_ENV }}" > docker/prod/account_service.env
             echo "${{ secrets.CART_SERVICE_ENV }}" > docker/prod/cart_service.env
