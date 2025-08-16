@@ -18,19 +18,19 @@ spring:
             - AddResponseHeader=X-Gateway, gateway-service
           routes:
             - id: account-service
-              uri: lb://account
+              uri: lb://account-service
               predicates:
                 - Path=/account/**
             - id: cart-service
-              uri: lb://cart
+              uri: lb://cart-service
               predicates:
                 - Path=/cart/**
             - id: catalog-service
-              uri: lb://catalog
+              uri: lb://catalog-service
               predicates:
                 - Path=/catalog/**
             - id: order-service
-              uri: lb://order
+              uri: lb://order-service
               predicates:
                 - Path=/order/**
 
