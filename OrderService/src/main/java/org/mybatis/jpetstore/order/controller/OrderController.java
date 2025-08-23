@@ -1,6 +1,7 @@
 package org.mybatis.jpetstore.order.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.jpetstore.common.domain.Account;
@@ -14,24 +15,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
 
-    @Value("${gateway.base-url}")
-    private String redirectBaseUrl;
-
     private final OrderService orderService;
 
     @GetMapping("/listOrders")
-    public String listOrders(HttpSession session, HttpServletRequest request, RedirectAttributes redirect) {
+    public String listOrders(HttpSession session, HttpServletRequest request, RedirectAttributes redirect, HttpServletResponse response) throws IOException {
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + redirectBaseUrl + "/account/signonForm";
+            response.sendRedirect("/account/signonForm");
+            return null;
         }
         List<Order> orderList = orderService.getOrdersByUsername(account.getUsername());
         request.setAttribute("orderList", orderList);
@@ -39,13 +39,14 @@ public class OrderController {
     }
 
     @GetMapping("/newOrderForm")
-    public String newOrderForm(HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
+    public String newOrderForm(HttpServletRequest req, HttpSession session, RedirectAttributes redirect, HttpServletResponse response) throws IOException {
         Account account = (Account) session.getAttribute("account");
         Cart cart = (Cart) session.getAttribute("cart");
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + redirectBaseUrl + "/account/signonForm";
+            response.sendRedirect("/account/signonForm");
+            return null;
         }
         else if (cart != null) {
             Order order = orderService.createOrder(account, cart);
@@ -80,13 +81,14 @@ public class OrderController {
 
 
     @GetMapping("/viewOrder")
-    public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session, RedirectAttributes redirect) {
+    public String viewOrder(@RequestParam int orderId, HttpServletRequest req, HttpSession session, RedirectAttributes redirect, HttpServletResponse response) throws IOException {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
             String msg = "You must sign on before attempting to check out.  Please sign on and try checking out again.";
             redirect.addAttribute("msg", msg);
-            return "redirect:" + redirectBaseUrl + "/account/signonForm";
+            response.sendRedirect("/account/signonForm");
+            return null;
         }
         Order order = orderService.getOrder(orderId);
         if (account.getUsername().equals(order.getUsername())) {

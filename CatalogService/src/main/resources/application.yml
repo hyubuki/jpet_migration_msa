@@ -3,6 +3,14 @@ server:
   servlet:
     context-path: /catalog
 
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.mybatis: INFO
+    org.apache.kafka: WARN
+    org.springframework.cloud: WARN
+
 spring:
   application:
     name: catalog-service

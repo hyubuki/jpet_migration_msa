@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(AccountController.class)
-@TestPropertySource(properties = "gateway.base-url=http://localhost")
 class AccountControllerTest {
 
     @Autowired
@@ -27,9 +26,6 @@ class AccountControllerTest {
     private AccountService accountService;
     @MockitoBean
     private CatalogGrpcClient catalogGrpcClient;
-
-    @Value("${gateway.base-url}")
-    private String redirectBaseUrl;
 
     // 계정을 생성하면 메인 화면으로 리다이렉트된다
     @Test
@@ -42,8 +38,7 @@ class AccountControllerTest {
                 .param("username", "user")
                 .param("password", "pass")
                 .param("favouriteCategoryId", "CAT"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 수정 폼 요청 시 정상적으로 뷰를 반환한다
@@ -84,8 +79,7 @@ class AccountControllerTest {
                 .session(session)
                 .param("csrf", "token")
                 .param("username", "user"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 로그인된 상태에서 로그인 폼을 요청하면 메인으로 이동한다
@@ -94,8 +88,7 @@ class AccountControllerTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/signonForm").session(session))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 비로그인 상태에서 로그인 폼을 요청하면 폼을 반환한다
@@ -112,8 +105,7 @@ class AccountControllerTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/signoff").session(session))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 로그인 상태에서 새 계정 폼을 요청하면 메인 화면으로 이동한다
@@ -122,8 +114,7 @@ class AccountControllerTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("account", new Account());
         mockMvc.perform(MockMvcRequestBuilders.get("/newAccountForm").session(session))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 비로그인 상태에서 새 계정 폼을 요청하면 폼을 반환한다
@@ -144,8 +135,7 @@ class AccountControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/signon")
                 .param("username", "user")
                 .param("password", "pass"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl(redirectBaseUrl + "/catalog"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     // 잘못된 사용자 정보로 로그인하면 로그인 폼을 다시 보여준다

@@ -30,9 +30,6 @@ mybatis:
   type-aliases-package: org.mybatis.jpetstore.*.domain
   mapper-locations: classpath:mapperXML/*.xml
 
-gateway:
-  base-url: ${GATEWAY_BASE_URL:http://localhost}
-
 grpc:
   client:
     catalog:

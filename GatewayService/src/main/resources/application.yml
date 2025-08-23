@@ -3,6 +3,10 @@ server:
   address: 0.0.0.0
   forward-headers-strategy: native  # X-Forwarded-* 신뢰
 
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+
 spring:
   application:
     name: gateway-service
